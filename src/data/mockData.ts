@@ -53,7 +53,7 @@ export const mockSales: SalesRecord[] = [
   {
     memberId: "RC01862444",
     purchaseDate: "2023-01-01",
-    brandId: "00",
+    brandId: "MD",
     brandName: "MD",
     productId: "002250801501",
     productName: "チュール刺繍フレアスカート",
@@ -68,7 +68,7 @@ export const mockSales: SalesRecord[] = [
   {
     memberId: "RC01862444",
     purchaseDate: "2023-01-01",
-    brandId: "00",
+    brandId: "MD",
     brandName: "MD",
     productId: "002260800101",
     productName: "異素材ドッキングスーパーハイウエストスカート",
@@ -83,7 +83,7 @@ export const mockSales: SalesRecord[] = [
   {
     memberId: "RC01866206",
     purchaseDate: "2023-01-01",
-    brandId: "00",
+    brandId: "MD",
     brandName: "MD",
     productId: "002240400501",
     productName: "2WAYリボンボリュームスリーブブラウス",
@@ -296,7 +296,7 @@ export const mockSales: SalesRecord[] = [
 export const mockMemberships: MembershipRecord[] = [
   {
     memberId: "RC01862444",
-    brandCode: "00",
+    brandCode: "MD",
     storeCode: "0032602",
     storeName: "MD FC金沢フォーラス",
     salesAssociate: "MD FC金沢フォーラス",
@@ -304,7 +304,7 @@ export const mockMemberships: MembershipRecord[] = [
   },
   {
     memberId: "RC01866206",
-    brandCode: "00",
+    brandCode: "MD",
     storeCode: "0060101",
     storeName: "MERCURYDUO ルミネエスト新宿",
     salesAssociate: "岡田 端穂",
@@ -312,7 +312,7 @@ export const mockMemberships: MembershipRecord[] = [
   },
   {
     memberId: "RC01017392",
-    brandCode: "00",
+    brandCode: "MD",
     storeCode: "0060501",
     storeName: "MERCURYDUO 渋谷マルイ",
     salesAssociate: "平出 有紗",
