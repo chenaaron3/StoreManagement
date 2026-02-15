@@ -30,6 +30,7 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-price: var(--price);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
@@ -78,6 +79,14 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  /* Segment/ranking palette: metallic gold, silver, bronze (similar to metal) */
+  --segment-gold: #B8860B;
+  --segment-silver: #6B7280;
+  --segment-bronze: #92400E;
+  --segment-risk: #EF5350;
+  --segment-opportunity: #FFA726;
+  --segment-birthday: #EC4899;
+  --price: oklch(0.45 0.14 162);
 }
 
 .dark {
@@ -112,15 +121,14 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --price: oklch(0.7 0.14 162);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
     @apply bg-background text-foreground;
   }
 }

@@ -13,6 +13,8 @@ export interface SalesRecord {
   quantity: number;
   totalCost: number;
   storeName: string;
+  /** Store code (e.g. EMODA, MD). Used for cross-store detection. */
+  storeCode?: string;
   salesAssociate: string;
 }
 
@@ -35,6 +37,33 @@ export interface MembershipRecord {
 /** A single membership (MembershipRecord without memberId). Nested under User. */
 export type Membership = Omit<MembershipRecord, "memberId">;
 
+/** Coupon distributed to a customer (mock for MVP). */
+export interface Coupon {
+  id: string;
+  name: string;
+  code?: string;
+  discount: string;
+  expiry: string;
+  used?: boolean;
+}
+
+/** Associate todo task (mock for MVP; localStorage). */
+export interface AssociateTodo {
+  id: string;
+  title: string;
+  dueDate: string;
+  status: "pending" | "done";
+  memberId?: string;
+}
+
+/** Online cart item (mock for MVP). */
+export interface OnlineCartItem {
+  id: string;
+  itemName: string;
+  price: number;
+  quantity?: number;
+}
+
 /** Body shape types. */
 export const BODY_SHAPES = ["unknown", "straight", "wavy", "natural"] as const;
 
@@ -54,4 +83,5 @@ export interface User {
   bodyShape: BodyShape;
   memberships: Membership[];
   purchases: Purchase[];
+  coupons?: Coupon[];
 }

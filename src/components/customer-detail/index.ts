@@ -1,0 +1,8 @@
+export { CustomerDetailModalHeader } from "./CustomerDetailModalHeader"
+export { ShoppingHistorySection } from "./ShoppingHistorySection"
+export { NotesSection } from "./NotesSection"
+export { ProfileSection } from "./ProfileSection"
+export { CouponsSection } from "./CouponsSection"
+export { LastVisitSection } from "./LastVisitSection"
+export { OnlineCartSection } from "./OnlineCartSection"
+export { RecommendationsSection } from "./RecommendationsSection"

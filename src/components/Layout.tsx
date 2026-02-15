@@ -7,7 +7,7 @@ export function Layout() {
     <div className="min-h-screen bg-background">
       <Header />
       <Separator />
-      <main className="container py-8">
+      <main className="container mx-auto py-8">
         <Outlet />
       </main>
     </div>
