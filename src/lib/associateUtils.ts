@@ -45,7 +45,8 @@ export function getBrandPurchaseCounts(
 ): { brandCode: string; count: number }[] {
   const counts: Record<string, number> = {}
   for (const p of purchases) {
-    counts[p.brandCode] = (counts[p.brandCode] ?? 0) + 1
+    const code = p.brandCode ?? p.brandId ?? ""
+    if (code) counts[code] = (counts[code] ?? 0) + 1
   }
   return Object.entries(counts)
     .map(([brandCode, count]) => ({ brandCode, count }))
@@ -72,8 +73,9 @@ export function getPurchaseCategoryCounts(
     counts[keyword] = 0
   }
   for (const p of purchases) {
+    const name = p.itemName ?? p.productName ?? ""
     for (const keyword of Object.keys(CATEGORY_KEYWORDS)) {
-      if (p.itemName.includes(keyword)) {
+      if (name.includes(keyword)) {
         counts[keyword] = (counts[keyword] ?? 0) + 1
         break
       }

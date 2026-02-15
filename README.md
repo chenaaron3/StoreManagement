@@ -1,6 +1,6 @@
 # Sales Analytics (Manager)
 
-Manager dashboard for multi-brand clothing analytics. Data is driven by CSVs in `src/data/` (e.g. `mark_sales.csv`, `mark_transactions.csv`). The Manager page loads precomputed analytics from `public/data/precomputed.json`.
+Manager dashboard for multi-brand clothing analytics. Data is driven by CSVs in `src/data/` (e.g. `mark_sales.csv`, `mark_memberships.csv`). The Manager page loads precomputed analytics from `public/data/precomputed.json`.
 
 ## Precomputed data
 
@@ -10,7 +10,20 @@ Before running the app (or building), generate the precomputed JSON from the CSV
 npm run precompute
 ```
 
-This reads `src/data/mark_sales.csv` and `src/data/mark_transactions.csv`, runs the analysis pipeline, and writes `public/data/precomputed.json`. The build runs this automatically via `prebuild`.
+This reads `src/data/mark_sales.csv` and `src/data/mark_memberships.csv` (plus optional `mark_sales_fabricated.csv`), runs the analysis pipeline, and writes `public/data/precomputed.json`. The build runs this automatically via `prebuild`.
+
+### Fabricated sales (optional)
+
+To fill in sales data for brands that have memberships but no sales, run:
+
+```bash
+npm run build-fabrication-entities   # Creates fabrication_entities.json
+npm run fabricate-sales              # Creates mark_sales_fabricated.csv
+# Or combined:
+npm run fabricate
+```
+
+Then run `npm run precompute` to merge and analyze. When `mark_sales_fabricated.csv` exists, precompute will include it via streaming. For large fabricated datasets (~5M+ rows), use `NODE_OPTIONS="--max-old-space-size=16384" npm run precompute` (16GB heap).
 
 # React + TypeScript + Vite
 

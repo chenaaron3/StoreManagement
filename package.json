@@ -8,6 +8,9 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "build-fabrication-entities": "tsx scripts/buildFabricationEntities.ts",
+    "fabricate-sales": "tsx scripts/fabricateSales.ts",
+    "fabricate": "npm run build-fabrication-entities && npm run fabricate-sales",
     "precompute": "tsx scripts/precomputeData.ts",
     "prebuild": "npm run precompute"
   },

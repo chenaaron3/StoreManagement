@@ -1,16 +1,13 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import type { User } from "@/types/data"
-import { CURRENT_STORE_BRAND } from "@/config/associate"
-import { getOnlineCart } from "@/data/mockData"
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { CURRENT_STORE_BRAND } from '@/config/associate';
+import { getOnlineCart } from '@/data/mockData';
 import {
-  getNotificationFlags,
-  getLastVisit,
-  getPurchasesInLast6Months,
-  getRecommendations,
-} from "@/lib/associateUtils"
-import { rankingBadgeClass } from "@/lib/rankingBadge"
+    getNotificationFlags, getPurchasesInLast6Months, getRecommendations
+} from '@/lib/associateUtils';
+import { rankingBadgeClass } from '@/lib/rankingBadge';
 
+import type { User } from "@/types/data"
 interface MemberCardContentProps {
   user: User
 }
@@ -35,16 +32,12 @@ export function MemberCardContent({ user }: MemberCardContentProps) {
     user.memberId,
     onlineCartItems.length > 0
   )
-  const lastVisit = getLastVisit(user.purchases)
   const purchasesInBrand = user.purchases.filter(
-    (p) => p.brandCode === CURRENT_STORE_BRAND
+    (p) => p.storeCode === CURRENT_STORE_BRAND
   ).length
   const inLast6Months = getPurchasesInLast6Months(user.purchases)
   const topRank = topRanking(user.memberships)
   const recommendations = getRecommendations(user.purchases).slice(0, 2)
-  const recentPurchases = user.purchases
-    .sort((a, b) => new Date(b.purchaseDate).getTime() - new Date(a.purchaseDate).getTime())
-    .slice(0, 2)
 
   return (
     <Card className="cursor-pointer gap-2 bg-transparent shadow-none">
@@ -104,34 +97,19 @@ export function MemberCardContent({ user }: MemberCardContentProps) {
 
         {/* Last visit — same title/body as detail LastVisitSection */}
         <div>
-          <h4 className={SECTION_TITLE_CLASS}>
-            {lastVisit ? `Last visit · ${lastVisit.purchaseDate}` : "Last visit"}
-          </h4>
-          <div className="mt-2">
-            {lastVisit ? (
-              <p>Helped by: {lastVisit.salesAssociate} ({lastVisit.storeName})</p>
-            ) : (
-              <p className="text-muted-foreground">No purchase history</p>
-            )}
-          </div>
-        </div>
-
-        {/* Recent purchases — price styling to match detail */}
-        <div>
-          <h4 className={SECTION_TITLE_CLASS}>Recent purchases</h4>
-          <div className="mt-2">
-            {recentPurchases.length === 0 ? (
-              <p className="text-muted-foreground">No purchases yet</p>
-            ) : (
-              <ul className="space-y-1">
-                {recentPurchases.map((s, i) => (
-                  <li key={i}>
-                    {s.itemName} · <span className="font-medium text-price">¥{s.totalCost.toLocaleString()}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+          <p className="text-muted-foreground">Purchases ({user.purchases.length})</p>
+          {user.purchases.length === 0 ? (
+            <p className="text-muted-foreground">—</p>
+          ) : (
+            <ul className="mt-1 space-y-0.5">
+              {user.purchases.slice(0, 3).map((s, i) => (
+                <li key={i}>{s.productName ?? s.itemName ?? "—"} · ¥{s.totalCost.toLocaleString()}</li>
+              ))}
+              {user.purchases.length > 3 && (
+                <li className="text-muted-foreground">+{user.purchases.length - 3} more</li>
+              )}
+            </ul>
+          )}
         </div>
       </CardContent>
     </Card>

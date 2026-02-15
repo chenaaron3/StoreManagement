@@ -1,15 +1,23 @@
 /**
  * One row from sales/purchase data (e.g. mark_sales.csv).
  * Use for CSV/API; when nested under User, use Purchase instead.
+ * Supports two shapes: CSV (productId/productName/brandId/brandName) and
+ * membership/fabricated (itemId/itemName/brandCode). At least one set should be present.
  */
 export interface SalesRecord {
   memberId: string;
   purchaseDate: string;
-  itemId: string;
-  itemName: string;
+  /** CSV shape (mark_sales). */
+  brandId?: string;
+  brandName?: string;
+  productId?: string;
+  productName?: string;
+  /** Alternate shape (memberships/fabricated). */
+  itemId?: string;
+  itemName?: string;
+  brandCode?: string;
   color: string;
   size: string;
-  brandCode: string;
   quantity: number;
   totalCost: number;
   storeName: string;
@@ -22,7 +30,7 @@ export interface SalesRecord {
 export type Purchase = Omit<SalesRecord, "memberId">;
 
 /**
- * Membership / customer–store association (e.g. mark_transactions.csv).
+ * Membership / customer–store association (e.g. mark_memberships.csv).
  * Use for CSV/API; when nested under User, use Membership instead.
  */
 export interface MembershipRecord {

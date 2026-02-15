@@ -123,7 +123,7 @@ export function getCustomerDetails(salesData: SalesRecord[]): Map<string, Custom
         lastPurchaseDate: sale.purchaseDate,
         daysSinceLastPurchase: 0,
         preferredStore: sale.storeName,
-        preferredCategory: sale.itemName || "",
+        preferredCategory: sale.productName ?? sale.itemName ?? "",
         isOnlineCustomer: false,
       });
     }
@@ -160,18 +160,27 @@ export function getTopProducts(
 ): ProductPerformance[] {
   const productMap = new Map<
     string,
-    { revenue: number; quantity: number; transactions: Set<string>; productCode: string }
+    {
+      revenue: number;
+      quantity: number;
+      transactions: Set<string>;
+      productCode: string;
+      productName: string;
+    }
   >();
 
   salesData.forEach((sale) => {
-    const key = sale.itemName || sale.itemId;
+    const productId = sale.productId ?? sale.itemId;
+    const productName = sale.productName ?? sale.itemName;
+    const key = productId?.trim() || "";
     if (!key || sale.totalCost <= 0) return;
     if (!productMap.has(key)) {
       productMap.set(key, {
         revenue: 0,
         quantity: 0,
         transactions: new Set(),
-        productCode: sale.itemId,
+        productCode: productId ?? "",
+        productName: productName?.trim() || (productId ?? ""),
       });
     }
     const p = productMap.get(key)!;
@@ -181,8 +190,8 @@ export function getTopProducts(
   });
 
   return Array.from(productMap.entries())
-    .map(([productName, data]) => ({
-      productName,
+    .map(([, data]) => ({
+      productName: data.productName,
       productCode: data.productCode,
       revenue: data.revenue,
       quantity: data.quantity,
@@ -614,7 +623,7 @@ export function getProductTrends(
   const trendMap = new Map<string, Map<string, number>>();
 
   salesData.forEach((record) => {
-    const name = record.itemName || record.itemId;
+    const name = record.productName ?? record.itemName ?? record.productId ?? record.itemId;
     if (!name || !topNames.has(name) || record.totalCost <= 0) return;
     const date = parseDateKey(record.purchaseDate);
     if (!date) return;
@@ -641,7 +650,7 @@ export function getProductPerformanceWithStores(
   const productStoreMap = new Map<string, { totalRevenue: number; stores: Map<string, number> }>();
 
   salesData.forEach((sale) => {
-    const name = sale.itemName || sale.itemId;
+    const name = sale.productName ?? sale.itemName ?? sale.productId ?? sale.itemId;
     if (!name || !topNames.has(name) || !sale.storeName?.trim() || sale.totalCost <= 0) return;
     const storeName = sale.storeName.trim();
     if (!productStoreMap.has(name)) {
@@ -670,7 +679,7 @@ export function getCategoryPerformanceWithStores(
   const categoryMap = new Map<string, { revenue: number }>();
   salesData.forEach((sale) => {
     if (sale.totalCost <= 0) return;
-    const cat = sale.itemName || "その他";
+    const cat = sale.productName ?? sale.itemName ?? "その他";
     categoryMap.set(cat, { revenue: (categoryMap.get(cat)?.revenue ?? 0) + sale.totalCost });
   });
   const topCats = Array.from(categoryMap.entries())
@@ -680,7 +689,7 @@ export function getCategoryPerformanceWithStores(
   const topSet = new Set(topCats);
   const resultMap = new Map<string, { totalRevenue: number; stores: Map<string, number> }>();
   salesData.forEach((sale) => {
-    const cat = sale.itemName || "その他";
+    const cat = sale.productName ?? sale.itemName ?? "その他";
     if (!topSet.has(cat) || !sale.storeName?.trim() || sale.totalCost <= 0) return;
     const storeName = sale.storeName.trim();
     if (!resultMap.has(cat)) resultMap.set(cat, { totalRevenue: 0, stores: new Map() });
@@ -706,7 +715,7 @@ export function getCollectionPerformanceWithStores(
   const brandMap = new Map<string, number>();
   salesData.forEach((sale) => {
     if (sale.totalCost <= 0) return;
-    const b = sale.brandCode || "その他";
+    const b = sale.brandId ?? sale.brandCode ?? "その他";
     brandMap.set(b, (brandMap.get(b) || 0) + sale.totalCost);
   });
   const topBrands = Array.from(brandMap.entries())
@@ -716,7 +725,7 @@ export function getCollectionPerformanceWithStores(
   const topSet = new Set(topBrands);
   const resultMap = new Map<string, { totalRevenue: number; stores: Map<string, number> }>();
   salesData.forEach((sale) => {
-    const b = sale.brandCode || "その他";
+    const b = sale.brandId ?? sale.brandCode ?? "その他";
     if (!topSet.has(b) || !sale.storeName?.trim() || sale.totalCost <= 0) return;
     const storeName = sale.storeName.trim();
     if (!resultMap.has(b)) resultMap.set(b, { totalRevenue: 0, stores: new Map() });
@@ -799,7 +808,7 @@ export function getCollectionTrends(
   const brandMap = new Map<string, number>();
   salesData.forEach((sale) => {
     if (sale.totalCost <= 0) return;
-    const b = sale.brandCode || "その他";
+    const b = sale.brandId ?? sale.brandCode ?? "その他";
     brandMap.set(b, (brandMap.get(b) || 0) + sale.totalCost);
   });
   const topBrands = Array.from(brandMap.entries())
@@ -809,7 +818,7 @@ export function getCollectionTrends(
   const topSet = new Set(topBrands);
   const trendMap = new Map<string, Map<string, number>>();
   salesData.forEach((record) => {
-    const b = record.brandCode || "その他";
+    const b = record.brandId ?? record.brandCode ?? "その他";
     if (!topSet.has(b) || record.totalCost <= 0) return;
     const date = parseDateKey(record.purchaseDate);
     if (!date) return;
@@ -834,7 +843,7 @@ export function getCategoryTrends(
   const categoryMap = new Map<string, number>();
   salesData.forEach((sale) => {
     if (sale.totalCost <= 0) return;
-    const cat = sale.itemName || "その他";
+    const cat = sale.productName ?? sale.itemName ?? "その他";
     categoryMap.set(cat, (categoryMap.get(cat) || 0) + sale.totalCost);
   });
   const topCats = Array.from(categoryMap.entries())
@@ -844,7 +853,7 @@ export function getCategoryTrends(
   const topSet = new Set(topCats);
   const trendMap = new Map<string, Map<string, number>>();
   salesData.forEach((record) => {
-    const cat = record.itemName || "その他";
+    const cat = record.productName ?? record.itemName ?? "その他";
     if (!topSet.has(cat) || record.totalCost <= 0) return;
     const date = parseDateKey(record.purchaseDate);
     if (!date) return;
@@ -873,7 +882,7 @@ export function getStorePerformanceWithProducts(
 
   salesData.forEach((sale) => {
     const storeName = sale.storeName?.trim() || "";
-    const productName = sale.itemName || sale.itemId;
+    const productName = sale.productName ?? sale.itemName ?? sale.productId ?? sale.itemId;
     if (!storeName || !topStoreNames.has(storeName) || !productName || !topProductNames.has(productName) || sale.totalCost <= 0)
       return;
     if (!storeProductMap.has(storeName)) {
@@ -941,8 +950,8 @@ export function getEmployeePerformance(
     const e = employeeMap.get(key)!;
     e.totalRevenue += sale.totalCost;
     e.stores.add(sale.storeName?.trim() || "");
-    const name = sale.itemName || sale.itemId;
-    e.products.set(name, (e.products.get(name) || 0) + sale.totalCost);
+    const name = sale.productName ?? sale.itemName ?? sale.productId ?? sale.itemId ?? "";
+    if (name) e.products.set(name, (e.products.get(name) || 0) + sale.totalCost);
   });
 
   return Array.from(employeeMap.entries())
@@ -966,21 +975,31 @@ export function getGenderSegments(_salesData: SalesRecord[]): CustomerSegment[] 
   return [];
 }
 
+/**
+ * Brand performance from sales. brandId from mark_sales (商品/店舗ブランドコード); brandName from 略称.
+ */
 export function getBrandPerformance(salesData: SalesRecord[]): BrandPerformance[] {
   const brandMap = new Map<
     string,
-    { revenue: number; transactions: Set<string>; customers: Set<string>; stores: Set<string> }
+    {
+      revenue: number;
+      transactions: Set<string>;
+      customers: Set<string>;
+      stores: Set<string>;
+      brandName: string;
+    }
   >();
 
   salesData.forEach((sale) => {
     if (sale.totalCost <= 0) return;
-    const code = sale.brandCode || "OTHER";
+    const code = (sale.brandId ?? sale.brandCode)?.trim() || "OTHER";
     if (!brandMap.has(code)) {
       brandMap.set(code, {
         revenue: 0,
         transactions: new Set(),
         customers: new Set(),
         stores: new Set(),
+        brandName: (sale.brandName ?? sale.brandCode)?.trim() || code,
       });
     }
     const b = brandMap.get(code)!;
@@ -993,7 +1012,7 @@ export function getBrandPerformance(salesData: SalesRecord[]): BrandPerformance[
   return Array.from(brandMap.entries())
     .map(([brandCode, data]) => ({
       brandCode,
-      brandName: brandCode,
+      brandName: data.brandName,
       totalRevenue: data.revenue,
       transactions: data.transactions.size,
       customers: data.customers.size,

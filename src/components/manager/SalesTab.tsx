@@ -14,11 +14,9 @@ export function SalesTab({ data }: SalesTabProps) {
   const [granularity, setGranularity] = useState<Granularity>("monthly");
 
   const trendData =
-    granularity === "daily"
-      ? data.trendDataDaily
-      : granularity === "weekly"
-        ? data.trendDataWeekly
-        : data.trendDataMonthly;
+    granularity === "weekly"
+      ? data.trendDataWeekly
+      : data.trendDataMonthly;
 
   return (
     <>
@@ -34,7 +32,7 @@ export function SalesTab({ data }: SalesTabProps) {
           <div className="flex flex-wrap items-center justify-between gap-4">
             <CardTitle>Sales trends</CardTitle>
             <div className="flex gap-2">
-              {(["daily", "weekly", "monthly"] as const).map((g) => (
+              {(["weekly", "monthly"] as const).map((g) => (
                 <button
                   key={g}
                   type="button"

@@ -4,7 +4,6 @@
 
 export interface PrecomputedData {
   kpis: { totalRevenue: number; totalTransactions: number; averageOrderValue: number; activeCustomers: number };
-  trendDataDaily: { date: string; revenue: number; transactions: number; customers: number }[];
   trendDataWeekly: { date: string; revenue: number; transactions: number; customers: number }[];
   trendDataMonthly: { date: string; revenue: number; transactions: number; customers: number }[];
   dayOfWeekData: { day: string; revenue: number; transactions: number; customers: number }[];

@@ -10,7 +10,13 @@ import type {
 /** Core user fields (no memberships/purchases). Used to build User. */
 type UserCore = Pick<
   User,
-  "memberId" | "prefecture" | "birthday" | "gender" | "name" | "phoneNumber" | "bodyShape"
+  | "memberId"
+  | "prefecture"
+  | "birthday"
+  | "gender"
+  | "name"
+  | "phoneNumber"
+  | "bodyShape"
 >;
 
 export const mockProfiles: UserCore[] = [
@@ -46,12 +52,13 @@ export const mockProfiles: UserCore[] = [
 export const mockSales: SalesRecord[] = [
   {
     memberId: "RC01862444",
-    purchaseDate: "2024-09-15",
-    itemId: "002250801501",
-    itemName: "チュール刺繍フレアスカート",
+    purchaseDate: "2023-01-01",
+    brandId: "00",
+    brandName: "MD",
+    productId: "002250801501",
+    productName: "チュール刺繍フレアスカート",
     color: "IVY",
     size: "M",
-    brandCode: "MD",
     quantity: 1,
     totalCost: 8640,
     storeName: "MD FC金沢フォーラス",
@@ -60,12 +67,13 @@ export const mockSales: SalesRecord[] = [
   },
   {
     memberId: "RC01862444",
-    purchaseDate: "2024-11-01",
-    itemId: "002260800101",
-    itemName: "異素材ドッキングスーパーハイウエストスカート",
+    purchaseDate: "2023-01-01",
+    brandId: "00",
+    brandName: "MD",
+    productId: "002260800101",
+    productName: "異素材ドッキングスーパーハイウエストスカート",
     color: "C.GRY",
     size: "M",
-    brandCode: "MD",
     quantity: 1,
     totalCost: 9360,
     storeName: "MD FC金沢フォーラス",
@@ -73,13 +81,14 @@ export const mockSales: SalesRecord[] = [
     salesAssociate: "山田",
   },
   {
-    memberId: "RC01862444",
-    purchaseDate: "2025-01-10",
-    itemId: "002240400501",
-    itemName: "2WAYリボンボリュームスリーブブラウス",
+    memberId: "RC01866206",
+    purchaseDate: "2023-01-01",
+    brandId: "00",
+    brandName: "MD",
+    productId: "002240400501",
+    productName: "2WAYリボンボリュームスリーブブラウス",
     color: "B.PNK",
     size: "F",
-    brandCode: "MD",
     quantity: 1,
     totalCost: 3600,
     storeName: "MD FC金沢フォーラス",
@@ -314,15 +323,33 @@ export const mockMemberships: MembershipRecord[] = [
 /** Mock coupons per member (MVP). Birthday coupon is on the member with birthday in Feb (RC01862444). */
 export const mockCouponsByMember: Record<string, Coupon[]> = {
   RC01862444: [
-    { id: "c1", name: "10% Off Next Visit", code: "WELCOME10", discount: "10%", expiry: "2025-12-31", used: false },
-    { id: "c2", name: "Free Shipping", discount: "Free ship", expiry: "2025-06-30", used: true },
+    {
+      id: "c1",
+      name: "10% Off Next Visit",
+      code: "WELCOME10",
+      discount: "10%",
+      expiry: "2025-12-31",
+      used: false,
+    },
+    {
+      id: "c2",
+      name: "Free Shipping",
+      discount: "Free ship",
+      expiry: "2025-06-30",
+      used: true,
+    },
   ],
 };
 
 /** Mock online cart per member. EC browse tag is shown only when cart has items. */
 export const mockOnlineCartByMember: Record<string, OnlineCartItem[]> = {
   RC01862444: [
-    { id: "cart1", itemName: "プリーツミディスカート", price: 5500, quantity: 1 },
+    {
+      id: "cart1",
+      itemName: "プリーツミディスカート",
+      price: 5500,
+      quantity: 1,
+    },
     { id: "cart2", itemName: "シルク風ブラウス", price: 4500, quantity: 1 },
   ],
   RC01866206: [],
@@ -331,35 +358,58 @@ export const mockOnlineCartByMember: Record<string, OnlineCartItem[]> = {
 
 /** Prepopulated notes per member (used when localStorage has no notes yet). */
 export const mockNotesByMember: Record<string, string> = {
-  RC01862444: "Came with her family last visit. Interested in new skirt collection.",
-  RC01866206: "VIP customer. Prefers blouses and jackets. Follow up on wishlist items.",
+  RC01862444:
+    "Came with her family last visit. Interested in new skirt collection.",
+  RC01866206:
+    "VIP customer. Prefers blouses and jackets. Follow up on wishlist items.",
 };
 
 /** Initial notes for a member (mock), when none saved yet. */
 export function getInitialNotes(memberId: string): string {
-  return mockNotesByMember[memberId] ?? ""
+  return mockNotesByMember[memberId] ?? "";
 }
 
 /** Mock recommendation items by category (for プラスワン). */
-export const mockRecommendationItems: { category: string; itemName: string; price: number }[] = [
+export const mockRecommendationItems: {
+  category: string;
+  itemName: string;
+  price: number;
+}[] = [
   { category: "スカート", itemName: "プリーツミディスカート", price: 5500 },
   { category: "スカート", itemName: "ウールブレンドスカート", price: 7200 },
   { category: "ブラウス", itemName: "シルク風ブラウス", price: 4500 },
   { category: "ブラウス", itemName: "レースカフスブラウス", price: 3900 },
   { category: "ドレス", itemName: "ミニワンピース", price: 8900 },
   { category: "ジャケット", itemName: "ウールジャケット", price: 12000 },
-]
+];
 
 /** Mock initial associate todos (seed; persisted in localStorage). */
 export const mockAssociateTodos: AssociateTodo[] = [
-  { id: "t1", title: "Follow-up call: 田中 花子", dueDate: "2025-02-20", status: "pending", memberId: "RC01862444" },
-  { id: "t2", title: "Stock check: skirts section", dueDate: "2025-02-16", status: "pending" },
-  { id: "t3", title: "Send thank-you to 佐藤 美咲", dueDate: "2025-02-18", status: "done", memberId: "RC01866206" },
-]
+  {
+    id: "t1",
+    title: "Follow-up call: 田中 花子",
+    dueDate: "2025-02-20",
+    status: "pending",
+    memberId: "RC01862444",
+  },
+  {
+    id: "t2",
+    title: "Stock check: skirts section",
+    dueDate: "2025-02-16",
+    status: "pending",
+  },
+  {
+    id: "t3",
+    title: "Send thank-you to 佐藤 美咲",
+    dueDate: "2025-02-18",
+    status: "done",
+    memberId: "RC01866206",
+  },
+];
 
 /** Normalize phone for search: strip spaces and dashes. */
 function normalizePhone(phone: string): string {
-  return phone.replace(/\s|-/g, "")
+  return phone.replace(/\s|-/g, "");
 }
 
 /** Fetch all sales (mock; replace with CSV/API later). */
@@ -369,7 +419,9 @@ export async function fetchSales(): Promise<SalesRecord[]> {
 }
 
 /** Fetch core user fields by member id (mock). */
-export async function fetchUserCore(memberId: string): Promise<UserCore | null> {
+export async function fetchUserCore(
+  memberId: string,
+): Promise<UserCore | null> {
   await delay(200);
   return mockProfiles.find((p) => p.memberId === memberId) ?? null;
 }
@@ -382,27 +434,29 @@ export async function fetchUser(memberId: string): Promise<User | null> {
     Promise.resolve(mockMemberships.filter((m) => m.memberId === memberId)),
   ]);
   if (!core) return null;
-  const coupons = mockCouponsByMember[memberId] ?? []
+  const coupons = mockCouponsByMember[memberId] ?? [];
   return {
     ...core,
     memberships: membershipsForMember.map(({ memberId: _, ...m }) => m),
     purchases: salesForMember.map(({ memberId: _, ...s }) => s),
     coupons,
-  }
+  };
 }
 
 /** Fetch user by phone number (normalized: strip spaces/dashes). Returns null if no match. */
 export async function fetchUserByPhone(phone: string): Promise<User | null> {
-  const normalized = normalizePhone(phone)
-  if (!normalized) return null
-  const core = mockProfiles.find((p) => normalizePhone(p.phoneNumber) === normalized) ?? null
-  if (!core) return null
-  return fetchUser(core.memberId)
+  const normalized = normalizePhone(phone);
+  if (!normalized) return null;
+  const core =
+    mockProfiles.find((p) => normalizePhone(p.phoneNumber) === normalized) ??
+    null;
+  if (!core) return null;
+  return fetchUser(core.memberId);
 }
 
 /** Fetch online cart items for a member (mock). */
 export function getOnlineCart(memberId: string): OnlineCartItem[] {
-  return mockOnlineCartByMember[memberId] ?? []
+  return mockOnlineCartByMember[memberId] ?? [];
 }
 
 function delay(ms: number): Promise<void> {
