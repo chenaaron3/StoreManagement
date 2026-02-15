@@ -1,0 +1,12 @@
+---
+description: Use shadcn/ui for all UI components via MCP
+globs: src/**/*.tsx
+alwaysApply: false
+---
+
+# UI components: shadcn only
+
+- **All UI must use shadcn/ui.** Buttons, inputs, dropdowns, modals, cards, avatars, etc. come from `@/components/ui/` (shadcn), not custom primitives or other libraries.
+- **Use the shadcn MCP** to discover and add components. Before building a new UI piece, check the shadcn registry via MCP for an existing component (e.g. Button, Card, Dialog, Select). Add missing components with the CLI: `npx shadcn@latest add <component>`.
+- **Import from `@/components/ui/<name>`.** Example: `import { Button } from "@/components/ui/button"`. Do not reimplement patterns that shadcn already provides.
+- **Compose with shadcn primitives.** For custom patterns, compose shadcn components and use `cn()` from `@/lib/utils` for class merging. Keep styling consistent with the project theme (CSS variables in `src/index.css`).
