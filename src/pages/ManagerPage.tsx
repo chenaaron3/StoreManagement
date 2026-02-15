@@ -81,9 +81,9 @@ export function ManagerPage() {
     ) : null;
 
   return (
-    <div className="flex min-h-[calc(100vh-8rem)] gap-0">
+    <div className="flex h-[calc(100vh-8rem)] overflow-hidden">
       <ManagerSidebar activeTab={activeTab} onTabChange={setActiveTab} />
-      <main className="flex-1 min-w-0 overflow-auto">
+      <main className="flex-1 min-w-0 overflow-y-auto">
         <div className="space-y-8 p-6">{body}</div>
       </main>
     </div>

@@ -1,23 +1,32 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import type { CustomerSegment, RFMMatrixCell } from "@/types/analysis";
 import type { PrecomputedData } from "@/utils/precomputedDataLoader";
+import { RFMAnalysis } from "./RFMAnalysis";
+import { AdvancedCustomerSegmentation } from "./AdvancedCustomerSegmentation";
 
 interface CustomersTabProps {
   data: PrecomputedData;
 }
 
-export function CustomersTab({ data: _data }: CustomersTabProps) {
+export function CustomersTab({ data }: CustomersTabProps) {
+  const rfmMatrix = data.rfmMatrix as RFMMatrixCell[];
+  const frequencySegments = data.frequencySegments as CustomerSegment[];
+  const ageSegments = data.ageSegments as CustomerSegment[];
+  const genderSegments = data.genderSegments as CustomerSegment[];
+  const channelSegments = data.channelSegments as CustomerSegment[];
+  const aovSegments = data.aovSegments as CustomerSegment[];
+  const lifetimeValueSegments = data.customerSegments;
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Customers</CardTitle>
-        <p className="text-sm text-muted-foreground">
-          Charts and tables for this section will be wired next.
-        </p>
-      </CardHeader>
-      <CardContent>
-        <Skeleton className="h-64 w-full" />
-      </CardContent>
-    </Card>
+    <div className="space-y-8">
+      <RFMAnalysis rfmMatrix={rfmMatrix} />
+      <AdvancedCustomerSegmentation
+        frequencySegments={frequencySegments}
+        ageSegments={ageSegments}
+        genderSegments={genderSegments}
+        channelSegments={channelSegments}
+        aovSegments={aovSegments}
+        lifetimeValueSegments={lifetimeValueSegments}
+      />
+    </div>
   );
 }

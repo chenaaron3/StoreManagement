@@ -38,7 +38,7 @@ export function ManagerSidebar({ activeTab, onTabChange }: ManagerSidebarProps) 
 
   return (
     <aside
-      className="flex flex-col shrink-0 h-[calc(100vh-8rem)] rounded-br-2xl border-r border-[#1a2030] bg-[#232A3B] text-white shadow-lg transition-[width] duration-200"
+      className="flex h-full flex-col shrink-0 rounded-br-2xl border-r border-[#1a2030] bg-[#232A3B] text-white shadow-lg transition-[width] duration-200"
       style={{ width: collapsed ? 72 : 240 }}
     >
       {/* Header */}
