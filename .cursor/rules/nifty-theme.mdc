@@ -1,0 +1,36 @@
+---
+description: Nifty-inspired theme and styling for all views (Manager, Associate, modals)
+globs: src/**/*
+alwaysApply: true
+---
+
+# Nifty theme: apply across all views
+
+Follow this theme for every UI implementation so Manager, Associate, and shared components feel like one app.
+
+## Colors (use CSS variables)
+
+- **Primary accent:** `var(--primary)` (~#5B9BD5 blue) – buttons, links, active nav, focus rings
+- **Content background:** `var(--background)` – light gray #F5F6FA
+- **Cards:** `var(--card)` – white
+- **Charts:** `var(--chart-1)` … `var(--chart-8)` – no hardcoded hex; all charts must use theme palette
+- **Sidebar:** dark `#232A3B` / `#1a2030`; active state uses primary accent, never `shadow-lg` or `rounded-br-*`
+
+## Layout
+
+- **Sidebar:** Edge-to-edge, flat (no rounded corners, no heavy shadow). Single `main` per page; content area is `div`, not nested `main`.
+- **Page padding:** `p-6` everywhere; section gap `space-y-6` or `space-y-8` – be consistent.
+- **Separators:** Prefer spacing over `Separator`; use at most 1–2 per page for major breaks.
+
+## Shared elements
+
+- **Page headers:** Use `PageHeader({ title, subtitle })` – same style for Manager and Associate.
+- **Sections:** Use `Section` (or `PageSection`) with `title` + children; section titles `text-sm font-medium text-muted-foreground`.
+- **Formatting:** Use `formatCurrency` and `formatNumber` from `@/lib/utils`.
+- **Ranking logic:** Use `topRanking` / `RANK_ORDER` from `@/lib/rankingBadge` or `memberUtils`.
+
+## Cards and components
+
+- White cards, light border, subtle shadow; primary for active tab/toggle states.
+- Tables: striped or alternating rows; header slightly darker.
+- Badges: success/warning/danger aligned with theme palette.

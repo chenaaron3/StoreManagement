@@ -15,6 +15,12 @@ function rowToSalesRecord(row: Record<string, string>): SalesRecord | null {
   const brandName =
     row["商品ブランド略称"]?.trim() || row["店舗ブランド略称"]?.trim() || "";
 
+  let storeName = row["店舗名"]?.trim() ?? "";
+  // Ensure "Brand Location" format: if store has no space and brand exists, prepend brand
+  if (storeName && brandName && !storeName.includes(" ")) {
+    storeName = `${brandName} ${storeName}`;
+  }
+
   return {
     memberId,
     purchaseDate,
@@ -26,7 +32,7 @@ function rowToSalesRecord(row: Record<string, string>): SalesRecord | null {
     size: row["サイズ名"]?.trim() ?? "",
     quantity: Number.isNaN(quantity) ? 1 : quantity,
     totalCost: Number.isNaN(totalCost) ? 0 : totalCost,
-    storeName: row["店舗名"]?.trim() ?? "",
+    storeName,
     salesAssociate: row["販売担当者"]?.trim() ?? "",
   };
 }

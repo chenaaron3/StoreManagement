@@ -11,12 +11,7 @@ interface ProductTabProps {
   data: PrecomputedData;
 }
 
-const formatCurrency = (value: number) =>
-  new Intl.NumberFormat("ja-JP", {
-    style: "currency",
-    currency: "JPY",
-    maximumFractionDigits: 0,
-  }).format(value);
+import { formatCurrency } from "@/lib/utils";
 
 const VIEW_LABELS: Record<ProductViewType, string> = {
   product: "Product",
@@ -124,27 +119,27 @@ export function ProductTab({ data }: ProductTabProps) {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b">
-                  <th className="text-left py-2 font-medium">Product</th>
-                  <th className="text-right py-2 font-medium">Revenue</th>
-                  <th className="text-left py-2 font-medium">Top stores</th>
+                  <th className="text-left py-2 pr-4 font-medium">Product</th>
+                  <th className="text-right py-2 px-4 font-medium">Revenue</th>
+                  <th className="text-left py-2 pl-4 font-medium">Top stores</th>
                 </tr>
               </thead>
               <tbody>
                 {performance.slice(0, 25).map((row) => (
                   <tr key={row.name} className="border-b">
-                    <td className="py-2" title={row.name}>
+                    <td className="py-2 pr-4" title={row.name}>
                       {row.name.length > 50
                         ? `${row.name.slice(0, 50)}…`
                         : row.name}
                     </td>
-                    <td className="text-right py-2">
+                    <td className="text-right py-2 px-4 whitespace-nowrap">
                       {formatCurrency(row.totalRevenue)}
                     </td>
-                    <td className="py-2 text-muted-foreground">
+                    <td className="py-2 pl-4 text-muted-foreground">
                       {row.stores
                         .slice(0, 5)
-                        .map((s) => `${s.storeName} (${formatCurrency(s.revenue)})`)
-                        .join(" · ")}
+                        .map((s) => `${s.storeName} · ${formatCurrency(s.revenue)}`)
+                        .join("  ·  ")}
                       {row.stores.length > 5 &&
                         ` +${row.stores.length - 5} more`}
                     </td>

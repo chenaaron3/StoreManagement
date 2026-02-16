@@ -1,16 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-function formatCurrency(value: number): string {
-  return new Intl.NumberFormat("ja-JP", {
-    style: "currency",
-    currency: "JPY",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
-
-function formatNumber(value: number): string {
-  return new Intl.NumberFormat("ja-JP").format(value);
-}
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { formatCurrency, formatNumber } from "@/lib/utils"
 
 interface KPICardProps {
   title: string;
@@ -27,14 +16,16 @@ export function KPICard({ title, value, format = "number" }: KPICardProps) {
       : value;
 
   return (
-    <Card>
+    <Card className="flex min-w-0 h-full flex-col">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground">
+        <CardTitle className="text-sm font-medium text-muted-foreground line-clamp-1">
           {title}
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <p className="text-3xl font-bold">{display}</p>
+      <CardContent className="flex flex-1 flex-col justify-center">
+        <p className="truncate text-center text-xl font-bold tabular-nums md:text-2xl">
+          {display}
+        </p>
       </CardContent>
     </Card>
   );

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   LayoutDashboard,
   Users,
@@ -6,10 +7,11 @@ import {
   Store,
   UserCog,
   Tag,
-  Sun,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import { LanguageSwitcher } from "./LanguageSwitcher";
+import { ViewSwitcher } from "./ViewSwitcher";
 
 export type ManagerTabId =
   | "sales"
@@ -19,26 +21,41 @@ export type ManagerTabId =
   | "employees"
   | "brand";
 
-const NAV_ITEMS: { id: ManagerTabId; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
-  { id: "sales", label: "Sales", icon: LayoutDashboard },
-  { id: "customers", label: "Customers", icon: Users },
-  { id: "product", label: "Product", icon: Package },
-  { id: "stores", label: "Stores", icon: Store },
-  { id: "employees", label: "Employees", icon: UserCog },
-  { id: "brand", label: "Brand", icon: Tag },
+export interface BrandOption {
+  brandCode: string;
+  brandName: string;
+}
+
+const NAV_IDS: { id: ManagerTabId; icon: React.ComponentType<{ className?: string }> }[] = [
+  { id: "sales", icon: LayoutDashboard },
+  { id: "customers", icon: Users },
+  { id: "product", icon: Package },
+  { id: "stores", icon: Store },
+  { id: "employees", icon: UserCog },
+  { id: "brand", icon: Tag },
 ];
 
 interface ManagerSidebarProps {
   activeTab: ManagerTabId;
   onTabChange: (tab: ManagerTabId) => void;
+  brandFilter: string;
+  onBrandFilterChange: (brandCode: string) => void;
+  brandOptions: BrandOption[];
 }
 
-export function ManagerSidebar({ activeTab, onTabChange }: ManagerSidebarProps) {
+export function ManagerSidebar({
+  activeTab,
+  onTabChange,
+  brandFilter,
+  onBrandFilterChange,
+  brandOptions,
+}: ManagerSidebarProps) {
+  const { t } = useTranslation();
   const [collapsed, setCollapsed] = useState(false);
 
   return (
     <aside
-      className="flex h-full flex-col shrink-0 rounded-br-2xl border-r border-[#1a2030] bg-[#232A3B] text-white shadow-lg transition-[width] duration-200"
+      className="sticky top-0 flex min-h-screen flex-col shrink-0 self-start rounded-none border-r border-[#1a2030] bg-[#232A3B] text-white transition-[width] duration-200"
       style={{ width: collapsed ? 72 : 240 }}
     >
       {/* Header */}
@@ -47,31 +64,46 @@ export function ManagerSidebar({ activeTab, onTabChange }: ManagerSidebarProps) 
           collapsed ? "justify-center px-2" : "justify-between gap-2 px-4"
         }`}
       >
-        {!collapsed && (
-          <span className="text-lg font-bold tracking-tight">Mark</span>
+        {collapsed ? (
+          <span className="text-lg font-bold tracking-tight">M</span>
+        ) : (
+          <>
+            <span className="text-lg font-bold tracking-tight">Mark</span>
+            <LanguageSwitcher />
+          </>
         )}
-        <div className={`flex items-center gap-2 ${collapsed ? "" : "ml-auto"}`}>
-          <button
-            type="button"
-            aria-label="Theme"
-            className="rounded-md p-1.5 text-white/80 hover:bg-white/10 hover:text-white transition-colors"
+      </div>
+
+      {/* Brand filter */}
+      <div className={`shrink-0 border-b border-white/10 px-3 py-3 ${collapsed ? "px-2" : ""}`}>
+        <div className={collapsed ? "flex justify-center" : ""}>
+          <select
+            value={brandFilter}
+            onChange={(e) => onBrandFilterChange(e.target.value)}
+            className={`w-full rounded-lg border-0 bg-white/10 pl-3 pr-10 py-2 text-sm text-white focus:ring-1 focus:ring-white/30 [appearance:none] bg-[length:12px_12px] bg-[right_0.75rem_center] bg-no-repeat ${
+              collapsed ? "max-w-[52px] truncate" : ""
+            }`}
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
+            }}
+            title={t("sidebar.brandFilter")}
           >
-            <Sun className="h-5 w-5" />
-          </button>
-          <button
-            type="button"
-            aria-label="Language"
-            className="rounded-md p-1.5 text-white/80 hover:bg-white/10 hover:text-white transition-colors"
-          >
-            <span className="text-base leading-none">🇯🇵</span>
-          </button>
+            <option value="all">{collapsed ? "All" : t("sidebar.allBrands")}</option>
+            {brandOptions.map((b) => (
+              <option key={b.brandCode} value={b.brandCode}>
+                {collapsed && b.brandName.length > 6
+                  ? `${b.brandName.slice(0, 6)}…`
+                  : b.brandName}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto py-3 px-2">
         <ul className="space-y-0.5">
-          {NAV_ITEMS.map(({ id, label, icon: Icon }) => {
+          {NAV_IDS.map(({ id, icon: Icon }) => {
             const isActive = activeTab === id;
             return (
               <li key={id}>
@@ -88,13 +120,22 @@ export function ManagerSidebar({ activeTab, onTabChange }: ManagerSidebarProps) 
                     <span className="absolute left-0 top-1/2 h-8 w-0.5 -translate-y-1/2 rounded-r bg-blue-500" aria-hidden />
                   )}
                   <Icon className="h-5 w-5 shrink-0" aria-hidden />
-                  {!collapsed && <span>{label}</span>}
+                  {!collapsed && <span>{t(`sidebar.${id}`)}</span>}
                 </button>
               </li>
             );
           })}
         </ul>
       </nav>
+
+      {/* User (ViewSwitcher) */}
+      <div className={`shrink-0 border-t border-white/10 p-2 ${collapsed ? "flex justify-center" : ""}`}>
+        <ViewSwitcher
+          variant={collapsed ? "icon" : "full"}
+          invert
+          className={collapsed ? "justify-center rounded-lg py-2" : "w-full justify-start rounded-lg py-2"}
+        />
+      </div>
 
       {/* Collapse */}
       <div className="shrink-0 border-t border-white/10 p-2">
@@ -106,11 +147,14 @@ export function ManagerSidebar({ activeTab, onTabChange }: ManagerSidebarProps) 
           }`}
         >
           {collapsed ? (
-            <ChevronRight className="h-5 w-5 shrink-0" aria-label="Expand sidebar" />
+            <ChevronRight
+              className="h-5 w-5 shrink-0"
+              aria-label={t("common.expandSidebar")}
+            />
           ) : (
             <>
               <ChevronLeft className="h-5 w-5 shrink-0" aria-hidden />
-              <span>Collapse</span>
+              <span>{t("sidebar.collapse")}</span>
             </>
           )}
         </button>

@@ -32,6 +32,37 @@ export interface PrecomputedData {
   aovSegments: unknown[];
   employeePerformance: unknown[];
   brandPerformance: { brandCode: string; brandName: string; totalRevenue: number; transactions: number; customers: number; averageOrderValue: number; storeCount: number }[];
+  byBrand?: Record<
+    string,
+    {
+      kpis: { totalRevenue: number; totalTransactions: number; averageOrderValue: number; activeCustomers: number };
+      trendDataWeekly: { date: string; revenue: number; transactions: number; customers: number }[];
+      trendDataMonthly: { date: string; revenue: number; transactions: number; customers: number }[];
+      dayOfWeekData: { day: string; revenue: number; transactions: number; customers: number }[];
+      customerSegments: unknown[];
+      rfmMatrix: unknown[];
+      frequencySegments: unknown[];
+      channelSegments: unknown[];
+      aovSegments: unknown[];
+      employeePerformance: unknown[];
+      storePerformanceWithProducts: unknown[];
+      storeTrendsWeekly: unknown;
+      storeTrendsMonthly: unknown;
+      productPerformanceWithStores: unknown[];
+      productTrendsWeekly: unknown[];
+      productTrendsMonthly: unknown[];
+      collectionPerformanceWithStores: unknown[];
+      collectionTrendsWeekly: unknown[];
+      collectionTrendsMonthly: unknown[];
+      categoryPerformanceWithStores: unknown[];
+      categoryTrendsWeekly: unknown[];
+      categoryTrendsMonthly: unknown[];
+      colorPerformanceWithStores: unknown[];
+      sizePerformanceWithStores: unknown[];
+      colorTrends: unknown[];
+      sizeTrends: unknown[];
+    }
+  >;
 }
 
 let cachedData: PrecomputedData | null = null;

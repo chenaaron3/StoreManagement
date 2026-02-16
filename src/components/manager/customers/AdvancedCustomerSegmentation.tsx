@@ -13,18 +13,7 @@ import {
 } from "recharts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { CustomerSegment } from "@/types/analysis";
-
-function formatCurrency(value: number): string {
-  return new Intl.NumberFormat("ja-JP", {
-    style: "currency",
-    currency: "JPY",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
-
-function formatNumber(value: number): string {
-  return new Intl.NumberFormat("ja-JP").format(value);
-}
+import { formatCurrency, formatNumber } from "@/lib/utils";
 
 interface AdvancedCustomerSegmentationProps {
   frequencySegments: CustomerSegment[];
@@ -46,17 +35,15 @@ const SEGMENT_LABELS: Record<SegmentationType, string> = {
   lifetimeValue: "Lifetime value",
 };
 
-const COLORS = [
-  "#8884d8",
-  "#82ca9d",
-  "#ffc658",
-  "#ff7c7c",
-  "#8dd1e1",
-  "#d084d0",
-  "#ffb347",
-  "#87ceeb",
-  "#dda0dd",
-  "#98d8c8",
+const CHART_COLORS = [
+  "var(--chart-1)",
+  "var(--chart-2)",
+  "var(--chart-3)",
+  "var(--chart-4)",
+  "var(--chart-5)",
+  "var(--chart-6)",
+  "var(--chart-7)",
+  "var(--chart-8)",
 ];
 
 export function AdvancedCustomerSegmentation({
@@ -81,7 +68,7 @@ export function AdvancedCustomerSegmentation({
   const currentData = segmentData[activeSegment];
   const chartData = currentData.map((segment, index) => ({
     ...segment,
-    fill: COLORS[index % COLORS.length],
+    fill: CHART_COLORS[index % CHART_COLORS.length],
   }));
 
   const hasData = chartData.length > 0 && chartData.some((d) => d.count > 0);
@@ -124,7 +111,7 @@ export function AdvancedCustomerSegmentation({
             No segment data for this dimension.
           </p>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             <div>
               <h3 className="text-lg font-semibold mb-4">
                 {SEGMENT_LABELS[activeSegment]} distribution
@@ -175,18 +162,19 @@ export function AdvancedCustomerSegmentation({
                 <BarChart
                   data={chartData}
                   layout="vertical"
-                  margin={{ top: 5, right: 30, left: 120, bottom: 5 }}
+                  margin={{ top: 5, right: 50, left: 130, bottom: 5 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
                   <XAxis
                     type="number"
                     tickFormatter={(v) => `¥${(v / 1000000).toFixed(1)}M`}
+                    tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
                   />
                   <YAxis
                     dataKey="segment"
                     type="category"
                     width={110}
-                    tick={{ fontSize: 11 }}
+                    tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
                   />
                   <Tooltip
                     content={({ active, payload }) => {
@@ -208,7 +196,7 @@ export function AdvancedCustomerSegmentation({
                       );
                     }}
                   />
-                  <Bar dataKey="totalRevenue" fill="hsl(var(--primary))" name="Revenue">
+                  <Bar dataKey="totalRevenue" fill="var(--chart-1)" name="Revenue">
                     {chartData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.fill} />
                     ))}

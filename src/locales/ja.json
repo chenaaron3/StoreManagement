@@ -1,0 +1,132 @@
+{
+  "sidebar": {
+    "collapse": "折りたたむ",
+    "sales": "売上",
+    "customers": "顧客",
+    "product": "商品",
+    "stores": "店舗",
+    "employees": "従業員",
+    "brand": "ブランド",
+    "brandFilter": "ブランドで絞り込み",
+    "allBrands": "すべてのブランド",
+    "searchByPhone": "電話番号検索",
+    "inStore": "来店客情報",
+    "tasksAssigned": "Todoリスト",
+    "myDashboard": "マイダッシュボード",
+    "location": "所在地",
+    "branch": "支店"
+  },
+  "viewSwitcher": {
+    "manager": "マネージャー",
+    "associate": "販売担当",
+    "switchView": "ビューを切り替え"
+  },
+  "common": {
+    "revenue": "売上",
+    "count": "件数",
+    "expandSidebar": "サイドバーを展開",
+    "memberId": "会員ID",
+    "loading": "分析データを読み込み中...",
+    "more": "あと{{count}}件"
+  },
+  "language": {
+    "switchToEnglish": "英語に切り替え",
+    "switchToJapanese": "日本語に切り替え"
+  },
+  "managerPage": {
+    "tabs": {
+      "sales": { "title": "売上", "subtitle": "売上、取引数、トレンドの推移" },
+      "brand": { "title": "ブランド", "subtitle": "ブランド別の売上と実績" },
+      "customers": { "title": "顧客", "subtitle": "セグメント、RFM分析、顧客インサイト" },
+      "product": { "title": "商品", "subtitle": "商品別の売上" },
+      "stores": { "title": "店舗", "subtitle": "店舗別の売上と実績" },
+      "employees": { "title": "従業員", "subtitle": "従業員別の売上と実績" }
+    },
+    "error": {
+      "loadFailed": "データの読み込みに失敗しました",
+      "precomputeHint": "{{cmd1}} を実行してprecomputedデータを生成し、{{path}} が配信されていることを確認してください。"
+    }
+  },
+  "salesTab": {
+    "totalRevenue": "総売上",
+    "transactions": "取引数",
+    "averageOrderValue": "平均注文金額",
+    "activeCustomers": "アクティブ顧客数",
+    "salesTrends": "売上トレンド",
+    "weekly": "週次",
+    "monthly": "月次",
+    "revenueByDayOfWeek": "曜日別売上"
+  },
+  "associatePage": {
+    "searchByPhone": "電話番号検索",
+    "inStore": "来店客情報",
+    "noCustomersCheckedIn": "チェックイン済みの顧客はいません"
+  },
+  "todo": {
+    "title": "Todoリスト",
+    "addTask": "タスク追加",
+    "taskTitle": "タスク名",
+    "add": "追加",
+    "cancel": "キャンセル",
+    "markPending": "未完了に戻す",
+    "markDone": "完了にする",
+    "dismiss": "非表示",
+    "due": "期限",
+    "customer": "顧客",
+    "completed": "完了 {{count}}件",
+    "noTasks": "タスクがありません"
+  },
+  "memberCard": {
+    "birthdayThisMonth": "今月誕生日",
+    "crossStore": "他店利用",
+    "ecBrowse": "EC閲覧",
+    "customerValue": "お客様情報",
+    "purchasesTotal": "購入{{total}}回・直近6ヶ月{{inLast6}}回",
+    "inMyBrand": "自ブランド",
+    "recommendedForYou": "おすすめ商品",
+    "noRecommendations": "おすすめはまだありません",
+    "purchases": "購入履歴（{{count}}件）"
+  },
+  "customerDetail": {
+    "title": "お客様情報",
+    "notFound": "顧客が見つかりません。",
+    "profile": "プロフィール",
+    "name": "氏名",
+    "phone": "電話番号",
+    "prefecture": "都道府県",
+    "birthday": "生年月日",
+    "gender": "性別",
+    "bodyShape": "骨格",
+    "size": "サイズ",
+    "genderMale": "男性",
+    "genderFemale": "女性",
+    "genderUndefined": "未設定",
+    "bodyStraight": "骨格ストレート",
+    "bodyWavy": "骨格ウェーブ",
+    "bodyNatural": "骨格ナチュラル",
+    "bodyUnknown": "未設定",
+    "customerValue": "お客様情報",
+    "categoryTrend": "カテゴリトレンド",
+    "recommendedForYou": "おすすめ商品",
+    "noRecommendations": "おすすめはまだありません",
+    "notes": "メモ・過去の対応履歴",
+    "notesPlaceholder": "顧客向けメモを入力…",
+    "saveNotes": "保存",
+    "saved": "保存しました",
+    "distributedCoupons": "配布クーポン",
+    "noCoupons": "クーポンはありません",
+    "code": "コード",
+    "expires": "有効期限",
+    "used": "使用済み",
+    "lastVisit": "前回来店",
+    "lastVisitDate": "前回来店 · {{date}}",
+    "helpedBy": "対応スタッフ",
+    "noPurchaseHistory": "購入履歴なし",
+    "itemsInCart": "オンラインカート",
+    "noItemsInCart": "カートに商品はありません"
+  },
+  "chart": {
+    "revenue": "売上",
+    "percentile": "パーセンタイル"
+  }
+}

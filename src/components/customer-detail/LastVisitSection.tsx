@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import { Section } from "./Section"
 
 interface LastVisitSectionProps {
@@ -9,15 +10,18 @@ interface LastVisitSectionProps {
 }
 
 export function LastVisitSection({ lastVisit }: LastVisitSectionProps) {
-  const title = lastVisit ? `Last visit · ${lastVisit.purchaseDate}` : "Last visit"
+  const { t } = useTranslation()
+  const title = lastVisit
+    ? t("customerDetail.lastVisitDate", { date: lastVisit.purchaseDate })
+    : t("customerDetail.lastVisit")
   return (
     <Section title={title}>
       {lastVisit ? (
         <p className="text-sm">
-          Helped by: {lastVisit.salesAssociate} ({lastVisit.storeName})
+          {t("customerDetail.helpedBy")}: {lastVisit.salesAssociate} ({lastVisit.storeName})
         </p>
       ) : (
-        <p className="text-sm text-muted-foreground">No purchase history</p>
+        <p className="text-sm text-muted-foreground">{t("customerDetail.noPurchaseHistory")}</p>
       )}
     </Section>
   )

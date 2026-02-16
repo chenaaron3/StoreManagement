@@ -1,18 +1,7 @@
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import type { RFMMatrixCell } from "@/types/analysis";
-
-function formatCurrency(value: number): string {
-  return new Intl.NumberFormat("ja-JP", {
-    style: "currency",
-    currency: "JPY",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
-
-function formatNumber(value: number): string {
-  return new Intl.NumberFormat("ja-JP").format(value);
-}
+import { formatCurrency, formatNumber } from "@/lib/utils";
 
 type MetricType = "revenue" | "aov" | "customers";
 

@@ -1,0 +1,132 @@
+{
+  "sidebar": {
+    "collapse": "Collapse",
+    "sales": "Sales",
+    "customers": "Customers",
+    "product": "Product",
+    "stores": "Stores",
+    "employees": "Employees",
+    "brand": "Brand",
+    "brandFilter": "Filter by brand",
+    "allBrands": "All brands",
+    "searchByPhone": "Search by phone",
+    "inStore": "Currently in store",
+    "tasksAssigned": "Tasks assigned to me",
+    "myDashboard": "My dashboard",
+    "location": "Location",
+    "branch": "Branch"
+  },
+  "viewSwitcher": {
+    "manager": "Manager",
+    "associate": "Sales Associate",
+    "switchView": "Switch view"
+  },
+  "common": {
+    "revenue": "Revenue",
+    "count": "Count",
+    "expandSidebar": "Expand sidebar",
+    "memberId": "Member ID",
+    "loading": "Loading analytics...",
+    "more": "{{count}} more"
+  },
+  "language": {
+    "switchToEnglish": "Switch to English",
+    "switchToJapanese": "Switch to Japanese"
+  },
+  "managerPage": {
+    "tabs": {
+      "sales": { "title": "Sales", "subtitle": "Revenue, transactions, and trends over time" },
+      "brand": { "title": "Brand", "subtitle": "Revenue and performance by brand" },
+      "customers": { "title": "Customers", "subtitle": "Segmentation, RFM analysis, and customer insights" },
+      "product": { "title": "Product", "subtitle": "Revenue and sales by product" },
+      "stores": { "title": "Stores", "subtitle": "Revenue and performance by store" },
+      "employees": { "title": "Employees", "subtitle": "Revenue and performance by employee" }
+    },
+    "error": {
+      "loadFailed": "Failed to load data",
+      "precomputeHint": "Run {{cmd1}} to generate precomputed data, then ensure {{path}} is served."
+    }
+  },
+  "salesTab": {
+    "totalRevenue": "Total revenue",
+    "transactions": "Transactions",
+    "averageOrderValue": "Average order value",
+    "activeCustomers": "Active customers",
+    "salesTrends": "Sales trends",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "revenueByDayOfWeek": "Revenue by day of week"
+  },
+  "associatePage": {
+    "searchByPhone": "Search by phone",
+    "inStore": "Currently in store",
+    "noCustomersCheckedIn": "No customers checked in"
+  },
+  "todo": {
+    "title": "Tasks assigned to me",
+    "addTask": "Add task",
+    "taskTitle": "Task title",
+    "add": "Add",
+    "cancel": "Cancel",
+    "markPending": "Mark pending",
+    "markDone": "Mark done",
+    "dismiss": "Dismiss",
+    "due": "Due",
+    "customer": "Customer",
+    "completed": "{{count}} completed",
+    "noTasks": "No tasks yet."
+  },
+  "memberCard": {
+    "birthdayThisMonth": "Birthday this month",
+    "crossStore": "Cross-store",
+    "ecBrowse": "EC browse",
+    "customerValue": "Customer value",
+    "purchasesTotal": "{{total}} purchases total · {{inLast6}} in the last 6 months",
+    "inMyBrand": "in my brand",
+    "recommendedForYou": "Recommended for you",
+    "noRecommendations": "No recommendations yet",
+    "purchases": "Purchases ({{count}})"
+  },
+  "customerDetail": {
+    "title": "Customer details",
+    "notFound": "Customer not found.",
+    "profile": "Profile",
+    "name": "Name",
+    "phone": "Phone",
+    "prefecture": "Prefecture",
+    "birthday": "Birthday",
+    "gender": "Gender",
+    "bodyShape": "Body shape",
+    "size": "Size",
+    "genderMale": "Male",
+    "genderFemale": "Female",
+    "genderUndefined": "Undefined",
+    "bodyStraight": "Straight",
+    "bodyWavy": "Wavy",
+    "bodyNatural": "Natural",
+    "bodyUnknown": "Unknown",
+    "customerValue": "Customer value",
+    "categoryTrend": "Category trend",
+    "recommendedForYou": "Recommended for you",
+    "noRecommendations": "No recommendations yet",
+    "notes": "Notes / Past interactions",
+    "notesPlaceholder": "Add notes for this customer…",
+    "saveNotes": "Save notes",
+    "saved": "Saved",
+    "distributedCoupons": "Distributed coupons",
+    "noCoupons": "No coupons",
+    "code": "Code",
+    "expires": "Expires",
+    "used": "Used",
+    "lastVisit": "Last visit",
+    "lastVisitDate": "Last visit · {{date}}",
+    "helpedBy": "Helped by",
+    "noPurchaseHistory": "No purchase history",
+    "itemsInCart": "Items in online cart",
+    "noItemsInCart": "No items in cart"
+  },
+  "chart": {
+    "revenue": "Revenue",
+    "percentile": "Percentile"
+  }
+}

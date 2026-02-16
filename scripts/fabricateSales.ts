@@ -180,6 +180,12 @@ async function fabricateSales() {
         headerWritten = true;
       }
 
+      // Ensure "Brand Location" format: if store name has no space, prepend brand
+      const storeName =
+        store.storeName && !store.storeName.includes(" ")
+          ? `${brand.brandName} ${store.storeName}`
+          : store.storeName;
+
       batch.push({
         会員ID: memberId,
         購買日: samplePurchaseDate(),
@@ -196,7 +202,7 @@ async function fabricateSales() {
         購買点数: "1",
         税抜金額: String(product.price),
         VS店舗ID: store.vsStoreId,
-        店舗名: store.storeName,
+        店舗名: storeName,
         MS店舗ID: store.storeId,
         販売担当者: salesAssociate.name,
         担当者コード: salesAssociate.code,

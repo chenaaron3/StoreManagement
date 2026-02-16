@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import {
   DialogHeader,
   DialogTitle,
@@ -23,22 +24,14 @@ import {
   OnlineCartSection,
   RecommendationsSection,
 } from "@/components/customer-detail"
-
-const RANK_ORDER: Record<string, number> = { ゴールド: 3, シルバー: 2, ブロンズ: 1 }
-
-function topRanking(memberships: { ranking: string }[]): string | null {
-  if (!memberships.length) return null
-  const sorted = [...memberships].sort(
-    (a, b) => (RANK_ORDER[b.ranking] ?? 0) - (RANK_ORDER[a.ranking] ?? 0)
-  )
-  return sorted[0].ranking
-}
+import { topRanking } from "@/lib/rankingBadge"
 
 interface CustomerDetailModalContentProps {
   memberId: string
 }
 
 export function CustomerDetailModalContent({ memberId }: CustomerDetailModalContentProps) {
+  const { t } = useTranslation()
   const { data, loading, error } = useMemberData(memberId)
   const { notes, setNotes, saveNotes, isDirty } = useMemberNotes(memberId)
 
@@ -46,7 +39,7 @@ export function CustomerDetailModalContent({ memberId }: CustomerDetailModalCont
     return (
       <>
         <DialogHeader>
-          <DialogTitle>Customer details</DialogTitle>
+          <DialogTitle>{t("customerDetail.title")}</DialogTitle>
         </DialogHeader>
         <div className="space-y-3 py-4">
           <Skeleton className="h-6 w-32" />
@@ -61,7 +54,7 @@ export function CustomerDetailModalContent({ memberId }: CustomerDetailModalCont
     return (
       <>
         <DialogHeader>
-          <DialogTitle>Customer details</DialogTitle>
+          <DialogTitle>{t("customerDetail.title")}</DialogTitle>
         </DialogHeader>
         <p className="text-destructive py-4 text-sm">{error}</p>
       </>
@@ -72,9 +65,9 @@ export function CustomerDetailModalContent({ memberId }: CustomerDetailModalCont
     return (
       <>
         <DialogHeader>
-          <DialogTitle>Customer details</DialogTitle>
+          <DialogTitle>{t("customerDetail.title")}</DialogTitle>
         </DialogHeader>
-        <p className="text-muted-foreground py-4 text-sm">Customer not found.</p>
+        <p className="text-muted-foreground py-4 text-sm">{t("customerDetail.notFound")}</p>
       </>
     )
   }

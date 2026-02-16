@@ -7,33 +7,19 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { formatCurrency } from "@/lib/utils";
 
 export type MultiSeriesTrendRow = { date: string; [key: string]: string | number };
 
-function formatCurrency(value: number): string {
-  return new Intl.NumberFormat("ja-JP", {
-    style: "currency",
-    currency: "JPY",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
-
-const COLORS = [
-  "#8884d8",
-  "#82ca9d",
-  "#ffc658",
-  "#ff7c7c",
-  "#8dd1e1",
-  "#d084d0",
-  "#ffb347",
-  "#87ceeb",
-  "#dda0dd",
-  "#98d8c8",
-  "#ff6b6b",
-  "#4ecdc4",
-  "#45b7d1",
-  "#f9ca24",
-  "#f0932b",
+const CHART_COLORS = [
+  "var(--chart-1)",
+  "var(--chart-2)",
+  "var(--chart-3)",
+  "var(--chart-4)",
+  "var(--chart-5)",
+  "var(--chart-6)",
+  "var(--chart-7)",
+  "var(--chart-8)",
 ];
 
 interface MultiSeriesTrendChartProps {
@@ -87,18 +73,19 @@ export function MultiSeriesTrendChart({ data }: MultiSeriesTrendChartProps) {
 
   return (
     <ResponsiveContainer width="100%" height={420}>
-      <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-        <CartesianGrid strokeDasharray="3 3" />
+      <LineChart data={data} margin={{ top: 5, right: 40, left: 55, bottom: 5 }}>
+        <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
         <XAxis
           dataKey="date"
           angle={-45}
           textAnchor="end"
           height={80}
-          tick={{ fontSize: 12 }}
+          tick={{ fontSize: 12, fill: "var(--muted-foreground)" }}
         />
         <YAxis
           tickFormatter={(v) => `¥${(v / 1000).toFixed(0)}k`}
-          tick={{ fontSize: 12 }}
+          tick={{ fontSize: 12, fill: "var(--muted-foreground)" }}
+          width={55}
         />
         <Tooltip content={<CustomTooltip />} />
         {seriesKeys.map((key, i) => (
@@ -107,7 +94,7 @@ export function MultiSeriesTrendChart({ data }: MultiSeriesTrendChartProps) {
             type="monotone"
             dataKey={key}
             name={key.length > 40 ? `${key.slice(0, 40)}…` : key}
-            stroke={COLORS[i % COLORS.length]}
+            stroke={CHART_COLORS[i % CHART_COLORS.length]}
             strokeWidth={2}
             dot={false}
           />

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { KPICard } from "@/components/KPICard";
 import { TrendChart } from "@/components/TrendChart";
@@ -11,6 +12,7 @@ interface SalesTabProps {
 }
 
 export function SalesTab({ data }: SalesTabProps) {
+  const { t } = useTranslation();
   const [granularity, setGranularity] = useState<Granularity>("monthly");
 
   const trendData =
@@ -21,16 +23,16 @@ export function SalesTab({ data }: SalesTabProps) {
   return (
     <>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <KPICard title="Total revenue" value={data.kpis.totalRevenue} format="currency" />
-        <KPICard title="Transactions" value={data.kpis.totalTransactions} format="number" />
-        <KPICard title="Average order value" value={data.kpis.averageOrderValue} format="currency" />
-        <KPICard title="Active customers" value={data.kpis.activeCustomers} format="number" />
+        <KPICard title={t("salesTab.totalRevenue")} value={data.kpis.totalRevenue} format="currency" />
+        <KPICard title={t("salesTab.transactions")} value={data.kpis.totalTransactions} format="number" />
+        <KPICard title={t("salesTab.averageOrderValue")} value={data.kpis.averageOrderValue} format="currency" />
+        <KPICard title={t("salesTab.activeCustomers")} value={data.kpis.activeCustomers} format="number" />
       </div>
 
       <Card>
         <CardHeader>
           <div className="flex flex-wrap items-center justify-between gap-4">
-            <CardTitle>Sales trends</CardTitle>
+            <CardTitle>{t("salesTab.salesTrends")}</CardTitle>
             <div className="flex gap-2">
               {(["weekly", "monthly"] as const).map((g) => (
                 <button
@@ -43,7 +45,7 @@ export function SalesTab({ data }: SalesTabProps) {
                       : "bg-muted text-muted-foreground hover:bg-muted/80"
                   }`}
                 >
-                  {g.charAt(0).toUpperCase() + g.slice(1)}
+                  {t(`salesTab.${g}`)}
                 </button>
               ))}
             </div>

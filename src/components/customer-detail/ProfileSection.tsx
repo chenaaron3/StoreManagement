@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import type { User } from "@/types/data"
 import { Section } from "./Section"
 
@@ -14,45 +15,58 @@ interface ProfileSectionProps {
   user: User
 }
 
+function getGenderKey(gender: string): string {
+  if (gender === "1") return "genderMale"
+  if (gender === "2") return "genderFemale"
+  return "genderUndefined"
+}
+
+function getBodyShapeKey(shape: string): string {
+  const k = shape.replace("_", "").toLowerCase()
+  if (k === "straight") return "bodyStraight"
+  if (k === "wavy") return "bodyWavy"
+  if (k === "natural") return "bodyNatural"
+  return "bodyUnknown"
+}
+
 export function ProfileSection({ user }: ProfileSectionProps) {
+  const { t } = useTranslation()
   const size = getMostRecentSize(user.purchases)
 
   return (
-    <Section title="Profile">
+    <Section title={t("customerDetail.profile")}>
       <div className="grid gap-2 text-sm sm:grid-cols-2">
         <div>
-          <p className="text-muted-foreground">Member ID</p>
+          <p className="text-muted-foreground">{t("common.memberId")}</p>
           <p>{user.memberId}</p>
         </div>
         <div>
-          <p className="text-muted-foreground">Name</p>
+          <p className="text-muted-foreground">{t("customerDetail.name")}</p>
           <p>{user.name}</p>
         </div>
         <div>
-          <p className="text-muted-foreground">Phone</p>
+          <p className="text-muted-foreground">{t("customerDetail.phone")}</p>
           <p>{user.phoneNumber}</p>
         </div>
         <div>
-          <p className="text-muted-foreground">Prefecture</p>
+          <p className="text-muted-foreground">{t("customerDetail.prefecture")}</p>
           <p>{user.prefecture}</p>
         </div>
         <div>
-          <p className="text-muted-foreground">Birthday</p>
+          <p className="text-muted-foreground">{t("customerDetail.birthday")}</p>
           <p>{user.birthday}</p>
         </div>
         <div>
-          <p className="text-muted-foreground">Gender</p>
-          <p>
-            {user.gender === "1" ? "M" : user.gender === "2" ? "F" : "Undefined"}
-          </p>
+          <p className="text-muted-foreground">{t("customerDetail.gender")}</p>
+          <p>{t(`customerDetail.${getGenderKey(user.gender)}`)}</p>
         </div>
         <div>
-          <p className="text-muted-foreground">Body shape</p>
-          <p className="capitalize">{user.bodyShape.replace("_", " ")}</p>
+          <p className="text-muted-foreground">{t("customerDetail.bodyShape")}</p>
+          <p>{t(`customerDetail.${getBodyShapeKey(user.bodyShape)}`)}</p>
         </div>
         {size != null && (
           <div>
-            <p className="text-muted-foreground">Size</p>
+            <p className="text-muted-foreground">{t("customerDetail.size")}</p>
             <p>{size}</p>
           </div>
         )}

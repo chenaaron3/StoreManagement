@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Bar,
   BarChart,
@@ -9,14 +10,7 @@ import {
 } from "recharts";
 import type { TimeSeriesData } from "@/types/analysis";
 import type { Granularity } from "@/utils/dataAnalysis";
-
-function formatCurrency(value: number): string {
-  return new Intl.NumberFormat("ja-JP", {
-    style: "currency",
-    currency: "JPY",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
+import { RevenuePercentileTooltip } from "@/components/charts/RevenuePercentileTooltip";
 
 interface TrendChartProps {
   data: TimeSeriesData[];
@@ -24,6 +18,9 @@ interface TrendChartProps {
 }
 
 export function TrendChart({ data }: TrendChartProps) {
+  const { t } = useTranslation();
+  const revenues = data.map((d) => d.revenue);
+
   const CustomTooltip = ({
     active,
     payload,
@@ -34,37 +31,33 @@ export function TrendChart({ data }: TrendChartProps) {
     label?: string;
   }) => {
     if (!active || !payload?.length || label == null) return null;
-    const revenue = payload[0].value;
-    const revenues = data.map((d) => d.revenue);
-    const maxR = Math.max(...revenues);
-    const minR = Math.min(...revenues);
-    const percentile =
-      maxR === minR ? 100 : Math.round(((revenue - minR) / (maxR - minR)) * 100);
     return (
-      <div className="rounded-lg border bg-background p-3 shadow-lg">
-        <p className="text-sm font-semibold">{label}</p>
-        <p className="text-sm">
-          Revenue: <span className="font-semibold">{formatCurrency(revenue)}</span>
-        </p>
-        <p className="text-xs text-muted-foreground">Percentile: {percentile}%</p>
-      </div>
+      <RevenuePercentileTooltip
+        label={label}
+        revenue={payload[0].value}
+        revenues={revenues}
+      />
     );
   };
 
   return (
     <ResponsiveContainer width="100%" height={400}>
-      <BarChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-        <CartesianGrid strokeDasharray="3 3" />
+      <BarChart data={data} margin={{ top: 5, right: 40, left: 55, bottom: 5 }}>
+        <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
         <XAxis
           dataKey="date"
           angle={-45}
           textAnchor="end"
           height={80}
-          tick={{ fontSize: 12 }}
+          tick={{ fontSize: 12, fill: "var(--muted-foreground)" }}
         />
-        <YAxis tickFormatter={(v) => `¥${(v / 1000).toFixed(0)}k`} />
+        <YAxis
+          tickFormatter={(v) => `¥${(v / 1000).toFixed(0)}k`}
+          tick={{ fontSize: 12, fill: "var(--muted-foreground)" }}
+          width={55}
+        />
         <Tooltip content={<CustomTooltip />} />
-        <Bar dataKey="revenue" fill="hsl(var(--primary))" name="Revenue" />
+        <Bar dataKey="revenue" fill="var(--chart-1)" name={t("chart.revenue")} />
       </BarChart>
     </ResponsiveContainer>
   );

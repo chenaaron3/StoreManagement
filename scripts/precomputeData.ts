@@ -91,6 +91,147 @@ async function precomputeData() {
     })
     .sort((a, b) => b.totalRevenue - a.totalRevenue);
 
+  // Per-brand analytics for brand filter
+  const byBrand: Record<
+    string,
+    {
+      kpis: ReturnType<typeof dataAnalysis.calculateKPIs>;
+      trendDataWeekly: ReturnType<typeof dataAnalysis.getTrendsByGranularity>;
+      trendDataMonthly: ReturnType<typeof dataAnalysis.getTrendsByGranularity>;
+      dayOfWeekData: ReturnType<typeof dataAnalysis.getDayOfWeekAnalysis>;
+      customerSegments: ReturnType<typeof dataAnalysis.getCustomerSegments>;
+      rfmMatrix: ReturnType<typeof dataAnalysis.getRFMMatrix>;
+      frequencySegments: ReturnType<typeof dataAnalysis.getFrequencySegments>;
+      channelSegments: ReturnType<typeof dataAnalysis.getChannelSegments>;
+      aovSegments: ReturnType<typeof dataAnalysis.getAOVSegments>;
+      employeePerformance: ReturnType<typeof dataAnalysis.getEmployeePerformance>;
+      storePerformanceWithProducts: ReturnType<
+        typeof dataAnalysis.getStorePerformanceWithProducts
+      >;
+      storeTrendsWeekly: ReturnType<typeof dataAnalysis.getStoreTrends>;
+      storeTrendsMonthly: ReturnType<typeof dataAnalysis.getStoreTrends>;
+      productPerformanceWithStores: ReturnType<
+        typeof dataAnalysis.getProductPerformanceWithStores
+      >;
+      productTrendsWeekly: ReturnType<typeof dataAnalysis.getProductTrends>;
+      productTrendsMonthly: ReturnType<typeof dataAnalysis.getProductTrends>;
+      collectionPerformanceWithStores: ReturnType<
+        typeof dataAnalysis.getCollectionPerformanceWithStores
+      >;
+      collectionTrendsWeekly: ReturnType<typeof dataAnalysis.getCollectionTrends>;
+      collectionTrendsMonthly: ReturnType<typeof dataAnalysis.getCollectionTrends>;
+      categoryPerformanceWithStores: ReturnType<
+        typeof dataAnalysis.getCategoryPerformanceWithStores
+      >;
+      categoryTrendsWeekly: ReturnType<typeof dataAnalysis.getCategoryTrends>;
+      categoryTrendsMonthly: ReturnType<typeof dataAnalysis.getCategoryTrends>;
+      colorPerformanceWithStores: ReturnType<
+        typeof dataAnalysis.getColorPerformanceWithStores
+      >;
+      sizePerformanceWithStores: ReturnType<
+        typeof dataAnalysis.getSizePerformanceWithStores
+      >;
+      colorTrends: ReturnType<typeof dataAnalysis.getAttributeTrends>;
+      sizeTrends: ReturnType<typeof dataAnalysis.getAttributeTrends>;
+    }
+  > = {};
+
+  for (const brand of brandPerformance) {
+    const salesForBrand = filteredSales.filter(
+      (r) => (r.brandId?.trim() || r.brandCode?.trim() || "") === brand.brandCode
+    );
+    const storeNamePrefix = brand.brandName
+      ? brand.brandName + " "
+      : "";
+    const salesForBrandStores = filteredSales.filter(
+      (r) =>
+        (r.storeName?.trim() || "").startsWith(storeNamePrefix) ||
+        (r.brandId?.trim() || r.brandCode?.trim() || "") === brand.brandCode
+    );
+    const salesToUse = salesForBrandStores.length > 0 ? salesForBrandStores : salesForBrand;
+
+    byBrand[brand.brandCode] = {
+      kpis: dataAnalysis.calculateKPIs(salesToUse),
+      trendDataWeekly: dataAnalysis.getTrendsByGranularity(
+        salesToUse,
+        "weekly"
+      ),
+      trendDataMonthly: dataAnalysis.getTrendsByGranularity(
+        salesToUse,
+        "monthly"
+      ),
+      dayOfWeekData: dataAnalysis.getDayOfWeekAnalysis(salesToUse),
+      customerSegments: dataAnalysis.getCustomerSegments(salesToUse),
+      rfmMatrix: dataAnalysis.getRFMMatrix(salesToUse),
+      frequencySegments: dataAnalysis.getFrequencySegments(salesToUse),
+      channelSegments: dataAnalysis.getChannelSegments(salesToUse),
+      aovSegments: dataAnalysis.getAOVSegments(salesToUse),
+      employeePerformance: dataAnalysis.getEmployeePerformance(salesToUse),
+      storePerformanceWithProducts:
+        dataAnalysis.getStorePerformanceWithProducts(salesToUse, 25),
+      storeTrendsWeekly: dataAnalysis.getStoreTrends(
+        salesToUse,
+        25,
+        "weekly"
+      ),
+      storeTrendsMonthly: dataAnalysis.getStoreTrends(
+        salesToUse,
+        25,
+        "monthly"
+      ),
+      productPerformanceWithStores:
+        dataAnalysis.getProductPerformanceWithStores(salesToUse, 25),
+      productTrendsWeekly: dataAnalysis.getProductTrends(
+        salesToUse,
+        25,
+        "weekly"
+      ),
+      productTrendsMonthly: dataAnalysis.getProductTrends(
+        salesToUse,
+        25,
+        "monthly"
+      ),
+      collectionPerformanceWithStores:
+        dataAnalysis.getCollectionPerformanceWithStores(salesToUse, 25),
+      collectionTrendsWeekly: dataAnalysis.getCollectionTrends(
+        salesToUse,
+        25,
+        "weekly"
+      ),
+      collectionTrendsMonthly: dataAnalysis.getCollectionTrends(
+        salesToUse,
+        25,
+        "monthly"
+      ),
+      categoryPerformanceWithStores:
+        dataAnalysis.getCategoryPerformanceWithStores(salesToUse, 25),
+      categoryTrendsWeekly: dataAnalysis.getCategoryTrends(
+        salesToUse,
+        25,
+        "weekly"
+      ),
+      categoryTrendsMonthly: dataAnalysis.getCategoryTrends(
+        salesToUse,
+        25,
+        "monthly"
+      ),
+      colorPerformanceWithStores:
+        dataAnalysis.getColorPerformanceWithStores(salesToUse, 25),
+      sizePerformanceWithStores:
+        dataAnalysis.getSizePerformanceWithStores(salesToUse, 25),
+      colorTrends: dataAnalysis.getAttributeTrends(
+        salesToUse,
+        "color",
+        "monthly"
+      ),
+      sizeTrends: dataAnalysis.getAttributeTrends(
+        salesToUse,
+        "size",
+        "monthly"
+      ),
+    };
+  }
+
   const precomputed = {
     kpis: dataAnalysis.calculateKPIs(filteredSales),
     trendDataWeekly: dataAnalysis.getTrendsByGranularity(
@@ -177,6 +318,7 @@ async function precomputeData() {
     aovSegments: dataAnalysis.getAOVSegments(filteredSales),
     employeePerformance: dataAnalysis.getEmployeePerformance(filteredSales),
     brandPerformance,
+    byBrand,
   };
 
   mkdirSync(publicDataDir, { recursive: true });

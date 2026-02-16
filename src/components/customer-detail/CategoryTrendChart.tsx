@@ -36,15 +36,15 @@ export function CategoryTrendChart({ categoryCounts }: CategoryTrendChartProps) 
       <BarChart
         data={categoryCounts}
         layout="vertical"
-        margin={{ top: 0, right: 8, left: 0, bottom: 0 }}
+        margin={{ top: 0, right: 16, left: 60, bottom: 0 }}
       >
-        <CartesianGrid strokeDasharray="2 2" className="opacity-60" />
+        <CartesianGrid strokeDasharray="2 2" stroke="var(--border)" className="opacity-60" />
         <XAxis type="number" hide />
         <YAxis
           type="category"
           dataKey="label"
           width={72}
-          tick={{ fontSize: 11 }}
+          tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
           axisLine={false}
           tickLine={false}
         />

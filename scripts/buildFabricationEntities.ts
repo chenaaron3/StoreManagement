@@ -14,6 +14,35 @@ import { parseMarkSalesCSV, parseMarkMembershipsCSV } from "../src/utils/dataPar
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+/** Brand code to display name (fallback when membership store names lack brand). */
+const BRAND_CODE_TO_NAME: Record<string, string> = {
+  "00": "MD",
+  "01": "EMODA",
+  "02": "MURUA",
+  "03": "RESEXXY",
+  "04": "EVRIS",
+  "07": "EATME",
+  "08": "CALNAMUR",
+  "11": "Ungrid",
+  "12": "OUTLET",
+  "15": "GYDA",
+  "28": "merry jenny",
+  "34": "jouetie",
+  "37": "dazzlin",
+  "51": "MERCURYDUO",
+  "52": "MERCURYDUO",
+  "53": "MERCURYDUO",
+  "59": "MERCURYDUO",
+  "65": "MERCURYDUO",
+};
+
+/** Replace スタッフ1/2/3 with random Japanese names */
+const RANDOM_STAFF_NAMES = [
+  "田中 美咲", "佐藤 健太", "鈴木 彩花", "高橋 翔太", "伊藤 優子",
+  "渡辺 大輔", "山本 恵子", "中村 拓也", "小林 真由美", "加藤 翔",
+  "吉田 麻衣", "山田 涼太", "松本 美穂", "井上 和也", "木村 由香",
+];
+
 /** Brand-specific product names (research-backed). */
 const BRAND_PRODUCT_NAMES: Record<string, string[]> = {
   "01": [
@@ -180,17 +209,27 @@ function buildFabricationEntities() {
         const key = `${storeCode}|${storeId}|${storeName}`;
         if (!storeKeys.has(key)) {
           storeKeys.add(key);
+          // Ensure "Brand Location" format: if store name has no space, prepend brand
+          const brandDisplay = BRAND_CODE_TO_NAME[brandCode] ?? brandCode;
+          const normalizedStoreName =
+            storeName && !storeName.includes(" ")
+              ? `${brandDisplay} ${storeName}`
+              : storeName || brandDisplay;
           stores.push({
             storeCode: storeCode || storeId,
             storeId: storeId || storeCode,
-            storeName: storeName || brandCode,
+            storeName: normalizedStoreName,
             vsStoreId: storeId || storeCode,
           });
         }
       }
 
       const assocCode = (r["担当者コード"] ?? "").trim();
-      const assocName = (r["担当者名"] ?? "").trim();
+      let assocName = (r["担当者名"] ?? "").trim();
+      // Replace placeholder names like スタッフ1, スタッフ2 with random names
+      if (/^スタッフ\d+$/.test(assocName)) {
+        assocName = pick(RANDOM_STAFF_NAMES);
+      }
       if (assocName) {
         const key = `${assocCode}|${assocName}`;
         if (!associateKeys.has(key)) {

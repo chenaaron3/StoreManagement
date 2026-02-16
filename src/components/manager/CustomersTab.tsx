@@ -1,7 +1,6 @@
 import type { CustomerSegment, RFMMatrixCell } from "@/types/analysis";
 import type { PrecomputedData } from "@/utils/precomputedDataLoader";
-import { RFMAnalysis } from "./RFMAnalysis";
-import { AdvancedCustomerSegmentation } from "./AdvancedCustomerSegmentation";
+import { RFMAnalysis, AdvancedCustomerSegmentation } from "./customers";
 
 interface CustomersTabProps {
   data: PrecomputedData;

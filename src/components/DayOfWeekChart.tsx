@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Bar,
   BarChart,
@@ -9,20 +10,14 @@ import {
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { DayOfWeekData } from "@/types/analysis";
-
-function formatCurrency(value: number): string {
-  return new Intl.NumberFormat("ja-JP", {
-    style: "currency",
-    currency: "JPY",
-    maximumFractionDigits: 0,
-  }).format(value);
-}
+import { formatCurrency } from "@/lib/utils";
 
 interface DayOfWeekChartProps {
   data: DayOfWeekData[];
 }
 
 export function DayOfWeekChart({ data }: DayOfWeekChartProps) {
+  const { t } = useTranslation();
   const CustomTooltip = ({
     active,
     payload,
@@ -43,26 +38,32 @@ export function DayOfWeekChart({ data }: DayOfWeekChartProps) {
       <div className="rounded-lg border bg-background p-3 shadow-lg">
         <p className="text-sm font-semibold">{label}</p>
         <p className="text-sm">
-          Revenue: <span className="font-semibold">{formatCurrency(revenue)}</span>
+          {t("chart.revenue")}: <span className="font-semibold">{formatCurrency(revenue)}</span>
         </p>
-        <p className="text-xs text-muted-foreground">Percentile: {percentile}%</p>
+        <p className="text-xs text-muted-foreground">
+          {t("chart.percentile")}: {percentile}%
+        </p>
       </div>
     );
   };
 
   return (
-    <Card>
+    <Card className="mb-6">
       <CardHeader>
-        <CardTitle>Revenue by day of week</CardTitle>
+        <CardTitle>{t("salesTab.revenueByDayOfWeek")}</CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="day" />
-            <YAxis tickFormatter={(v) => `¥${(v / 1000).toFixed(0)}k`} />
+          <BarChart data={data} margin={{ top: 5, right: 40, left: 55, bottom: 5 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+            <XAxis dataKey="day" tick={{ fontSize: 12, fill: "var(--muted-foreground)" }} />
+            <YAxis
+              tickFormatter={(v) => `¥${(v / 1000).toFixed(0)}k`}
+              tick={{ fontSize: 12, fill: "var(--muted-foreground)" }}
+              width={55}
+            />
             <Tooltip content={<CustomTooltip />} />
-            <Bar dataKey="revenue" fill="hsl(var(--primary))" name="Revenue" />
+            <Bar dataKey="revenue" fill="var(--chart-1)" name="Revenue" />
           </BarChart>
         </ResponsiveContainer>
       </CardContent>

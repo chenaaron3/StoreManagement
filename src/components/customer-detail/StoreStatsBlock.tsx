@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import type { User } from "@/types/data"
 import { CURRENT_STORE_BRAND } from "@/config/associate"
 import { getPurchasesInLast6Months } from "@/lib/associateUtils"
@@ -7,17 +8,18 @@ interface StoreStatsBlockProps {
 }
 
 export function StoreStatsBlock({ user }: StoreStatsBlockProps) {
+  const { t } = useTranslation()
   const purchasesInBrand = user.purchases.filter(
-    (p) => p.brandCode === CURRENT_STORE_BRAND
+    (p) => (p.brandCode ?? p.brandId) === CURRENT_STORE_BRAND
   ).length
   const inLast6Months = getPurchasesInLast6Months(user.purchases)
 
   return (
     <div>
       <p className="text-sm">
-        {user.purchases.length} purchase{user.purchases.length !== 1 ? "s" : ""} total · {inLast6Months} in the last 6 months
+        {t("memberCard.purchasesTotal", { total: user.purchases.length, inLast6: inLast6Months })}
         {purchasesInBrand !== user.purchases.length && (
-          <> · {purchasesInBrand} in my brand</>
+          <> · {purchasesInBrand} {t("memberCard.inMyBrand")}</>
         )}
       </p>
     </div>

@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useEffectiveData } from "@/hooks/useEffectiveData";
+import { useTranslation } from "react-i18next";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ManagerSidebar, type ManagerTabId } from "@/components/ManagerSidebar";
@@ -14,10 +16,22 @@ import {
 } from "@/components/manager";
 
 export function ManagerPage() {
+  const { t } = useTranslation();
   const [data, setData] = useState<PrecomputedData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<ManagerTabId>("sales");
+  const [brandFilter, setBrandFilter] = useState<string>("all");
+
+  const brandOptions = useMemo(() => {
+    if (!data?.brandPerformance) return [];
+    return data.brandPerformance.map((b) => ({
+      brandCode: b.brandCode,
+      brandName: b.brandName || b.brandCode,
+    }));
+  }, [data?.brandPerformance]);
+
+  const effectiveData = useEffectiveData(data, brandFilter);
 
   useEffect(() => {
     let cancelled = false;
@@ -28,7 +42,8 @@ export function ManagerPage() {
         if (!cancelled) setData(d);
       })
       .catch((err) => {
-        if (!cancelled) setError(err instanceof Error ? err.message : "Failed to load data");
+        if (!cancelled)
+          setError(err instanceof Error ? err.message : t("managerPage.error.loadFailed"));
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -42,8 +57,10 @@ export function ManagerPage() {
     loading ? (
       <>
         <div>
-          <h2 className="text-2xl font-semibold tracking-tight">Manager view</h2>
-          <p className="text-muted-foreground mt-1">Loading analytics...</p>
+          <h2 className="text-2xl font-semibold tracking-tight">
+            {t(`managerPage.tabs.${activeTab}.title`)}
+          </h2>
+          <p className="text-muted-foreground mt-1">{t("common.loading")}</p>
         </div>
         <Separator />
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -54,37 +71,55 @@ export function ManagerPage() {
       </>
     ) : error ? (
       <div>
-        <h2 className="text-2xl font-semibold tracking-tight">Manager view</h2>
+        <h2 className="text-2xl font-semibold tracking-tight">
+          {t(`managerPage.tabs.${activeTab}.title`)}
+        </h2>
         <p className="text-destructive mt-2">{error}</p>
         <p className="text-muted-foreground text-sm mt-1">
-          Run <code className="rounded bg-muted px-1">npm run precompute</code> to generate
-          precomputed data, then ensure <code className="rounded bg-muted px-1">public/data/precomputed.json</code> is
-          served.
+          {t("managerPage.error.precomputeHint", {
+            cmd1: "npm run precompute",
+            path: "public/data/precomputed.json",
+          })}
         </p>
       </div>
-    ) : data ? (
-      <>
-        <div>
-          <h2 className="text-2xl font-semibold tracking-tight">Manager view</h2>
-          <p className="text-muted-foreground mt-1">
-            Insights between brands, aggregation, and trends.
-          </p>
-        </div>
-        <Separator />
-        {activeTab === "sales" && <SalesTab data={data} />}
-        {activeTab === "brand" && <BrandTab data={data} />}
-        {activeTab === "customers" && <CustomersTab data={data} />}
-        {activeTab === "product" && <ProductTab data={data} />}
-        {activeTab === "stores" && <StoresTab data={data} />}
-        {activeTab === "employees" && <EmployeesTab data={data} />}
-      </>
+    ) : effectiveData ? (
+      (() => {
+        const tabData: PrecomputedData = effectiveData!;
+        return (
+          <>
+            <div>
+              <h2 className="text-2xl font-semibold tracking-tight">
+                {t(`managerPage.tabs.${activeTab}.title`)}
+              </h2>
+              <p className="text-muted-foreground mt-1">
+                {brandFilter !== "all"
+                  ? `${brandOptions.find((b) => b.brandCode === brandFilter)?.brandName ?? ""} – ${t(`managerPage.tabs.${activeTab}.subtitle`)}`
+                  : t(`managerPage.tabs.${activeTab}.subtitle`)}
+              </p>
+            </div>
+            <Separator />
+            {activeTab === "sales" && <SalesTab data={tabData} />}
+            {activeTab === "brand" && data && <BrandTab data={data} />}
+            {activeTab === "customers" && <CustomersTab data={tabData} />}
+            {activeTab === "product" && <ProductTab data={tabData} />}
+            {activeTab === "stores" && <StoresTab data={tabData} />}
+            {activeTab === "employees" && <EmployeesTab data={tabData} brandFilter={brandFilter} />}
+          </>
+        );
+      })()
     ) : null;
 
   return (
-    <div className="flex h-[calc(100vh-8rem)] overflow-hidden">
-      <ManagerSidebar activeTab={activeTab} onTabChange={setActiveTab} />
-      <main className="flex-1 min-w-0 overflow-y-auto">
-        <div className="space-y-8 p-6">{body}</div>
+    <div className="flex min-h-screen">
+      <ManagerSidebar
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        brandFilter={brandFilter}
+        onBrandFilterChange={setBrandFilter}
+        brandOptions={brandOptions}
+      />
+      <main className="min-w-0 flex-1">
+        <div className="space-y-8 px-6 pt-6">{body}</div>
       </main>
     </div>
   );

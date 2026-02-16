@@ -1,16 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { PrecomputedData } from "@/utils/precomputedDataLoader";
+import { formatCurrency } from "@/lib/utils";
 
 interface BrandTabProps {
   data: PrecomputedData;
 }
-
-const formatCurrency = (value: number) =>
-  new Intl.NumberFormat("ja-JP", {
-    style: "currency",
-    currency: "JPY",
-    maximumFractionDigits: 0,
-  }).format(value);
 
 export function BrandTab({ data }: BrandTabProps) {
   return (

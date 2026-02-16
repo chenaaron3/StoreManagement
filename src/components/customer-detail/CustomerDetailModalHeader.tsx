@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import {
   DialogDescription,
   DialogHeader,
@@ -25,24 +26,31 @@ export function CustomerDetailModalHeader({
   topRank,
   flags,
 }: CustomerDetailModalHeaderProps) {
+  const { t } = useTranslation()
   return (
     <DialogHeader>
       <div className="flex flex-wrap items-center gap-2">
         <DialogTitle>{name || memberId}</DialogTitle>
         {flags.birthday && (
-          <Badge variant="outline" className="bg-[var(--segment-birthday)]/15 text-[var(--segment-birthday)] border-[var(--segment-birthday)]/40">Birthday this month</Badge>
+          <Badge variant="outline" className="bg-[var(--segment-birthday)]/15 text-[var(--segment-birthday)] border-[var(--segment-birthday)]/40">
+            {t("memberCard.birthdayThisMonth")}
+          </Badge>
         )}
         {topRank && (
           <Badge className={rankingBadgeClass(topRank)}>{topRank}</Badge>
         )}
         {flags.crossStore && (
-          <Badge variant="outline" className="bg-[var(--segment-opportunity)]/15 text-[var(--segment-opportunity)] border-[var(--segment-opportunity)]/40">Cross-store</Badge>
+          <Badge variant="outline" className="bg-[var(--segment-opportunity)]/15 text-[var(--segment-opportunity)] border-[var(--segment-opportunity)]/40">
+            {t("memberCard.crossStore")}
+          </Badge>
         )}
         {flags.ecBrowse && (
-          <Badge variant="outline" className="bg-[var(--segment-silver)]/15 text-[var(--segment-silver)] border-[var(--segment-silver)]/40">EC browse</Badge>
+          <Badge variant="outline" className="bg-[var(--segment-silver)]/15 text-[var(--segment-silver)] border-[var(--segment-silver)]/40">
+            {t("memberCard.ecBrowse")}
+          </Badge>
         )}
       </div>
-      <DialogDescription>Member ID: {memberId}</DialogDescription>
+      <DialogDescription>{t("common.memberId")}: {memberId}</DialogDescription>
     </DialogHeader>
   )
 }
