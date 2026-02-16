@@ -10,7 +10,7 @@ Before running the app (or building), generate the precomputed JSON from the CSV
 npm run precompute
 ```
 
-This reads `src/data/mark_sales.csv` and `src/data/mark_memberships.csv` (plus optional `mark_sales_fabricated.csv`), runs the analysis pipeline, and writes `public/data/precomputed.json`. The build runs this automatically via `prebuild`.
+This reads `src/data/mark_sales.csv` and `src/data/mark_memberships.csv` (plus optional `mark_sales_fabricated.csv`), runs the analysis pipeline, and writes `public/data/precomputed.json`. Precompute is run manually; for automated builds (e.g. Vercel), commit or upload `public/data/precomputed.json` so the build can skip this step.
 
 ### Fabricated sales (optional)
 
