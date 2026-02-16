@@ -1,13 +1,9 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
 import * as dataAnalysis from '../src/utils/dataAnalysis';
-import {
-  parseMarkSalesCSV,
-  parseMarkSalesCSVStream,
-  parseMarkMembershipsCSV,
-} from '../src/utils/dataParser';
+import { parseMarkSalesCSVStream } from '../src/utils/dataParser';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -19,66 +15,35 @@ async function precomputeData() {
   const dataDir = join(projectRoot, "src", "data");
   const publicDataDir = join(projectRoot, "public", "data");
 
-  const salesPath = join(dataDir, "mark_sales.csv");
   const fabricatedPath = join(dataDir, "mark_sales_fabricated.csv");
-  const membershipsPath = join(dataDir, "mark_memberships.csv");
 
-  console.log("Reading CSV files...");
-  const salesCsv = readFileSync(salesPath, "utf-8");
-  const membershipsCsv = readFileSync(membershipsPath, "utf-8");
-
-  let fabricatedData: Awaited<ReturnType<typeof parseMarkSalesCSVStream>> = [];
-  try {
-    if (existsSync(fabricatedPath)) {
-      console.log("Found mark_sales_fabricated.csv, streaming parse...");
-      fabricatedData = await parseMarkSalesCSVStream(fabricatedPath);
-      console.log(`Parsed ${fabricatedData.length} fabricated sales.`);
-    } else {
-      console.log("No mark_sales_fabricated.csv, using sales only.");
-    }
-  } catch (e) {
-    console.log("Could not load mark_sales_fabricated.csv:", (e as Error).message);
+  if (!existsSync(fabricatedPath)) {
+    throw new Error(
+      "mark_sales_fabricated.csv not found. Run: npm run build-fabrication-entities && npm run fabricate-sales"
+    );
   }
 
-  console.log("Parsing CSV files...");
-  const salesData = parseMarkSalesCSV(salesCsv);
-  const mergedSales = [...salesData, ...fabricatedData];
-  const membershipData = parseMarkMembershipsCSV(membershipsCsv);
+  console.log("Reading fabricated sales only (no real CSVs)...");
+  const fabricatedData = await parseMarkSalesCSVStream(fabricatedPath);
+  console.log(`Parsed ${fabricatedData.length} fabricated sales.`);
 
-  const filteredSales = mergedSales.filter((r) => {
+  const filteredSales = fabricatedData.filter((r) => {
     if (!r.purchaseDate || r.totalCost <= 0) return false;
     return true;
   });
 
-  console.log(
-    `Processed ${filteredSales.length} sales records (${salesData.length} real, ${fabricatedData.length} fabricated) and ${membershipData.length} membership records`,
-  );
+  console.log(`Processed ${filteredSales.length} sales records (fabricated only).`);
 
-  // Brand performance: include all brands from memberships, with sales metrics when present
+  // Brand performance: from fabricated sales only (no memberships)
   const brandFromSales = dataAnalysis.getBrandPerformance(filteredSales);
   const salesByBrandCode = new Map(
     brandFromSales.map((b) => [b.brandCode, b]),
   );
-  const brandNameFromMembership = new Map<string, string>();
-  const membershipBrandCodes = new Set<string>();
-  for (const m of membershipData) {
-    membershipBrandCodes.add(m.brandCode);
-    if (!brandNameFromMembership.has(m.brandCode) && m.storeName?.trim()) {
-      const firstWord = m.storeName.trim().split(/\s+/)[0] || m.brandCode;
-      brandNameFromMembership.set(m.brandCode, firstWord);
-    }
-  }
-  const allBrandCodes = new Set([
-    ...salesByBrandCode.keys(),
-    ...membershipBrandCodes,
-  ]);
+  const allBrandCodes = new Set(salesByBrandCode.keys());
   const brandPerformance = Array.from(allBrandCodes)
     .map((brandCode) => {
       const fromSales = salesByBrandCode.get(brandCode);
-      const brandName =
-        fromSales?.brandName ||
-        brandNameFromMembership.get(brandCode) ||
-        brandCode;
+      const brandName = fromSales?.brandName ?? brandCode;
       return {
         brandCode,
         brandName,
