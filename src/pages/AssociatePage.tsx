@@ -7,6 +7,7 @@ import { CustomerDetailModalContent } from "@/components/CustomerDetailModalCont
 import { MemberCard } from "@/components/MemberCard"
 import { PhoneSearchBar } from "@/components/PhoneSearchBar"
 import { AssociateTodoList } from "@/components/AssociateTodoList"
+import { CURRENT_STORE_NAME } from "@/config/associate"
 
 const MEMBER_IDS = ["RC01862444", "RC01866206", "RC01017392"]
 
@@ -35,6 +36,17 @@ export function AssociatePage() {
       <AssociateSidebar activeTab={activeTab} onTabChange={setActiveTab} />
       <main className="min-w-0 flex-1 overflow-y-auto" ref={scrollRef}>
         <div className="mx-auto max-w-5xl space-y-8 px-6 py-8 md:px-8 md:py-10">
+          {/* Page title (dashboard + location + branch) */}
+          <div>
+            <h2 className="text-2xl font-semibold tracking-tight">
+              {t("sidebar.myDashboard")}
+            </h2>
+            <p className="text-muted-foreground mt-1">
+              {t("sidebar.branch")}: {CURRENT_STORE_NAME}
+            </p>
+          </div>
+          <Separator />
+
           {/* Phone Search */}
           <section id={SECTION_IDS.search} className="scroll-mt-6 space-y-3">
             <h3 className="text-sm font-medium text-muted-foreground">

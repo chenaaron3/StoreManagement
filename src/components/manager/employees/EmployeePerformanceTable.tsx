@@ -1,5 +1,6 @@
 import type { EmployeePerformance } from "@/types/analysis";
 import { formatCurrency } from "@/lib/utils";
+import { TableContainer } from "@/components/ui/table-container";
 
 interface EmployeePerformanceTableProps {
   data: EmployeePerformance[];
@@ -7,7 +8,7 @@ interface EmployeePerformanceTableProps {
 
 export function EmployeePerformanceTable({ data }: EmployeePerformanceTableProps) {
   return (
-    <div className="overflow-x-auto">
+    <TableContainer>
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b">
@@ -47,6 +48,6 @@ export function EmployeePerformanceTable({ data }: EmployeePerformanceTableProps
           ))}
         </tbody>
       </table>
-    </div>
+    </TableContainer>
   );
 }

@@ -63,7 +63,7 @@ export function DayOfWeekChart({ data }: DayOfWeekChartProps) {
               width={55}
             />
             <Tooltip content={<CustomTooltip />} />
-            <Bar dataKey="revenue" fill="var(--chart-1)" name="Revenue" />
+            <Bar dataKey="revenue" fill="var(--chart-1)" name={t("chart.revenue")} />
           </BarChart>
         </ResponsiveContainer>
       </CardContent>

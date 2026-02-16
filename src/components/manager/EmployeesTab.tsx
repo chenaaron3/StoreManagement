@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { PrecomputedData } from "@/utils/precomputedDataLoader";
 import type { EmployeePerformance } from "@/types/analysis";
@@ -12,6 +13,8 @@ import {
   extractBrandsAndLocations,
   parseStoreParts,
 } from "./employees";
+import { ExportCsvButton } from "@/components/ExportCsvButton";
+import { EmptyState } from "@/components/ui/empty-state";
 
 interface EmployeesTabProps {
   data: PrecomputedData;
@@ -20,6 +23,7 @@ interface EmployeesTabProps {
 }
 
 export function EmployeesTab({ data, brandFilter }: EmployeesTabProps) {
+  const { t } = useTranslation();
   const [selectedBrand, setSelectedBrand] = useState<string>("all");
   const [selectedLocation, setSelectedLocation] = useState<string>("all");
   const [page, setPage] = useState(1);
@@ -97,9 +101,9 @@ export function EmployeesTab({ data, brandFilter }: EmployeesTabProps) {
         <CardHeader>
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <CardTitle>Employee performance</CardTitle>
-              <p className="text-sm text-muted-foreground">
-                Revenue by sales associate with store and product breakdown.
+              <CardTitle>{t("employeesTab.title")}</CardTitle>
+              <p className="text-sm text-muted-foreground mt-1">
+                {t("employeesTab.subtitle")}
               </p>
             </div>
             <EmployeeFilters
@@ -116,12 +120,13 @@ export function EmployeesTab({ data, brandFilter }: EmployeesTabProps) {
         </CardHeader>
         <CardContent className="space-y-6">
           <EmployeePerformanceChart data={chartData} />
+          <div className="flex justify-end">
+            <ExportCsvButton />
+          </div>
           <EmployeePerformanceTable data={paginated} />
 
           {filtered.length === 0 && (
-            <p className="py-8 text-center text-muted-foreground">
-              No employee data.
-            </p>
+            <EmptyState>{t("employeesTab.noData")}</EmptyState>
           )}
 
           <EmployeePagination

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next"
 import {
   Bar,
   BarChart,
@@ -27,8 +28,9 @@ interface CategoryTrendChartProps {
 }
 
 export function CategoryTrendChart({ categoryCounts }: CategoryTrendChartProps) {
+  const { t } = useTranslation()
   if (categoryCounts.length === 0) {
-    return <p className="text-sm text-muted-foreground">No category data yet</p>
+    return <p className="text-sm text-muted-foreground">{t("customerDetail.noCategoryData")}</p>
   }
 
   return (
@@ -56,12 +58,12 @@ export function CategoryTrendChart({ categoryCounts }: CategoryTrendChartProps) 
             return (
               <div className="rounded-md border bg-background px-3 py-2 text-sm shadow-sm">
                 <p className="font-medium">{label}</p>
-                <p className="text-muted-foreground">Count: {count}</p>
+                <p className="text-muted-foreground">{t("common.count")}: {count}</p>
               </div>
             )
           }}
         />
-        <Bar dataKey="count" radius={[0, 4, 4, 0]}>
+        <Bar dataKey="count" radius={[0, 4, 4, 0]} name={t("common.count")}>
           {categoryCounts.map((_, i) => (
             <Cell key={categoryCounts[i].label} fill={CHART_COLORS[i % CHART_COLORS.length]} />
           ))}

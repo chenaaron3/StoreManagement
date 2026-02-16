@@ -9,7 +9,6 @@ import {
 } from "lucide-react"
 import { LanguageSwitcher } from "./LanguageSwitcher"
 import { ViewSwitcher } from "./ViewSwitcher"
-import { CURRENT_STORE_NAME } from "@/config/associate"
 
 export type AssociateTabId = "search" | "in-store" | "tasks"
 
@@ -39,26 +38,17 @@ export function AssociateSidebar({ activeTab, onTabChange }: AssociateSidebarPro
     >
       {/* Header */}
       <div
-        className={`shrink-0 border-b border-white/10 py-3 px-4 ${
-          collapsed ? "flex justify-center items-center px-2" : ""
+        className={`flex h-14 shrink-0 items-center border-b border-white/10 ${
+          collapsed ? "justify-center px-2" : "justify-between gap-2 px-4"
         }`}
       >
-        {!collapsed ? (
-          <div className="flex items-start justify-between gap-2">
-            <div className="space-y-0.5 min-w-0">
-              <span className="text-lg font-bold tracking-tight">
-                {t("sidebar.myDashboard")}
-              </span>
-              <p className="text-xs text-white/60">
-                {t("sidebar.location")}: 金沢
-                <br />
-                {t("sidebar.branch")}: {CURRENT_STORE_NAME}
-              </p>
-            </div>
-            <LanguageSwitcher className="shrink-0" />
-          </div>
-        ) : (
+        {collapsed ? (
           <span className="text-lg font-bold tracking-tight">A</span>
+        ) : (
+          <>
+            <span className="text-lg font-bold tracking-tight">Mark</span>
+            <LanguageSwitcher />
+          </>
         )}
       </div>
 

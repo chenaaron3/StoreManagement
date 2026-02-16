@@ -1,4 +1,7 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useTranslation } from "react-i18next";
+import { ExportCsvButton } from "@/components/ExportCsvButton";
+import { ManagerCard } from "./ManagerCard";
+import { TableContainer } from "@/components/ui/table-container";
 import type { PrecomputedData } from "@/utils/precomputedDataLoader";
 import { formatCurrency } from "@/lib/utils";
 
@@ -7,25 +10,23 @@ interface BrandTabProps {
 }
 
 export function BrandTab({ data }: BrandTabProps) {
+  const { t } = useTranslation();
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Brand performance</CardTitle>
-        <p className="text-sm text-muted-foreground">
-          Revenue and metrics by brand (top brands).
-        </p>
-      </CardHeader>
-      <CardContent>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+    <ManagerCard
+      title={t("brandTab.title")}
+      subtitle={t("brandTab.subtitle")}
+      headerAction={<ExportCsvButton />}
+    >
+      <TableContainer>
+        <table className="w-full text-sm">
             <thead>
               <tr className="border-b">
-                <th className="text-left py-2 font-medium">Brand</th>
-                <th className="text-right py-2 font-medium">Revenue</th>
-                <th className="text-right py-2 font-medium">Transactions</th>
-                <th className="text-right py-2 font-medium">Customers</th>
-                <th className="text-right py-2 font-medium">AOV</th>
-                <th className="text-right py-2 font-medium">Stores</th>
+                <th className="text-left py-2 font-medium">{t("brandTab.brand")}</th>
+                <th className="text-right py-2 font-medium">{t("common.revenue")}</th>
+                <th className="text-right py-2 font-medium">{t("brandTab.transactions")}</th>
+                <th className="text-right py-2 font-medium">{t("brandTab.customers")}</th>
+                <th className="text-right py-2 font-medium">{t("brandTab.aov")}</th>
+                <th className="text-right py-2 font-medium">{t("brandTab.stores")}</th>
               </tr>
             </thead>
             <tbody>
@@ -40,9 +41,8 @@ export function BrandTab({ data }: BrandTabProps) {
                 </tr>
               ))}
             </tbody>
-          </table>
-        </div>
-      </CardContent>
-    </Card>
+        </table>
+      </TableContainer>
+    </ManagerCard>
   );
 }

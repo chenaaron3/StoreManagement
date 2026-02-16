@@ -1,5 +1,6 @@
 import { useEffect } from "react"
 import { BrowserRouter, Navigate, Route, Routes, useParams } from "react-router-dom"
+import { TooltipProvider } from "@/components/ui/tooltip"
 import { useTranslation } from "react-i18next"
 import { Layout } from "@/components/Layout"
 import { ManagerPage } from "@/pages/ManagerPage"
@@ -49,9 +50,11 @@ function AppContent() {
 
 function App() {
   return (
-    <BrowserRouter>
-      <AppContent />
-    </BrowserRouter>
+    <TooltipProvider>
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
+    </TooltipProvider>
   )
 }
 

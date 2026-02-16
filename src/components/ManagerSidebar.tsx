@@ -26,7 +26,7 @@ export interface BrandOption {
   brandName: string;
 }
 
-const NAV_IDS: { id: ManagerTabId; icon: React.ComponentType<{ className?: string }> }[] = [
+const NAV_ITEMS: { id: ManagerTabId; icon: React.ComponentType<{ className?: string }> }[] = [
   { id: "sales", icon: LayoutDashboard },
   { id: "customers", icon: Users },
   { id: "product", icon: Package },
@@ -34,6 +34,15 @@ const NAV_IDS: { id: ManagerTabId; icon: React.ComponentType<{ className?: strin
   { id: "employees", icon: UserCog },
   { id: "brand", icon: Tag },
 ];
+
+const SIDEBAR_LABELS: Record<ManagerTabId, string> = {
+  sales: "sidebar.sales",
+  customers: "sidebar.customers",
+  product: "sidebar.product",
+  stores: "sidebar.stores",
+  employees: "sidebar.employees",
+  brand: "sidebar.brand",
+};
 
 interface ManagerSidebarProps {
   activeTab: ManagerTabId;
@@ -103,7 +112,7 @@ export function ManagerSidebar({
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto py-3 px-2">
         <ul className="space-y-0.5">
-          {NAV_IDS.map(({ id, icon: Icon }) => {
+          {NAV_ITEMS.map(({ id, icon: Icon }) => {
             const isActive = activeTab === id;
             return (
               <li key={id}>
@@ -120,7 +129,7 @@ export function ManagerSidebar({
                     <span className="absolute left-0 top-1/2 h-8 w-0.5 -translate-y-1/2 rounded-r bg-blue-500" aria-hidden />
                   )}
                   <Icon className="h-5 w-5 shrink-0" aria-hidden />
-                  {!collapsed && <span>{t(`sidebar.${id}`)}</span>}
+                  {!collapsed && <span>{t(SIDEBAR_LABELS[id])}</span>}
                 </button>
               </li>
             );

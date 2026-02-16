@@ -24,6 +24,8 @@
   "common": {
     "revenue": "Revenue",
     "count": "Count",
+    "cancel": "Cancel",
+    "exportCsv": "Export CSV",
     "expandSidebar": "Expand sidebar",
     "memberId": "Member ID",
     "loading": "Loading analytics...",
@@ -60,7 +62,11 @@
   "associatePage": {
     "searchByPhone": "Search by phone",
     "inStore": "Currently in store",
-    "noCustomersCheckedIn": "No customers checked in"
+    "noCustomersCheckedIn": "No customers checked in",
+    "phoneSearchPlaceholder": "Search by phone number (e.g. 090-1234-5678)",
+    "search": "Search",
+    "searching": "Searching…",
+    "noCustomerFound": "No customer found."
   },
   "todo": {
     "title": "Tasks assigned to me",
@@ -107,6 +113,7 @@
     "bodyUnknown": "Unknown",
     "customerValue": "Customer value",
     "categoryTrend": "Category trend",
+    "noCategoryData": "No category data yet",
     "recommendedForYou": "Recommended for you",
     "noRecommendations": "No recommendations yet",
     "notes": "Notes / Past interactions",
@@ -125,8 +132,122 @@
     "itemsInCart": "Items in online cart",
     "noItemsInCart": "No items in cart"
   },
+  "coupon": {
+    "c1": { "name": "10% Off Next Visit", "discount": "10%" },
+    "c2": { "name": "Free Shipping", "discount": "Free ship" }
+  },
   "chart": {
     "revenue": "Revenue",
     "percentile": "Percentile"
+  },
+  "rfm": {
+    "title": "RFM matrix",
+    "metric": "Metric",
+    "revenue": "Revenue",
+    "aov": "AOV",
+    "customers": "Customers",
+    "explanation": "R = Recency (how recently they bought; R4 = most recent). F = Frequency (how often; F4 = highest). Each cell shows the metric for that segment. Top-left (R4–F4) = best customers; bottom-right (R1–F1) = at-risk.",
+    "descRevenue": "Revenue by Recency (R) and Frequency (F). Green = higher, red = lower.",
+    "descAov": "Average order value by R-F segment.",
+    "descCustomers": "Customer count by R-F segment.",
+    "colorScale": "Color scale",
+    "highToLow": "High → Low",
+    "noData": "No data",
+    "customersLabel": "customers",
+    "txns": "txns",
+    "days": "days",
+    "targetedCoupon": "Targeted coupon",
+    "targetedCouponDesc": "Configure a coupon for this R-F segment.",
+    "couponName": "Coupon name",
+    "discount": "Discount",
+    "expiry": "Expiry",
+    "createCoupon": "Create coupon",
+    "couponNamePlaceholder": "e.g. Win-back 10% off",
+    "discountPlaceholder": "e.g. 10% or ¥500 off"
+  },
+  "productTab": {
+    "product": "Product",
+    "collection": "Collection (brand)",
+    "category": "Category",
+    "color": "Color",
+    "size": "Size",
+    "trends": "{{view}} trends",
+    "revenueOverTime": "Revenue over time for top items by {{view}}.",
+    "performanceByStore": "{{view}} performance by store",
+    "topItemsDesc": "Top items with revenue and store breakdown.",
+    "productCol": "Product",
+    "topStores": "Top stores",
+    "more": "+{{count}} more",
+    "noData": "No performance data for this view."
+  },
+  "storesTab": {
+    "title": "Store trends",
+    "revenueOverTime": "Revenue over time for top 25 stores.",
+    "performanceByProduct": "Store performance by product",
+    "topStoresDesc": "Top stores with revenue and product breakdown.",
+    "store": "Store",
+    "topProducts": "Top products",
+    "noData": "No store performance data."
+  },
+  "employeesTab": {
+    "title": "Employee performance",
+    "subtitle": "Revenue by sales associate with store and product breakdown.",
+    "noData": "No employee data."
+  },
+  "brandTab": {
+    "title": "Brand performance",
+    "subtitle": "Revenue and metrics by brand (top brands).",
+    "brand": "Brand",
+    "transactions": "Transactions",
+    "customers": "Customers",
+    "aov": "AOV",
+    "stores": "Stores"
+  },
+  "employeeFilters": {
+    "brand": "Brand",
+    "allBrands": "All brands",
+    "location": "Location",
+    "allLocations": "All locations",
+    "perPage": "Per page"
+  },
+  "customerSegmentation": {
+    "title": "Customer segmentation",
+    "description": "Distribution and revenue by segment. Choose an axis below.",
+    "dimension": "Axis",
+    "frequency": "Purchase frequency",
+    "age": "Age band",
+    "gender": "Gender",
+    "channel": "Channel",
+    "aov": "AOV",
+    "lifetimeValue": "Lifetime value",
+    "distribution": "distribution",
+    "revenueBySegment": "Revenue by segment",
+    "noData": "No data for this axis.",
+    "customersCount": "{{count}} customers ({{percent}}%)",
+    "count": "Count"
+  },
+  "segmentLabels": {
+    "Very Frequent (10+ purchases)": "Very frequent (10+ purchases)",
+    "Frequent (5-9 purchases)": "Frequent (5-9 purchases)",
+    "Regular (2-4 purchases)": "Regular (2-4 purchases)",
+    "One-Time (1 purchase)": "One-time (1 purchase)",
+    "High AOV (¥10,000+)": "High AOV (¥10,000+)",
+    "Medium AOV (¥5,000-10,000)": "Medium AOV (¥5,000-10,000)",
+    "Standard AOV (¥2,000-5,000)": "Standard AOV (¥2,000-5,000)",
+    "Low AOV (<¥2,000)": "Low AOV (<¥2,000)",
+    "VIP (>¥100,000)": "VIP (>¥100,000)",
+    "High Value (¥50,000-100,000)": "High value (¥50,000-100,000)",
+    "Regular (¥20,000-50,000)": "Regular (¥20,000-50,000)",
+    "Occasional (<¥20,000)": "Occasional (<¥20,000)"
+  },
+  "rfmLabels": {
+    "mostRecent": "Most recent",
+    "recent": "Recent",
+    "lessRecent": "Less recent",
+    "leastRecent": "Least recent",
+    "high": "High",
+    "mediumHigh": "Medium-high",
+    "mediumLow": "Medium-low",
+    "low": "Low"
   }
 }

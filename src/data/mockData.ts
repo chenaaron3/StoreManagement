@@ -359,9 +359,9 @@ export const mockOnlineCartByMember: Record<string, OnlineCartItem[]> = {
 /** Prepopulated notes per member (used when localStorage has no notes yet). */
 export const mockNotesByMember: Record<string, string> = {
   RC01862444:
-    "Came with her family last visit. Interested in new skirt collection.",
+    "前回来店時はご家族と一緒でした。スカートの新作にご興味あり。",
   RC01866206:
-    "VIP customer. Prefers blouses and jackets. Follow up on wishlist items.",
+    "VIPのお客様。ブラウスとジャケットをお好み。ウィッシュリストのフォローをお願いします。",
 };
 
 /** Initial notes for a member (mock), when none saved yet. */

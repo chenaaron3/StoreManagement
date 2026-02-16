@@ -16,12 +16,14 @@ export function CouponsSection({ coupons }: CouponsSectionProps) {
         <ul className="space-y-2">
           {coupons.map((c) => (
             <li key={c.id} className="rounded-md border px-3 py-2 text-sm">
-              <p className="font-medium">{c.name}</p>
+              <p className="font-medium">
+                {t(`coupon.${c.id}.name`, { defaultValue: c.name })}
+              </p>
               {c.code && (
                 <p className="text-muted-foreground">{t("customerDetail.code")}: {c.code}</p>
               )}
               <p className="text-muted-foreground">
-                {c.discount} · {t("customerDetail.expires")}: {c.expiry}
+                {t(`coupon.${c.id}.discount`, { defaultValue: c.discount })} · {t("customerDetail.expires")}: {c.expiry}
                 {c.used ? ` · ${t("customerDetail.used")}` : ""}
               </p>
             </li>

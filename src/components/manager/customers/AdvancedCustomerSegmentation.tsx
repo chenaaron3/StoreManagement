@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Bar,
   BarChart,
@@ -12,6 +13,8 @@ import {
   YAxis,
 } from "recharts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ButtonGroup } from "@/components/ui/button-group";
+import { EmptyState } from "@/components/ui/empty-state";
 import type { CustomerSegment } from "@/types/analysis";
 import { formatCurrency, formatNumber } from "@/lib/utils";
 
@@ -25,15 +28,6 @@ interface AdvancedCustomerSegmentationProps {
 }
 
 type SegmentationType = "frequency" | "age" | "gender" | "channel" | "aov" | "lifetimeValue";
-
-const SEGMENT_LABELS: Record<SegmentationType, string> = {
-  frequency: "Frequency",
-  age: "Age",
-  gender: "Gender",
-  channel: "Channel",
-  aov: "AOV",
-  lifetimeValue: "Lifetime value",
-};
 
 const CHART_COLORS = [
   "var(--chart-1)",
@@ -54,6 +48,7 @@ export function AdvancedCustomerSegmentation({
   aovSegments,
   lifetimeValueSegments,
 }: AdvancedCustomerSegmentationProps) {
+  const { t } = useTranslation();
   const [activeSegment, setActiveSegment] = useState<SegmentationType>("frequency");
 
   const segmentData: Record<SegmentationType, CustomerSegment[]> = {
@@ -73,48 +68,46 @@ export function AdvancedCustomerSegmentation({
 
   const hasData = chartData.length > 0 && chartData.some((d) => d.count > 0);
 
+  const translateSegment = (segment: string) =>
+    t(`segmentLabels.${segment}`, { defaultValue: segment });
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-2xl">Customer segmentation</CardTitle>
+        <CardTitle className="text-2xl">{t("customerSegmentation.title")}</CardTitle>
         <CardDescription>
-          Distribution and revenue by segment. Choose a dimension below.
+          {t("customerSegmentation.description")}
         </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="mb-6">
-          <label className="text-sm font-medium text-muted-foreground block mb-2">
-            Dimension
-          </label>
-          <div className="flex flex-wrap gap-2 rounded-lg border bg-muted/30 p-2">
+          <ButtonGroup className="flex-wrap gap-2">
             {(["frequency", "age", "gender", "channel", "aov", "lifetimeValue"] as const).map(
               (type) => (
                 <button
                   key={type}
                   type="button"
                   onClick={() => setActiveSegment(type)}
-                  className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                  className={`rounded-md px-3 py-1.5 text-sm font-medium ${
                     activeSegment === type
-                      ? "bg-background text-foreground shadow"
-                      : "text-muted-foreground hover:text-foreground"
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-muted-foreground hover:bg-muted/80"
                   }`}
                 >
-                  {SEGMENT_LABELS[type]}
+                  {t(`customerSegmentation.${type}`)}
                 </button>
               )
             )}
-          </div>
+          </ButtonGroup>
         </div>
 
         {!hasData ? (
-          <p className="text-sm text-muted-foreground py-8 text-center">
-            No segment data for this dimension.
-          </p>
+          <EmptyState>{t("customerSegmentation.noData")}</EmptyState>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
             <div>
               <h3 className="text-lg font-semibold mb-4">
-                {SEGMENT_LABELS[activeSegment]} distribution
+                {t(`customerSegmentation.${activeSegment}`)} {t("customerSegmentation.distribution")}
               </h3>
               <ResponsiveContainer width="100%" height={350}>
                 <PieChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
@@ -124,7 +117,7 @@ export function AdvancedCustomerSegmentation({
                     cy="50%"
                     labelLine
                     label={({ name, percent }: { name?: string; percent?: number }) =>
-                      `${name ?? ""}: ${((percent ?? 0) * 100).toFixed(1)}%`
+                      `${translateSegment(name ?? "")}: ${((percent ?? 0) * 100).toFixed(1)}%`
                     }
                     outerRadius={100}
                     dataKey="count"
@@ -141,9 +134,9 @@ export function AdvancedCustomerSegmentation({
                       const data = payload[0].payload;
                       return (
                         <div className="rounded-lg border bg-background p-3 shadow-lg">
-                          <p className="font-semibold">{data.segment}</p>
+                          <p className="font-semibold">{translateSegment(data.segment)}</p>
                           <p className="text-sm text-muted-foreground">
-                            Count: {formatNumber(data.count)}
+                            {t("customerSegmentation.count")}: {formatNumber(data.count)}
                           </p>
                           <p className="text-sm text-muted-foreground">
                             {data.percentage.toFixed(1)}%
@@ -157,7 +150,7 @@ export function AdvancedCustomerSegmentation({
             </div>
 
             <div>
-              <h3 className="text-lg font-semibold mb-4">Revenue by segment</h3>
+              <h3 className="text-lg font-semibold mb-4">{t("customerSegmentation.revenueBySegment")}</h3>
               <ResponsiveContainer width="100%" height={350}>
                 <BarChart
                   data={chartData}
@@ -174,6 +167,7 @@ export function AdvancedCustomerSegmentation({
                     dataKey="segment"
                     type="category"
                     width={110}
+                    tickFormatter={translateSegment}
                     tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
                   />
                   <Tooltip
@@ -183,20 +177,20 @@ export function AdvancedCustomerSegmentation({
                       const ltv = data.count > 0 ? data.totalRevenue / data.count : 0;
                       return (
                         <div className="rounded-lg border bg-background p-3 shadow-lg space-y-1">
-                          <p className="font-semibold">{data.segment}</p>
+                          <p className="font-semibold">{translateSegment(data.segment)}</p>
                           <p className="text-sm">
-                            Revenue: {formatCurrency(data.totalRevenue)}
+                            {t("common.revenue")}: {formatCurrency(data.totalRevenue)}
                           </p>
-                          <p className="text-sm">AOV: {formatCurrency(Math.round(data.averageRevenue))}</p>
-                          <p className="text-sm">LTV: {formatCurrency(Math.round(ltv))}</p>
+                          <p className="text-sm">{t("customerSegmentation.aov")}: {formatCurrency(Math.round(data.averageRevenue))}</p>
+                          <p className="text-sm">{t("customerSegmentation.lifetimeValue")}: {formatCurrency(Math.round(ltv))}</p>
                           <p className="text-xs text-muted-foreground">
-                            {formatNumber(data.count)} customers ({data.percentage.toFixed(1)}%)
+                            {t("customerSegmentation.customersCount", { count: formatNumber(data.count), percent: data.percentage.toFixed(1) })}
                           </p>
                         </div>
                       );
                     }}
                   />
-                  <Bar dataKey="totalRevenue" fill="var(--chart-1)" name="Revenue">
+                  <Bar dataKey="totalRevenue" fill="var(--chart-1)" name={t("common.revenue")}>
                     {chartData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.fill} />
                     ))}

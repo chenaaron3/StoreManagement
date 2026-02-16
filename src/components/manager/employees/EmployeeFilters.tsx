@@ -1,6 +1,5 @@
-import {
-  ITEMS_PER_PAGE_OPTIONS,
-} from "./employeesUtils";
+import { useTranslation } from "react-i18next";
+import { ITEMS_PER_PAGE_OPTIONS } from "./employeesUtils";
 
 interface EmployeeFiltersProps {
   selectedBrand: string;
@@ -23,19 +22,20 @@ export function EmployeeFilters({
   onLocationChange,
   onPageSizeChange,
 }: EmployeeFiltersProps) {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-wrap items-center gap-4">
       <div className="flex items-center gap-2">
         <label htmlFor="emp-brand" className="text-sm text-muted-foreground">
-          Brand
+          {t("employeeFilters.brand")}
         </label>
         <select
           id="emp-brand"
           value={selectedBrand}
           onChange={(e) => onBrandChange(e.target.value)}
-          className="rounded-md border bg-background px-3 py-1.5 text-sm"
+          className="rounded-md border bg-background pl-3 pr-8 py-1.5 text-sm"
         >
-          <option value="all">All brands</option>
+          <option value="all">{t("employeeFilters.allBrands")}</option>
           {allBrands.map((b) => (
             <option key={b} value={b}>
               {b}
@@ -45,15 +45,15 @@ export function EmployeeFilters({
       </div>
       <div className="flex items-center gap-2">
         <label htmlFor="emp-location" className="text-sm text-muted-foreground">
-          Location
+          {t("employeeFilters.location")}
         </label>
         <select
           id="emp-location"
           value={selectedLocation}
           onChange={(e) => onLocationChange(e.target.value)}
-          className="rounded-md border bg-background px-3 py-1.5 text-sm"
+          className="rounded-md border bg-background pl-3 pr-8 py-1.5 text-sm"
         >
-          <option value="all">All locations</option>
+          <option value="all">{t("employeeFilters.allLocations")}</option>
           {allLocations.map((l) => (
             <option key={l} value={l}>
               {l}
@@ -63,13 +63,13 @@ export function EmployeeFilters({
       </div>
       <div className="flex items-center gap-2">
         <label htmlFor="emp-per-page" className="text-sm text-muted-foreground">
-          Per page
+          {t("employeeFilters.perPage")}
         </label>
         <select
           id="emp-per-page"
           value={pageSize}
           onChange={(e) => onPageSizeChange(Number(e.target.value))}
-          className="rounded-md border bg-background px-3 py-1.5 text-sm"
+          className="rounded-md border bg-background pl-3 pr-8 py-1.5 text-sm"
         >
           {ITEMS_PER_PAGE_OPTIONS.map((n) => (
             <option key={n} value={n}>

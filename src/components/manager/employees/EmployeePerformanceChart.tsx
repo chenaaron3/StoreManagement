@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Bar,
   BarChart,
@@ -22,6 +23,7 @@ interface EmployeePerformanceChartProps {
 }
 
 export function EmployeePerformanceChart({ data }: EmployeePerformanceChartProps) {
+  const { t } = useTranslation();
   if (data.length === 0) return null;
 
   return (
@@ -50,7 +52,7 @@ export function EmployeePerformanceChart({ data }: EmployeePerformanceChartProps
             return (
               <div className="rounded-lg border bg-background p-3 shadow-lg text-sm">
                 <p className="font-semibold">{d.fullName}</p>
-                <p>Revenue: {formatCurrency(d.revenue)}</p>
+                <p>{t("chart.revenue")}: {formatCurrency(d.revenue)}</p>
                 {d.stores && (
                   <p className="text-muted-foreground mt-1">
                     Stores: {d.stores}
@@ -65,7 +67,7 @@ export function EmployeePerformanceChart({ data }: EmployeePerformanceChartProps
             );
           }}
         />
-        <Bar dataKey="revenue" fill="var(--chart-1)" name="Revenue" />
+        <Bar dataKey="revenue" fill="var(--chart-1)" name={t("chart.revenue")} />
       </BarChart>
     </ResponsiveContainer>
   );

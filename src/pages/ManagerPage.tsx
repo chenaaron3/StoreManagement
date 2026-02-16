@@ -98,11 +98,39 @@ export function ManagerPage() {
               </p>
             </div>
             <Separator />
-            {activeTab === "sales" && <SalesTab data={tabData} />}
+            {activeTab === "sales" && (
+              <SalesTab
+                data={tabData}
+                brandFilter={brandFilter}
+                onBrandFilterChange={setBrandFilter}
+                brandOptions={brandOptions}
+              />
+            )}
             {activeTab === "brand" && data && <BrandTab data={data} />}
-            {activeTab === "customers" && <CustomersTab data={tabData} />}
-            {activeTab === "product" && <ProductTab data={tabData} />}
-            {activeTab === "stores" && <StoresTab data={tabData} />}
+            {activeTab === "customers" && (
+              <CustomersTab
+                data={tabData}
+                brandFilter={brandFilter}
+                onBrandFilterChange={setBrandFilter}
+                brandOptions={brandOptions}
+              />
+            )}
+            {activeTab === "product" && (
+              <ProductTab
+                data={tabData}
+                brandFilter={brandFilter}
+                onBrandFilterChange={setBrandFilter}
+                brandOptions={brandOptions}
+              />
+            )}
+            {activeTab === "stores" && (
+              <StoresTab
+                data={tabData}
+                brandFilter={brandFilter}
+                onBrandFilterChange={setBrandFilter}
+                brandOptions={brandOptions}
+              />
+            )}
             {activeTab === "employees" && <EmployeesTab data={tabData} brandFilter={brandFilter} />}
           </>
         );
