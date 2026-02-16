@@ -184,7 +184,7 @@ export function AdvancedCustomerSegmentation({
                           <p className="text-sm">{t("customerSegmentation.aov")}: {formatCurrency(Math.round(data.averageRevenue))}</p>
                           <p className="text-sm">{t("customerSegmentation.lifetimeValue")}: {formatCurrency(Math.round(ltv))}</p>
                           <p className="text-xs text-muted-foreground">
-                            {t("customerSegmentation.customersCount", { count: formatNumber(data.count), percent: data.percentage.toFixed(1) })}
+                            {t("customerSegmentation.customersCount", { count: data.count, percent: data.percentage.toFixed(1) })}
                           </p>
                         </div>
                       );
