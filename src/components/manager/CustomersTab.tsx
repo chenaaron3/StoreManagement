@@ -33,6 +33,9 @@ export function CustomersTab({ data, brandFilter, onBrandFilterChange, brandOpti
         genderSegments={genderSegments}
         aovSegments={aovSegments}
         lifetimeValueSegments={lifetimeValueSegments}
+        brandFilter={brandFilter}
+        onBrandFilterChange={onBrandFilterChange}
+        brandOptions={brandOptions}
       />
     </div>
   );

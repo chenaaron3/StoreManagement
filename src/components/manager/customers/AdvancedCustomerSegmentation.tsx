@@ -5,18 +5,24 @@ import {
 } from 'recharts';
 
 import { ButtonGroup } from "@/components/ui/button-group";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { CHART_COLORS } from "@/lib/chartConstants";
 import { formatCurrency, formatNumber } from "@/lib/utils";
 
 import type { CustomerSegment } from "@/types/analysis";
+import type { BrandOption } from "../BrandFilterSelect";
+import { BrandFilterSelect } from "../BrandFilterSelect";
+
 interface AdvancedCustomerSegmentationProps {
   frequencySegments: CustomerSegment[];
   ageSegments: CustomerSegment[];
   genderSegments: CustomerSegment[];
   aovSegments: CustomerSegment[];
   lifetimeValueSegments: CustomerSegment[];
+  brandFilter?: string;
+  onBrandFilterChange?: (code: string) => void;
+  brandOptions?: BrandOption[];
 }
 
 type SegmentationType = "frequency" | "age" | "gender" | "aov" | "lifetimeValue";
@@ -27,6 +33,9 @@ export function AdvancedCustomerSegmentation({
   genderSegments,
   aovSegments,
   lifetimeValueSegments,
+  brandFilter = "all",
+  onBrandFilterChange,
+  brandOptions = [],
 }: AdvancedCustomerSegmentationProps) {
   const { t } = useTranslation();
   const [activeSegment, setActiveSegment] = useState<SegmentationType>("frequency");
@@ -57,6 +66,16 @@ export function AdvancedCustomerSegmentation({
         <CardDescription>
           {t("customerSegmentation.description")}
         </CardDescription>
+        {onBrandFilterChange && brandOptions.length > 0 && (
+          <CardAction>
+            <BrandFilterSelect
+              selectedBrandCode={brandFilter}
+              brandOptions={brandOptions}
+              onBrandChange={onBrandFilterChange}
+              idPrefix="segmentation"
+            />
+          </CardAction>
+        )}
       </CardHeader>
       <CardContent>
         <div className="mb-6">
@@ -82,7 +101,7 @@ export function AdvancedCustomerSegmentation({
         {!hasData ? (
           <EmptyState>{t("customerSegmentation.noData")}</EmptyState>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+          <div className="max-w-5xl mr-auto grid grid-cols-1 lg:grid-cols-2 gap-10">
             <div className="overflow-visible min-w-0" style={{ color: "var(--foreground)" }}>
               <h3 className="text-lg font-semibold mb-4">
                 {t(`customerSegmentation.${activeSegment}`)} {t("customerSegmentation.distribution")}
