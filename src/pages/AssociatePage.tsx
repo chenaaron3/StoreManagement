@@ -1,15 +1,16 @@
-import { useState, useEffect, useRef } from "react"
-import { useTranslation } from "react-i18next"
-import { Dialog, DialogContent } from "@/components/ui/dialog"
-import { Separator } from "@/components/ui/separator"
-import { AssociateSidebar, type AssociateTabId } from "@/components/AssociateSidebar"
-import { CustomerDetailModalContent } from "@/components/CustomerDetailModalContent"
-import { MemberCard } from "@/components/MemberCard"
-import { PhoneSearchBar } from "@/components/PhoneSearchBar"
-import { AssociateTodoList } from "@/components/AssociateTodoList"
-import { CURRENT_STORE_NAME } from "@/config/associate"
+import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-const MEMBER_IDS = ["RC01862444", "RC01866206", "RC01017392"]
+import { AssociateSidebar, type AssociateTabId } from '@/components/AssociateSidebar';
+import { AssociateTodoList } from '@/components/AssociateTodoList';
+import { CustomerDetailModalContent } from '@/components/CustomerDetailModalContent';
+import { MemberCard } from '@/components/MemberCard';
+import { PhoneSearchBar } from '@/components/PhoneSearchBar';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Separator } from '@/components/ui/separator';
+import { CURRENT_STORE_NAME } from '@/config/associate';
+
+const MEMBER_IDS = ["AB01862444", "A101866206", "B101017392"]
 
 const SECTION_IDS: Record<AssociateTabId, string> = {
   search: "section-search",

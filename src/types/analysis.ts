@@ -3,6 +3,8 @@
  * Used by dataAnalysis and precomputedDataLoader.
  */
 
+export type Granularity = "daily" | "weekly" | "monthly";
+
 export interface KPIMetrics {
   totalRevenue: number;
   totalTransactions: number;

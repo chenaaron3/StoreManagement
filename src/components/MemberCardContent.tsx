@@ -1,13 +1,14 @@
-import { useTranslation } from "react-i18next";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CURRENT_STORE_BRAND } from "@/config/associate";
-import { formatCurrency } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
+
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { CURRENT_STORE_BRAND } from '@/config/associate';
 import { getOnlineCart } from '@/data/mockData';
 import {
     getNotificationFlags, getPurchasesInLast6Months, getRecommendations
 } from '@/lib/associateUtils';
 import { rankingBadgeClass, topRanking } from '@/lib/rankingBadge';
+import { formatCurrency } from '@/lib/utils';
 
 import type { User } from "@/types/data"
 interface MemberCardContentProps {
@@ -33,7 +34,7 @@ export function MemberCardContent({ user }: MemberCardContentProps) {
   const recommendations = getRecommendations(user.purchases).slice(0, 2)
 
   return (
-    <Card className="cursor-pointer gap-2 bg-transparent shadow-none">
+    <Card className="cursor-pointer gap-2 bg-card shadow-sm">
       <CardHeader className="pb-2">
         <div className="flex flex-wrap items-center gap-2">
           <CardTitle className="text-base">{user.name || user.memberId}</CardTitle>

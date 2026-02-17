@@ -1,21 +1,18 @@
-import { useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { ExportCsvButton } from '@/components/ExportCsvButton';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { EmptyState } from '@/components/ui/empty-state';
+import { formatCurrency } from '@/lib/utils';
+
+import {
+    DEFAULT_PAGE_SIZE, EmployeeFilters, EmployeePagination, EmployeePerformanceChart,
+    EmployeePerformanceTable, extractBrandsAndLocations, parseStoreParts
+} from './employees';
+
 import type { PrecomputedData } from "@/utils/precomputedDataLoader";
 import type { EmployeePerformance } from "@/types/analysis";
-import { formatCurrency } from "@/lib/utils";
-import {
-  DEFAULT_PAGE_SIZE,
-  EmployeeFilters,
-  EmployeePagination,
-  EmployeePerformanceChart,
-  EmployeePerformanceTable,
-  extractBrandsAndLocations,
-  parseStoreParts,
-} from "./employees";
-import { ExportCsvButton } from "@/components/ExportCsvButton";
-import { EmptyState } from "@/components/ui/empty-state";
-
 interface EmployeesTabProps {
   data: PrecomputedData;
   /** Brand code from sidebar filter; used to preselect Brand filter */
@@ -119,7 +116,9 @@ export function EmployeesTab({ data, brandFilter }: EmployeesTabProps) {
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
-          <EmployeePerformanceChart data={chartData} />
+          <div className="max-w-5xl mx-auto">
+            <EmployeePerformanceChart data={chartData} />
+          </div>
           <div className="flex justify-end">
             <ExportCsvButton />
           </div>

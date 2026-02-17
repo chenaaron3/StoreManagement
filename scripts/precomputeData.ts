@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -15,30 +15,43 @@ async function precomputeData() {
   const dataDir = join(projectRoot, "src", "data");
   const publicDataDir = join(projectRoot, "public", "data");
 
-  const fabricatedPath = join(dataDir, "mark_sales_fabricated.csv");
+  const anonymizedPath = join(dataDir, "mark_sales_anonymized.csv");
 
-  if (!existsSync(fabricatedPath)) {
+  if (!existsSync(anonymizedPath)) {
     throw new Error(
-      "mark_sales_fabricated.csv not found. Run: npm run build-fabrication-entities && npm run fabricate-sales"
+      "mark_sales_anonymized.csv not found. Run: npm run anonymize-sales",
     );
   }
 
-  console.log("Reading fabricated sales only (no real CSVs)...");
-  const fabricatedData = await parseMarkSalesCSVStream(fabricatedPath);
-  console.log(`Parsed ${fabricatedData.length} fabricated sales.`);
+  console.log("Reading anonymized sales...");
+  const anonymizedData = await parseMarkSalesCSVStream(anonymizedPath);
+  console.log(`Parsed ${anonymizedData.length} anonymized sales.`);
 
-  const filteredSales = fabricatedData.filter((r) => {
+  const filteredSales = anonymizedData.filter((r) => {
     if (!r.purchaseDate || r.totalCost <= 0) return false;
     return true;
   });
 
-  console.log(`Processed ${filteredSales.length} sales records (fabricated only).`);
+  console.log(`Processed ${filteredSales.length} sales records.`);
 
-  // Brand performance: from fabricated sales only (no memberships)
+  const demographicsPath = join(publicDataDir, "member_demographics.json");
+  let memberDemographics: dataAnalysis.MemberDemographics | null = null;
+  if (existsSync(demographicsPath)) {
+    memberDemographics = JSON.parse(
+      readFileSync(demographicsPath, "utf-8"),
+    ) as dataAnalysis.MemberDemographics;
+    console.log(
+      `Loaded member demographics: ${Object.keys(memberDemographics).length} members`,
+    );
+  } else {
+    console.log(
+      "No member_demographics.json; age/gender segments will use fallback. Run: npm run build-member-demographics",
+    );
+  }
+
+  // Brand performance: from anonymized sales only (no memberships)
   const brandFromSales = dataAnalysis.getBrandPerformance(filteredSales);
-  const salesByBrandCode = new Map(
-    brandFromSales.map((b) => [b.brandCode, b]),
-  );
+  const salesByBrandCode = new Map(brandFromSales.map((b) => [b.brandCode, b]));
   const allBrandCodes = new Set(salesByBrandCode.keys());
   const brandPerformance = Array.from(allBrandCodes)
     .map((brandCode) => {
@@ -67,9 +80,13 @@ async function precomputeData() {
       customerSegments: ReturnType<typeof dataAnalysis.getCustomerSegments>;
       rfmMatrix: ReturnType<typeof dataAnalysis.getRFMMatrix>;
       frequencySegments: ReturnType<typeof dataAnalysis.getFrequencySegments>;
+      ageSegments: ReturnType<typeof dataAnalysis.getAgeSegments>;
+      genderSegments: ReturnType<typeof dataAnalysis.getGenderSegments>;
       channelSegments: ReturnType<typeof dataAnalysis.getChannelSegments>;
       aovSegments: ReturnType<typeof dataAnalysis.getAOVSegments>;
-      employeePerformance: ReturnType<typeof dataAnalysis.getEmployeePerformance>;
+      employeePerformance: ReturnType<
+        typeof dataAnalysis.getEmployeePerformance
+      >;
       storePerformanceWithProducts: ReturnType<
         typeof dataAnalysis.getStorePerformanceWithProducts
       >;
@@ -83,8 +100,12 @@ async function precomputeData() {
       collectionPerformanceWithStores: ReturnType<
         typeof dataAnalysis.getCollectionPerformanceWithStores
       >;
-      collectionTrendsWeekly: ReturnType<typeof dataAnalysis.getCollectionTrends>;
-      collectionTrendsMonthly: ReturnType<typeof dataAnalysis.getCollectionTrends>;
+      collectionTrendsWeekly: ReturnType<
+        typeof dataAnalysis.getCollectionTrends
+      >;
+      collectionTrendsMonthly: ReturnType<
+        typeof dataAnalysis.getCollectionTrends
+      >;
       categoryPerformanceWithStores: ReturnType<
         typeof dataAnalysis.getCategoryPerformanceWithStores
       >;
@@ -103,96 +124,101 @@ async function precomputeData() {
 
   for (const brand of brandPerformance) {
     const salesForBrand = filteredSales.filter(
-      (r) => (r.brandId?.trim() || r.brandCode?.trim() || "") === brand.brandCode
+      (r) =>
+        (r.brandId?.trim() || r.brandCode?.trim() || "") === brand.brandCode,
     );
-    const storeNamePrefix = brand.brandName
-      ? brand.brandName + " "
-      : "";
+    const storeNamePrefix = brand.brandName ? brand.brandName + " " : "";
     const salesForBrandStores = filteredSales.filter(
       (r) =>
         (r.storeName?.trim() || "").startsWith(storeNamePrefix) ||
-        (r.brandId?.trim() || r.brandCode?.trim() || "") === brand.brandCode
+        (r.brandId?.trim() || r.brandCode?.trim() || "") === brand.brandCode,
     );
-    const salesToUse = salesForBrandStores.length > 0 ? salesForBrandStores : salesForBrand;
+    const salesToUse =
+      salesForBrandStores.length > 0 ? salesForBrandStores : salesForBrand;
 
     byBrand[brand.brandCode] = {
       kpis: dataAnalysis.calculateKPIs(salesToUse),
       trendDataWeekly: dataAnalysis.getTrendsByGranularity(
         salesToUse,
-        "weekly"
+        "weekly",
       ),
       trendDataMonthly: dataAnalysis.getTrendsByGranularity(
         salesToUse,
-        "monthly"
+        "monthly",
       ),
       dayOfWeekData: dataAnalysis.getDayOfWeekAnalysis(salesToUse),
       customerSegments: dataAnalysis.getCustomerSegments(salesToUse),
       rfmMatrix: dataAnalysis.getRFMMatrix(salesToUse),
       frequencySegments: dataAnalysis.getFrequencySegments(salesToUse),
+      ageSegments: dataAnalysis.getAgeSegments(salesToUse, memberDemographics),
+      genderSegments: dataAnalysis.getGenderSegments(
+        salesToUse,
+        memberDemographics,
+      ),
       channelSegments: dataAnalysis.getChannelSegments(salesToUse),
       aovSegments: dataAnalysis.getAOVSegments(salesToUse),
       employeePerformance: dataAnalysis.getEmployeePerformance(salesToUse),
       storePerformanceWithProducts:
         dataAnalysis.getStorePerformanceWithProducts(salesToUse, 25),
-      storeTrendsWeekly: dataAnalysis.getStoreTrends(
-        salesToUse,
-        25,
-        "weekly"
-      ),
+      storeTrendsWeekly: dataAnalysis.getStoreTrends(salesToUse, 25, "weekly"),
       storeTrendsMonthly: dataAnalysis.getStoreTrends(
         salesToUse,
         25,
-        "monthly"
+        "monthly",
       ),
       productPerformanceWithStores:
         dataAnalysis.getProductPerformanceWithStores(salesToUse, 25),
       productTrendsWeekly: dataAnalysis.getProductTrends(
         salesToUse,
         25,
-        "weekly"
+        "weekly",
       ),
       productTrendsMonthly: dataAnalysis.getProductTrends(
         salesToUse,
         25,
-        "monthly"
+        "monthly",
       ),
       collectionPerformanceWithStores:
         dataAnalysis.getCollectionPerformanceWithStores(salesToUse, 25),
       collectionTrendsWeekly: dataAnalysis.getCollectionTrends(
         salesToUse,
         25,
-        "weekly"
+        "weekly",
       ),
       collectionTrendsMonthly: dataAnalysis.getCollectionTrends(
         salesToUse,
         25,
-        "monthly"
+        "monthly",
       ),
       categoryPerformanceWithStores:
         dataAnalysis.getCategoryPerformanceWithStores(salesToUse, 25),
       categoryTrendsWeekly: dataAnalysis.getCategoryTrends(
         salesToUse,
         25,
-        "weekly"
+        "weekly",
       ),
       categoryTrendsMonthly: dataAnalysis.getCategoryTrends(
         salesToUse,
         25,
-        "monthly"
+        "monthly",
       ),
-      colorPerformanceWithStores:
-        dataAnalysis.getColorPerformanceWithStores(salesToUse, 25),
-      sizePerformanceWithStores:
-        dataAnalysis.getSizePerformanceWithStores(salesToUse, 25),
+      colorPerformanceWithStores: dataAnalysis.getColorPerformanceWithStores(
+        salesToUse,
+        25,
+      ),
+      sizePerformanceWithStores: dataAnalysis.getSizePerformanceWithStores(
+        salesToUse,
+        25,
+      ),
       colorTrends: dataAnalysis.getAttributeTrends(
         salesToUse,
         "color",
-        "monthly"
+        "monthly",
       ),
       sizeTrends: dataAnalysis.getAttributeTrends(
         salesToUse,
         "size",
-        "monthly"
+        "monthly",
       ),
     };
   }
@@ -277,8 +303,11 @@ async function precomputeData() {
     ),
     rfmMatrix: dataAnalysis.getRFMMatrix(filteredSales),
     frequencySegments: dataAnalysis.getFrequencySegments(filteredSales),
-    ageSegments: dataAnalysis.getAgeSegments(filteredSales),
-    genderSegments: dataAnalysis.getGenderSegments(filteredSales),
+    ageSegments: dataAnalysis.getAgeSegments(filteredSales, memberDemographics),
+    genderSegments: dataAnalysis.getGenderSegments(
+      filteredSales,
+      memberDemographics,
+    ),
     channelSegments: dataAnalysis.getChannelSegments(filteredSales),
     aovSegments: dataAnalysis.getAOVSegments(filteredSales),
     employeePerformance: dataAnalysis.getEmployeePerformance(filteredSales),

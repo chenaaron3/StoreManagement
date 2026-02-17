@@ -47,6 +47,7 @@ export function CategoryTrendChart({ categoryCounts }: CategoryTrendChartProps) 
           dataKey="label"
           width={72}
           tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
+          tickFormatter={(value) => t(`customerDetail.categoryLabels.${value}`, { defaultValue: value })}
           axisLine={false}
           tickLine={false}
         />
@@ -55,9 +56,10 @@ export function CategoryTrendChart({ categoryCounts }: CategoryTrendChartProps) 
           content={({ active, payload }) => {
             if (!active || !payload?.[0]) return null
             const { label, count } = payload[0].payload
+            const translatedLabel = t(`customerDetail.categoryLabels.${label}`, { defaultValue: label })
             return (
               <div className="rounded-md border bg-background px-3 py-2 text-sm shadow-sm">
-                <p className="font-medium">{label}</p>
+                <p className="font-medium">{translatedLabel}</p>
                 <p className="text-muted-foreground">{t("common.count")}: {count}</p>
               </div>
             )

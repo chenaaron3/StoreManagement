@@ -1,18 +1,21 @@
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ButtonGroup } from "@/components/ui/button-group";
-import { EmptyState } from "@/components/ui/empty-state";
-import { TableContainer } from "@/components/ui/table-container";
-import { ManagerCard } from "./ManagerCard";
-import { ExportCsvButton } from "@/components/ExportCsvButton";
-import { MultiSeriesTrendChart } from "@/components/MultiSeriesTrendChart";
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { ExportCsvButton } from '@/components/ExportCsvButton';
+import { MultiSeriesTrendChart } from '@/components/MultiSeriesTrendChart';
+import { ButtonGroup } from '@/components/ui/button-group';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { EmptyState } from '@/components/ui/empty-state';
+import { TableContainer } from '@/components/ui/table-container';
+import { formatCurrency } from '@/lib/utils';
+
+import { BrandFilterSelect } from './BrandFilterSelect';
+import { ManagerCard } from './ManagerCard';
+
 import type { PrecomputedData } from "@/utils/precomputedDataLoader";
-import type { Granularity } from "@/utils/dataAnalysis";
+import type { Granularity } from "@/types/analysis";
 import type { PerformanceWithStoreBreakdown } from "@/types/analysis";
 import type { BrandOption } from "./BrandFilterSelect";
-import { BrandFilterSelect } from "./BrandFilterSelect";
-
 type ProductViewType = "product" | "collection" | "category" | "color" | "size";
 
 interface ProductTabProps {
@@ -21,8 +24,6 @@ interface ProductTabProps {
   onBrandFilterChange: (code: string) => void;
   brandOptions: BrandOption[];
 }
-
-import { formatCurrency } from "@/lib/utils";
 
 const VIEW_KEYS: Record<ProductViewType, string> = {
   product: "product",
@@ -64,58 +65,49 @@ export function ProductTab({ data, brandFilter, onBrandFilterChange, brandOption
     return [];
   })() as PerformanceWithStoreBreakdown[];
 
-  const showGranularity =
-    viewType === "product" || viewType === "collection" || viewType === "category";
-
   return (
     <div className="space-y-6">
       <Card>
         <CardHeader>
           <div className="flex flex-wrap items-center justify-between gap-4">
             <CardTitle>{t("productTab.trends", { view: t(`productTab.${VIEW_KEYS[viewType]}`) })}</CardTitle>
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-1 flex-wrap items-center justify-end gap-4 min-w-0">
               <BrandFilterSelect
                 selectedBrandCode={brandFilter}
                 brandOptions={brandOptions}
                 onBrandChange={onBrandFilterChange}
                 idPrefix="product"
               />
-              <div className="flex flex-wrap items-center gap-3">
-              <ButtonGroup>
+              <ButtonGroup className="shrink-0">
                 {(Object.keys(VIEW_KEYS) as ProductViewType[]).map((v) => (
                   <button
                     key={v}
                     type="button"
                     onClick={() => setViewType(v)}
-                    className={`rounded-md px-2.5 py-1.5 text-xs font-medium ${
-                      viewType === v
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted text-muted-foreground hover:bg-muted/80"
-                    }`}
+                    className={`rounded-md px-2.5 py-1.5 text-xs font-medium whitespace-nowrap ${viewType === v
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-muted-foreground hover:bg-muted/80"
+                      }`}
                   >
                     {t(`productTab.${VIEW_KEYS[v]}`)}
                   </button>
                 ))}
               </ButtonGroup>
-              {showGranularity && (
-                <ButtonGroup className="gap-2">
-                  {(["weekly", "monthly"] as const).map((g) => (
-                    <button
-                      key={g}
-                      type="button"
-                      onClick={() => setGranularity(g)}
-                      className={`rounded-md px-3 py-1.5 text-sm font-medium ${
-                        granularity === g
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-muted text-muted-foreground hover:bg-muted/80"
+              <ButtonGroup className="gap-2 shrink-0">
+                {(["weekly", "monthly"] as const).map((g) => (
+                  <button
+                    key={g}
+                    type="button"
+                    onClick={() => setGranularity(g)}
+                    className={`rounded-md px-3 py-1.5 text-sm font-medium ${granularity === g
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-muted-foreground hover:bg-muted/80"
                       }`}
-                    >
-                      {t(`salesTab.${g}`)}
-                    </button>
-                  ))}
-                </ButtonGroup>
-              )}
-              </div>
+                  >
+                    {t(`salesTab.${g}`)}
+                  </button>
+                ))}
+              </ButtonGroup>
             </div>
           </div>
           <p className="text-sm text-muted-foreground">
@@ -134,36 +126,36 @@ export function ProductTab({ data, brandFilter, onBrandFilterChange, brandOption
       >
         <TableContainer>
           <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b">
-                  <th className="text-left py-2 pr-4 font-medium">{t("productTab.productCol")}</th>
-                  <th className="text-right py-2 px-4 font-medium">{t("common.revenue")}</th>
-                  <th className="text-left py-2 pl-4 font-medium">{t("productTab.topStores")}</th>
+            <thead>
+              <tr className="border-b border-border bg-muted/60">
+                <th className="text-left py-3 px-4 font-medium text-muted-foreground min-w-[108px]">{t("productTab.productCol")}</th>
+                <th className="text-right py-3 px-4 font-medium text-muted-foreground">{t("common.revenue")}</th>
+                <th className="text-left py-3 px-4 font-medium text-muted-foreground">{t("productTab.topStores")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {performance.slice(0, 25).map((row, i) => (
+                <tr key={row.name} className={`border-b border-border ${i % 2 === 1 ? "bg-muted/30" : ""} hover:bg-muted/40 transition-colors`}>
+                  <td className="py-3 px-4 min-w-[108px] font-medium" title={row.name}>
+                    {row.name.length > 50
+                      ? `${row.name.slice(0, 50)}…`
+                      : row.name}
+                  </td>
+                  <td className="text-right py-3 px-4 whitespace-nowrap tabular-nums">
+                    {formatCurrency(row.totalRevenue)}
+                  </td>
+                  <td className="py-3 px-4 text-muted-foreground">
+                    {row.stores
+                      .slice(0, 5)
+                      .map((s) => `${s.storeName} · ${formatCurrency(s.revenue)}`)
+                      .join("  ·  ")}
+                    {row.stores.length > 5 &&
+                      ` ${t("productTab.more", { count: row.stores.length - 5 })}`}
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {performance.slice(0, 25).map((row) => (
-                  <tr key={row.name} className="border-b">
-                    <td className="py-2 pr-4" title={row.name}>
-                      {row.name.length > 50
-                        ? `${row.name.slice(0, 50)}…`
-                        : row.name}
-                    </td>
-                    <td className="text-right py-2 px-4 whitespace-nowrap">
-                      {formatCurrency(row.totalRevenue)}
-                    </td>
-                    <td className="py-2 pl-4 text-muted-foreground">
-                      {row.stores
-                        .slice(0, 5)
-                        .map((s) => `${s.storeName} · ${formatCurrency(s.revenue)}`)
-                        .join("  ·  ")}
-                      {row.stores.length > 5 &&
-                        ` ${t("productTab.more", { count: row.stores.length - 5 })}`}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+              ))}
+            </tbody>
+          </table>
         </TableContainer>
         {performance.length === 0 && (
           <EmptyState>{t("productTab.noData")}</EmptyState>

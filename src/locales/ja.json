@@ -37,12 +37,30 @@
   },
   "managerPage": {
     "tabs": {
-      "sales": { "title": "売上", "subtitle": "売上、取引数、トレンドの推移" },
-      "brand": { "title": "ブランド", "subtitle": "ブランド別の売上と実績" },
-      "customers": { "title": "顧客", "subtitle": "セグメント、RFM分析、顧客インサイト" },
-      "product": { "title": "商品", "subtitle": "商品別の売上" },
-      "stores": { "title": "店舗", "subtitle": "店舗別の売上と実績" },
-      "employees": { "title": "従業員", "subtitle": "従業員別の売上と実績" }
+      "sales": {
+        "title": "売上",
+        "subtitle": "売上、取引数、トレンドの推移"
+      },
+      "brand": {
+        "title": "ブランド",
+        "subtitle": "ブランド別の売上と実績"
+      },
+      "customers": {
+        "title": "顧客",
+        "subtitle": "セグメント、RFM分析、顧客インサイト"
+      },
+      "product": {
+        "title": "商品",
+        "subtitle": "商品別の売上"
+      },
+      "stores": {
+        "title": "店舗",
+        "subtitle": "店舗別の売上と実績"
+      },
+      "employees": {
+        "title": "従業員",
+        "subtitle": "従業員別の売上と実績"
+      }
     },
     "error": {
       "loadFailed": "データの読み込みに失敗しました",
@@ -112,6 +130,7 @@
     "bodyNatural": "骨格ナチュラル",
     "bodyUnknown": "未設定",
     "customerValue": "お客様情報",
+    "brandPreferences": "ブランド傾向",
     "categoryTrend": "カテゴリトレンド",
     "noCategoryData": "カテゴリデータはまだありません",
     "recommendedForYou": "おすすめ商品",
@@ -130,15 +149,39 @@
     "helpedBy": "対応スタッフ",
     "noPurchaseHistory": "購入履歴なし",
     "itemsInCart": "オンラインカート",
-    "noItemsInCart": "カートに商品はありません"
+    "noItemsInCart": "カートに商品はありません",
+    "categoryLabels": {
+      "Skirts": "スカート",
+      "Dresses": "ドレス",
+      "Blouses": "ブラウス",
+      "Jackets": "ジャケット",
+      "Pants": "パンツ",
+      "Knitwear": "ニット",
+      "Coats": "コート"
+    }
   },
   "coupon": {
-    "c1": { "name": "次回来店10%オフ", "discount": "10%オフ" },
-    "c2": { "name": "送料無料", "discount": "送料無料" }
+    "c1": {
+      "name": "次回来店10%オフ",
+      "discount": "10%オフ"
+    },
+    "c2": {
+      "name": "送料無料",
+      "discount": "送料無料"
+    }
   },
   "chart": {
     "revenue": "売上",
-    "percentile": "パーセンタイル"
+    "percentile": "パーセンタイル",
+    "daysOfWeek": {
+      "Sun": "日",
+      "Mon": "月",
+      "Tue": "火",
+      "Wed": "水",
+      "Thu": "木",
+      "Fri": "金",
+      "Sat": "土"
+    }
   },
   "rfm": {
     "title": "RFMマトリクス",
@@ -167,7 +210,7 @@
   },
   "productTab": {
     "product": "商品",
-    "collection": "コレクション（ブランド）",
+    "collection": "ブランド",
     "category": "カテゴリ",
     "color": "カラー",
     "size": "サイズ",
@@ -192,7 +235,11 @@
   "employeesTab": {
     "title": "従業員実績",
     "subtitle": "販売担当別売上（店舗・商品内訳付き）。",
-    "noData": "従業員データがありません。"
+    "noData": "従業員データがありません。",
+    "employee": "従業員",
+    "revenue": "売上",
+    "stores": "店舗",
+    "topProducts": "主な商品"
   },
   "brandTab": {
     "title": "ブランド実績",
@@ -201,7 +248,13 @@
     "transactions": "取引数",
     "customers": "顧客数",
     "aov": "平均単価",
-    "stores": "店舗数"
+    "stores": "店舗数",
+    "revenueByBrand": "ブランド別売上",
+    "transactionsByBrand": "ブランド別取引数",
+    "aovByBrand": "ブランド別平均単価",
+    "revenueOverTimeByBrand": "ブランド別売上推移",
+    "total": "合計",
+    "allBrandsTotal": "全ブランド合計"
   },
   "customerSegmentation": {
     "title": "顧客セグメント",
@@ -238,7 +291,16 @@
     "VIP (>¥100,000)": "VIP（10万円超）",
     "High Value (¥50,000-100,000)": "高額顧客（5万～10万円）",
     "Regular (¥20,000-50,000)": "通常（2万～5万円）",
-    "Occasional (<¥20,000)": "低頻度（2万円未満）"
+    "Occasional (<¥20,000)": "低頻度（2万円未満）",
+    "10s (10–19)": "10代",
+    "20s (20–29)": "20代",
+    "30s (30–39)": "30代",
+    "40s (40–49)": "40代",
+    "50s (50–59)": "50代",
+    "60+": "60代以上",
+    "Male": "男性",
+    "Female": "女性",
+    "Unknown": "未設定"
   },
   "rfmLabels": {
     "mostRecent": "直近",

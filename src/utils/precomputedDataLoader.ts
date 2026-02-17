@@ -78,13 +78,22 @@ export async function loadPrecomputedData(): Promise<PrecomputedData> {
   const response = await fetch(url);
   if (!response.ok) {
     throw new Error(
-      `Failed to load precomputed data from ${url}: ${response.statusText}. Run "npm run precompute" before build.`
+      `Failed to load precomputed data from ${url}: ${response.statusText}. Run "npm run anonymize-sales" then "npm run precompute".`
     );
   }
 
-  const data = (await response.json()) as PrecomputedData;
+  let data: PrecomputedData;
+  try {
+    data = (await response.json()) as PrecomputedData;
+  } catch (e) {
+    throw new Error(
+      `Precomputed data is invalid JSON. Regenerate with "npm run anonymize-sales" then "npm run precompute".`
+    );
+  }
   if (!data.kpis || !data.trendDataMonthly || !data.productTrendsMonthly) {
-    throw new Error('Invalid precomputed data format. Regenerate with "npm run precompute".');
+    throw new Error(
+      'Invalid precomputed data format. Regenerate with "npm run anonymize-sales" then "npm run precompute".'
+    );
   }
 
   cachedData = data;

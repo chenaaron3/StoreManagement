@@ -1,29 +1,38 @@
 # Sales Analytics (Manager)
 
-Manager dashboard for multi-brand clothing analytics. Data is driven by CSVs in `src/data/` (e.g. `mark_sales.csv`, `mark_memberships.csv`). The Manager page loads precomputed analytics from `public/data/precomputed.json`.
+Manager dashboard for multi-brand clothing analytics. Data is driven by sales CSVs in `src/data/`. The Manager page loads precomputed analytics from `public/data/precomputed.json`.
 
-## Precomputed data
+## Data pipeline
 
-Before running the app (or building), generate the precomputed JSON from the CSVs:
+Before running the app (or building), run the data pipeline to produce anonymized sales and precomputed analytics. You can run the full pipeline once, or run individual steps when only some inputs change.
 
-```bash
-npm run precompute
-```
-
-This reads `src/data/mark_sales.csv` and `src/data/mark_memberships.csv` (plus optional `mark_sales_fabricated.csv`), runs the analysis pipeline, and writes `public/data/precomputed.json`. Precompute is run manually; for automated builds (e.g. Vercel), commit or upload `public/data/precomputed.json` so the build can skip this step.
-
-### Fabricated sales (optional)
-
-To fill in sales data for brands that have memberships but no sales, run:
+### Master command (run everything)
 
 ```bash
-npm run build-fabrication-entities   # Creates fabrication_entities.json
-npm run fabricate-sales              # Creates mark_sales_fabricated.csv
-# Or combined:
-npm run fabricate
+npm run data-pipeline
 ```
 
-Then run `npm run precompute` to merge and analyze. When `mark_sales_fabricated.csv` exists, precompute will include it via streaming. For large fabricated datasets (~5M+ rows), use `NODE_OPTIONS="--max-old-space-size=16384" npm run precompute` (16GB heap).
+This runs, in order:
+
+1. **anonymize-sales** → `mark_sales_anonymized.csv` + `public/data/member_prefix_map.json`
+2. **build-member-demographics** → `public/data/member_demographics.json` (age/gender from membership + users)
+3. **precompute** → `public/data/precomputed.json`
+
+### Individual commands
+
+| Command                             | Inputs                                                                                                   | Outputs                                                                    |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `npm run anonymize-sales`           | `src/data/mark_sales_md.csv`, `mark_sales_EL.csv`, `mark_sales_LM.csv`                                   | `src/data/mark_sales_anonymized.csv`, `public/data/member_prefix_map.json` |
+| `npm run build-member-demographics` | `public/data/member_prefix_map.json`, `src/data/mark_membership_MD_LM_EL.csv`, `src/data/mark_users.csv` | `public/data/member_demographics.json`                                     |
+| `npm run precompute`                | `mark_sales_anonymized.csv`, (optional) `public/data/member_demographics.json`                           | `public/data/precomputed.json`                                             |
+
+**Requirements:**
+
+- **anonymize-sales** must be run before **build-member-demographics** (demographics script needs `member_prefix_map.json`).
+- **anonymize-sales** must be run before **precompute** (precompute reads `mark_sales_anonymized.csv`).
+- **build-member-demographics** is optional. If you don’t have `mark_membership_MD_LM_EL.csv` and `mark_users.csv`, skip it and run only `npm run anonymize-sales && npm run precompute`; age/gender segments will use a fallback.
+
+For automated builds (e.g. Vercel), commit or upload `public/data/precomputed.json` so the build can skip the pipeline.
 
 # React + TypeScript + Vite
 

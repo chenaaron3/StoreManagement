@@ -8,10 +8,10 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "build-fabrication-entities": "tsx scripts/buildFabricationEntities.ts",
-    "fabricate-sales": "tsx scripts/fabricateSales.ts",
-    "fabricate": "npm run build-fabrication-entities && npm run fabricate-sales",
-    "precompute": "tsx scripts/precomputeData.ts"
+    "anonymize-sales": "tsx scripts/anonymizeSales.ts",
+    "build-member-demographics": "tsx scripts/buildMemberDemographics.ts",
+    "precompute": "tsx scripts/precomputeData.ts",
+    "data-pipeline": "npm run anonymize-sales && npm run build-member-demographics && npm run precompute"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",

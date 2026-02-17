@@ -77,7 +77,7 @@ export function ManagerPage() {
         <p className="text-destructive mt-2">{error}</p>
         <p className="text-muted-foreground text-sm mt-1">
           {t("managerPage.error.precomputeHint", {
-            cmd1: "npm run precompute",
+            cmd1: "npm run anonymize-sales",
             path: "public/data/precomputed.json",
           })}
         </p>

@@ -1,50 +1,30 @@
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Cell,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+    Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis
+} from 'recharts';
+
 import { ButtonGroup } from "@/components/ui/button-group";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
-import type { CustomerSegment } from "@/types/analysis";
+import { CHART_COLORS } from "@/lib/chartConstants";
 import { formatCurrency, formatNumber } from "@/lib/utils";
 
+import type { CustomerSegment } from "@/types/analysis";
 interface AdvancedCustomerSegmentationProps {
   frequencySegments: CustomerSegment[];
   ageSegments: CustomerSegment[];
   genderSegments: CustomerSegment[];
-  channelSegments: CustomerSegment[];
   aovSegments: CustomerSegment[];
   lifetimeValueSegments: CustomerSegment[];
 }
 
-type SegmentationType = "frequency" | "age" | "gender" | "channel" | "aov" | "lifetimeValue";
-
-const CHART_COLORS = [
-  "var(--chart-1)",
-  "var(--chart-2)",
-  "var(--chart-3)",
-  "var(--chart-4)",
-  "var(--chart-5)",
-  "var(--chart-6)",
-  "var(--chart-7)",
-  "var(--chart-8)",
-];
+type SegmentationType = "frequency" | "age" | "gender" | "aov" | "lifetimeValue";
 
 export function AdvancedCustomerSegmentation({
   frequencySegments,
   ageSegments,
   genderSegments,
-  channelSegments,
   aovSegments,
   lifetimeValueSegments,
 }: AdvancedCustomerSegmentationProps) {
@@ -55,7 +35,6 @@ export function AdvancedCustomerSegmentation({
     frequency: frequencySegments,
     age: ageSegments,
     gender: genderSegments,
-    channel: channelSegments,
     aov: aovSegments,
     lifetimeValue: lifetimeValueSegments,
   };
@@ -81,18 +60,17 @@ export function AdvancedCustomerSegmentation({
       </CardHeader>
       <CardContent>
         <div className="mb-6">
-          <ButtonGroup className="flex-wrap gap-2">
-            {(["frequency", "age", "gender", "channel", "aov", "lifetimeValue"] as const).map(
+          <ButtonGroup className="w-fit flex-wrap gap-2 pr-1">
+            {(["frequency", "age", "gender", "aov", "lifetimeValue"] as const).map(
               (type) => (
                 <button
                   key={type}
                   type="button"
                   onClick={() => setActiveSegment(type)}
-                  className={`rounded-md px-3 py-1.5 text-sm font-medium ${
-                    activeSegment === type
+                  className={`rounded-md px-3 py-1.5 text-sm font-medium ${activeSegment === type
                       ? "bg-primary text-primary-foreground"
                       : "bg-muted text-muted-foreground hover:bg-muted/80"
-                  }`}
+                    }`}
                 >
                   {t(`customerSegmentation.${type}`)}
                 </button>
@@ -105,12 +83,12 @@ export function AdvancedCustomerSegmentation({
           <EmptyState>{t("customerSegmentation.noData")}</EmptyState>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-            <div>
+            <div className="overflow-visible min-w-0" style={{ color: "var(--foreground)" }}>
               <h3 className="text-lg font-semibold mb-4">
                 {t(`customerSegmentation.${activeSegment}`)} {t("customerSegmentation.distribution")}
               </h3>
-              <ResponsiveContainer width="100%" height={350}>
-                <PieChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+              <ResponsiveContainer width="100%" height={320}>
+                <PieChart margin={{ top: 24, right: 24, bottom: 24, left: 24 }}>
                   <Pie
                     data={chartData}
                     cx="50%"
@@ -149,26 +127,26 @@ export function AdvancedCustomerSegmentation({
               </ResponsiveContainer>
             </div>
 
-            <div>
+            <div className="overflow-visible min-w-0" style={{ color: "var(--foreground)" }}>
               <h3 className="text-lg font-semibold mb-4">{t("customerSegmentation.revenueBySegment")}</h3>
-              <ResponsiveContainer width="100%" height={350}>
+              <ResponsiveContainer width="100%" height={320}>
                 <BarChart
                   data={chartData}
                   layout="vertical"
-                  margin={{ top: 5, right: 50, left: 130, bottom: 5 }}
+                  margin={{ top: 12, right: 56, left: 120, bottom: 12 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
                   <XAxis
                     type="number"
                     tickFormatter={(v) => `¥${(v / 1000000).toFixed(1)}M`}
-                    tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
+                    tick={{ fontSize: 11, fill: "currentColor" }}
                   />
                   <YAxis
                     dataKey="segment"
                     type="category"
-                    width={110}
+                    width={115}
                     tickFormatter={translateSegment}
-                    tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
+                    tick={{ fontSize: 11, fill: "currentColor" }}
                   />
                   <Tooltip
                     content={({ active, payload }) => {

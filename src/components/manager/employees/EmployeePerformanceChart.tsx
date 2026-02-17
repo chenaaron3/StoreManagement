@@ -1,14 +1,7 @@
-import { useTranslation } from "react-i18next";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
-import { formatCurrency } from "@/lib/utils";
+import { useTranslation } from 'react-i18next';
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+
+import { formatCurrency } from '@/lib/utils';
 
 interface ChartItem {
   name: string;
@@ -27,11 +20,11 @@ export function EmployeePerformanceChart({ data }: EmployeePerformanceChartProps
   if (data.length === 0) return null;
 
   return (
-    <ResponsiveContainer width="100%" height={Math.min(400, data.length * 28)}>
+    <ResponsiveContainer width="100%" height={Math.min(480, data.length * 32)}>
       <BarChart
         data={data}
         layout="vertical"
-        margin={{ top: 5, right: 50, left: 130, bottom: 5 }}
+        margin={{ top: 5, right: 50, left: 72, bottom: 5 }}
       >
         <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
         <XAxis
@@ -42,7 +35,7 @@ export function EmployeePerformanceChart({ data }: EmployeePerformanceChartProps
         <YAxis
           type="category"
           dataKey="name"
-          width={115}
+          width={100}
           tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
         />
         <Tooltip

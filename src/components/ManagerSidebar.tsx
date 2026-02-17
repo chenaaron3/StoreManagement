@@ -1,17 +1,11 @@
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import {
-  LayoutDashboard,
-  Users,
-  Package,
-  Store,
-  UserCog,
-  Tag,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
-import { LanguageSwitcher } from "./LanguageSwitcher";
-import { ViewSwitcher } from "./ViewSwitcher";
+    ChevronLeft, ChevronRight, LayoutDashboard, Package, Store, Tag, UserCog, Users
+} from 'lucide-react';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { LanguageSwitcher } from './LanguageSwitcher';
+import { ViewSwitcher } from './ViewSwitcher';
 
 export type ManagerTabId =
   | "sales"
@@ -69,15 +63,14 @@ export function ManagerSidebar({
     >
       {/* Header */}
       <div
-        className={`flex h-14 shrink-0 items-center border-b border-white/10 ${
-          collapsed ? "justify-center px-2" : "justify-between gap-2 px-4"
-        }`}
+        className={`flex h-14 shrink-0 items-center border-b border-white/10 ${collapsed ? "justify-center px-2" : "justify-between gap-2 px-4"
+          }`}
       >
         {collapsed ? (
-          <span className="text-lg font-bold tracking-tight">M</span>
+          <span className="text-lg font-bold tracking-tight">S</span>
         ) : (
           <>
-            <span className="text-lg font-bold tracking-tight">Mark</span>
+            <span className="text-lg font-bold tracking-tight">Sales Analytics</span>
             <LanguageSwitcher />
           </>
         )}
@@ -89,9 +82,8 @@ export function ManagerSidebar({
           <select
             value={brandFilter}
             onChange={(e) => onBrandFilterChange(e.target.value)}
-            className={`w-full rounded-lg border-0 bg-white/10 pl-3 pr-10 py-2 text-sm text-white focus:ring-1 focus:ring-white/30 [appearance:none] bg-[length:12px_12px] bg-[right_0.75rem_center] bg-no-repeat ${
-              collapsed ? "max-w-[52px] truncate" : ""
-            }`}
+            className={`w-full rounded-lg border-0 bg-white/10 pl-3 pr-10 py-2 text-sm text-white focus:ring-1 focus:ring-white/30 [appearance:none] bg-[length:12px_12px] bg-[right_0.75rem_center] bg-no-repeat ${collapsed ? "max-w-[52px] truncate" : ""
+              }`}
             style={{
               backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E")`,
             }}
@@ -119,11 +111,10 @@ export function ManagerSidebar({
                 <button
                   type="button"
                   onClick={() => onTabChange(id)}
-                  className={`relative flex w-full items-center gap-3 rounded-lg py-2.5 text-left text-sm font-medium transition-colors ${
-                    isActive
+                  className={`relative flex w-full items-center gap-3 rounded-lg py-2.5 text-left text-sm font-medium transition-colors ${isActive
                       ? "bg-[#384152] text-white"
                       : "text-white/90 hover:bg-white/10 hover:text-white"
-                  } ${collapsed ? "justify-center px-2" : "pl-3 pr-3"}`}
+                    } ${collapsed ? "justify-center px-2" : "pl-3 pr-3"}`}
                 >
                   {isActive && (
                     <span className="absolute left-0 top-1/2 h-8 w-0.5 -translate-y-1/2 rounded-r bg-blue-500" aria-hidden />
@@ -151,9 +142,8 @@ export function ManagerSidebar({
         <button
           type="button"
           onClick={() => setCollapsed((c) => !c)}
-          className={`flex w-full items-center gap-3 rounded-lg py-2.5 text-sm font-medium text-white/90 hover:bg-white/10 hover:text-white transition-colors ${
-            collapsed ? "justify-center px-2" : "px-3"
-          }`}
+          className={`flex w-full items-center gap-3 rounded-lg py-2.5 text-sm font-medium text-white/90 hover:bg-white/10 hover:text-white transition-colors ${collapsed ? "justify-center px-2" : "px-3"
+            }`}
         >
           {collapsed ? (
             <ChevronRight

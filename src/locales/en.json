@@ -37,12 +37,30 @@
   },
   "managerPage": {
     "tabs": {
-      "sales": { "title": "Sales", "subtitle": "Revenue, transactions, and trends over time" },
-      "brand": { "title": "Brand", "subtitle": "Revenue and performance by brand" },
-      "customers": { "title": "Customers", "subtitle": "Segmentation, RFM analysis, and customer insights" },
-      "product": { "title": "Product", "subtitle": "Revenue and sales by product" },
-      "stores": { "title": "Stores", "subtitle": "Revenue and performance by store" },
-      "employees": { "title": "Employees", "subtitle": "Revenue and performance by employee" }
+      "sales": {
+        "title": "Sales",
+        "subtitle": "Revenue, transactions, and trends over time"
+      },
+      "brand": {
+        "title": "Brand",
+        "subtitle": "Revenue and performance by brand"
+      },
+      "customers": {
+        "title": "Customers",
+        "subtitle": "Segmentation, RFM analysis, and customer insights"
+      },
+      "product": {
+        "title": "Product",
+        "subtitle": "Revenue and sales by product"
+      },
+      "stores": {
+        "title": "Stores",
+        "subtitle": "Revenue and performance by store"
+      },
+      "employees": {
+        "title": "Employees",
+        "subtitle": "Revenue and performance by employee"
+      }
     },
     "error": {
       "loadFailed": "Failed to load data",
@@ -112,6 +130,7 @@
     "bodyNatural": "Natural",
     "bodyUnknown": "Unknown",
     "customerValue": "Customer value",
+    "brandPreferences": "Brand preferences",
     "categoryTrend": "Category trend",
     "noCategoryData": "No category data yet",
     "recommendedForYou": "Recommended for you",
@@ -130,15 +149,39 @@
     "helpedBy": "Helped by",
     "noPurchaseHistory": "No purchase history",
     "itemsInCart": "Items in online cart",
-    "noItemsInCart": "No items in cart"
+    "noItemsInCart": "No items in cart",
+    "categoryLabels": {
+      "Skirts": "Skirts",
+      "Dresses": "Dresses",
+      "Blouses": "Blouses",
+      "Jackets": "Jackets",
+      "Pants": "Pants",
+      "Knitwear": "Knitwear",
+      "Coats": "Coats"
+    }
   },
   "coupon": {
-    "c1": { "name": "10% Off Next Visit", "discount": "10%" },
-    "c2": { "name": "Free Shipping", "discount": "Free ship" }
+    "c1": {
+      "name": "10% Off Next Visit",
+      "discount": "10%"
+    },
+    "c2": {
+      "name": "Free Shipping",
+      "discount": "Free ship"
+    }
   },
   "chart": {
     "revenue": "Revenue",
-    "percentile": "Percentile"
+    "percentile": "Percentile",
+    "daysOfWeek": {
+      "Sun": "Sun",
+      "Mon": "Mon",
+      "Tue": "Tue",
+      "Wed": "Wed",
+      "Thu": "Thu",
+      "Fri": "Fri",
+      "Sat": "Sat"
+    }
   },
   "rfm": {
     "title": "RFM matrix",
@@ -167,7 +210,7 @@
   },
   "productTab": {
     "product": "Product",
-    "collection": "Collection (brand)",
+    "collection": "Brand",
     "category": "Category",
     "color": "Color",
     "size": "Size",
@@ -192,7 +235,11 @@
   "employeesTab": {
     "title": "Employee performance",
     "subtitle": "Revenue by sales associate with store and product breakdown.",
-    "noData": "No employee data."
+    "noData": "No employee data.",
+    "employee": "Employee",
+    "revenue": "Revenue",
+    "stores": "Stores",
+    "topProducts": "Top products"
   },
   "brandTab": {
     "title": "Brand performance",
@@ -201,7 +248,13 @@
     "transactions": "Transactions",
     "customers": "Customers",
     "aov": "AOV",
-    "stores": "Stores"
+    "stores": "Stores",
+    "revenueByBrand": "Revenue by brand",
+    "transactionsByBrand": "Transactions by brand",
+    "aovByBrand": "AOV by brand",
+    "revenueOverTimeByBrand": "Revenue over time by brand",
+    "total": "Total",
+    "allBrandsTotal": "All brands total"
   },
   "employeeFilters": {
     "brand": "Brand",
@@ -238,7 +291,16 @@
     "VIP (>¥100,000)": "VIP (>¥100,000)",
     "High Value (¥50,000-100,000)": "High value (¥50,000-100,000)",
     "Regular (¥20,000-50,000)": "Regular (¥20,000-50,000)",
-    "Occasional (<¥20,000)": "Occasional (<¥20,000)"
+    "Occasional (<¥20,000)": "Occasional (<¥20,000)",
+    "10s (10–19)": "10s (10–19)",
+    "20s (20–29)": "20s (20–29)",
+    "30s (30–39)": "30s (30–39)",
+    "40s (40–49)": "40s (40–49)",
+    "50s (50–59)": "50s (50–59)",
+    "60+": "60+",
+    "Male": "Male",
+    "Female": "Female",
+    "Unknown": "Unknown"
   },
   "rfmLabels": {
     "mostRecent": "Most recent",

@@ -9,7 +9,7 @@ import {
   YAxis,
 } from "recharts";
 import type { TimeSeriesData } from "@/types/analysis";
-import type { Granularity } from "@/utils/dataAnalysis";
+import type { Granularity } from "@/types/analysis";
 import { RevenuePercentileTooltip } from "@/components/charts/RevenuePercentileTooltip";
 
 interface TrendChartProps {

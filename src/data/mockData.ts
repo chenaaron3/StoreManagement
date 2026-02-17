@@ -21,7 +21,7 @@ type UserCore = Pick<
 
 export const mockProfiles: UserCore[] = [
   {
-    memberId: "RC01862444",
+    memberId: "AB01862444",
     prefecture: "石川県",
     birthday: "1990-02-20",
     gender: "2",
@@ -30,7 +30,7 @@ export const mockProfiles: UserCore[] = [
     bodyShape: "straight",
   },
   {
-    memberId: "RC01866206",
+    memberId: "A101866206",
     prefecture: "東京都",
     birthday: "1985-08-03",
     gender: "2",
@@ -39,7 +39,7 @@ export const mockProfiles: UserCore[] = [
     bodyShape: "wavy",
   },
   {
-    memberId: "RC01017392",
+    memberId: "B101017392",
     prefecture: "神奈川県",
     birthday: "1978-11-22",
     gender: "2",
@@ -51,7 +51,7 @@ export const mockProfiles: UserCore[] = [
 
 export const mockSales: SalesRecord[] = [
   {
-    memberId: "RC01862444",
+    memberId: "AB01862444",
     purchaseDate: "2023-01-01",
     brandId: "SAKURA",
     brandName: "SAKURA",
@@ -61,12 +61,12 @@ export const mockSales: SalesRecord[] = [
     size: "M",
     quantity: 1,
     totalCost: 8640,
-    storeName: "SAKURA 店舗1",
+    storeName: "SAKURA 新宿モール店",
     storeCode: "SAKURA",
     salesAssociate: "山田",
   },
   {
-    memberId: "RC01862444",
+    memberId: "AB01862444",
     purchaseDate: "2023-01-01",
     brandId: "SAKURA",
     brandName: "SAKURA",
@@ -76,12 +76,12 @@ export const mockSales: SalesRecord[] = [
     size: "M",
     quantity: 1,
     totalCost: 9360,
-    storeName: "SAKURA 店舗1",
+    storeName: "SAKURA 新宿モール店",
     storeCode: "SAKURA",
     salesAssociate: "山田",
   },
   {
-    memberId: "RC01866206",
+    memberId: "A101866206",
     purchaseDate: "2023-01-01",
     brandId: "SAKURA",
     brandName: "SAKURA",
@@ -91,12 +91,12 @@ export const mockSales: SalesRecord[] = [
     size: "F",
     quantity: 1,
     totalCost: 3600,
-    storeName: "SAKURA 店舗1",
+    storeName: "SAKURA 新宿モール店",
     storeCode: "SAKURA",
     salesAssociate: "伊藤",
   },
   {
-    memberId: "RC01866206",
+    memberId: "A101866206",
     purchaseDate: "2024-08-20",
     itemId: "002240400501",
     itemName: "2WAYリボンボリュームスリーブブラウス",
@@ -105,12 +105,12 @@ export const mockSales: SalesRecord[] = [
     brandCode: "SAKURA",
     quantity: 1,
     totalCost: 3600,
-    storeName: "SAKURA 店舗1",
+    storeName: "SAKURA 新宿モール店",
     storeCode: "SAKURA",
     salesAssociate: "佐藤",
   },
   {
-    memberId: "RC01866206",
+    memberId: "A101866206",
     purchaseDate: "2024-12-05",
     itemId: "002270300101",
     itemName: "ウールブレンドジャケット",
@@ -119,12 +119,12 @@ export const mockSales: SalesRecord[] = [
     brandCode: "SAKURA",
     quantity: 1,
     totalCost: 12000,
-    storeName: "SAKURA 店舗2",
+    storeName: "SAKURA 駅前店",
     storeCode: "SAKURA",
     salesAssociate: "岡田",
   },
   {
-    memberId: "RC01866206",
+    memberId: "A101866206",
     purchaseDate: "2024-06-10",
     itemId: "EM001",
     itemName: "KAEDE プリーツパンツ",
@@ -138,7 +138,7 @@ export const mockSales: SalesRecord[] = [
     salesAssociate: "高橋",
   },
   {
-    memberId: "RC01866206",
+    memberId: "A101866206",
     purchaseDate: "2024-05-12",
     itemId: "002230500201",
     itemName: "リネン混ドレス",
@@ -147,12 +147,12 @@ export const mockSales: SalesRecord[] = [
     brandCode: "SAKURA",
     quantity: 1,
     totalCost: 12800,
-    storeName: "SAKURA 店舗2",
+    storeName: "SAKURA 駅前店",
     storeCode: "SAKURA",
     salesAssociate: "岡田",
   },
   {
-    memberId: "RC01866206",
+    memberId: "A101866206",
     purchaseDate: "2024-09-08",
     itemId: "002241000101",
     itemName: "フレアスカート",
@@ -161,12 +161,12 @@ export const mockSales: SalesRecord[] = [
     brandCode: "SAKURA",
     quantity: 1,
     totalCost: 7200,
-    storeName: "SAKURA 店舗1",
+    storeName: "SAKURA 新宿モール店",
     storeCode: "SAKURA",
     salesAssociate: "佐藤",
   },
   {
-    memberId: "RC01866206",
+    memberId: "A101866206",
     purchaseDate: "2024-10-20",
     itemId: "002250400301",
     itemName: "シフォンブラウス",
@@ -175,12 +175,12 @@ export const mockSales: SalesRecord[] = [
     brandCode: "SAKURA",
     quantity: 1,
     totalCost: 4500,
-    storeName: "SAKURA 店舗2",
+    storeName: "SAKURA モール前",
     storeCode: "SAKURA",
     salesAssociate: "岡田",
   },
   {
-    memberId: "RC01866206",
+    memberId: "A101866206",
     purchaseDate: "2024-11-15",
     itemId: "002260100101",
     itemName: "ニットセーター",
@@ -189,12 +189,12 @@ export const mockSales: SalesRecord[] = [
     brandCode: "SAKURA",
     quantity: 1,
     totalCost: 6900,
-    storeName: "SAKURA 店舗2",
+    storeName: "SAKURA 駅前店",
     storeCode: "SAKURA",
     salesAssociate: "岡田",
   },
   {
-    memberId: "RC01866206",
+    memberId: "A101866206",
     purchaseDate: "2025-01-05",
     itemId: "002280200201",
     itemName: "ウールコート",
@@ -203,12 +203,12 @@ export const mockSales: SalesRecord[] = [
     brandCode: "SAKURA",
     quantity: 1,
     totalCost: 19800,
-    storeName: "SAKURA 店舗2",
+    storeName: "SAKURA 駅前店",
     storeCode: "SAKURA",
     salesAssociate: "岡田",
   },
   {
-    memberId: "RC01866206",
+    memberId: "A101866206",
     purchaseDate: "2024-07-22",
     itemId: "002235000101",
     itemName: "テーラードジャケット",
@@ -217,12 +217,12 @@ export const mockSales: SalesRecord[] = [
     brandCode: "SAKURA",
     quantity: 1,
     totalCost: 14500,
-    storeName: "SAKURA 店舗1",
+    storeName: "SAKURA モール",
     storeCode: "SAKURA",
     salesAssociate: "佐藤",
   },
   {
-    memberId: "RC01866206",
+    memberId: "A101866206",
     purchaseDate: "2024-12-18",
     itemId: "002265000101",
     itemName: "ストレッチパンツ",
@@ -231,12 +231,12 @@ export const mockSales: SalesRecord[] = [
     brandCode: "SAKURA",
     quantity: 1,
     totalCost: 5800,
-    storeName: "SAKURA 店舗2",
+    storeName: "SAKURA 駅前店",
     storeCode: "SAKURA",
     salesAssociate: "岡田",
   },
   {
-    memberId: "RC01866206",
+    memberId: "A101866206",
     purchaseDate: "2025-02-08",
     itemId: "002240400501",
     itemName: "2WAYリボンボリュームスリーブブラウス",
@@ -245,12 +245,12 @@ export const mockSales: SalesRecord[] = [
     brandCode: "SAKURA",
     quantity: 1,
     totalCost: 3600,
-    storeName: "SAKURA 店舗2",
+    storeName: "SAKURA 駅前店",
     storeCode: "SAKURA",
     salesAssociate: "岡田",
   },
   {
-    memberId: "RC01017392",
+    memberId: "B101017392",
     purchaseDate: "2024-10-12",
     itemId: "002280100501",
     itemName: "プリーツミディドレス",
@@ -259,12 +259,12 @@ export const mockSales: SalesRecord[] = [
     brandCode: "SAKURA",
     quantity: 1,
     totalCost: 8900,
-    storeName: "SAKURA 店舗3",
+    storeName: "SAKURA 原宿モール店",
     storeCode: "SAKURA",
     salesAssociate: "平出",
   },
   {
-    memberId: "RC01017392",
+    memberId: "B101017392",
     purchaseDate: "2024-07-01",
     itemId: "002250801501",
     itemName: "チュール刺繍フレアスカート",
@@ -273,12 +273,12 @@ export const mockSales: SalesRecord[] = [
     brandCode: "SAKURA",
     quantity: 1,
     totalCost: 8640,
-    storeName: "SAKURA 店舗3",
+    storeName: "SAKURA 原宿店",
     storeCode: "SAKURA",
     salesAssociate: "平出",
   },
   {
-    memberId: "RC01017392",
+    memberId: "B101017392",
     purchaseDate: "2025-02-01",
     itemId: "002290200101",
     itemName: "ニットカーディガン",
@@ -287,7 +287,7 @@ export const mockSales: SalesRecord[] = [
     brandCode: "SAKURA",
     quantity: 1,
     totalCost: 5500,
-    storeName: "SAKURA 店舗3",
+    storeName: "SAKURA 原宿店",
     storeCode: "SAKURA",
     salesAssociate: "平出",
   },
@@ -295,34 +295,34 @@ export const mockSales: SalesRecord[] = [
 
 export const mockMemberships: MembershipRecord[] = [
   {
-    memberId: "RC01862444",
+    memberId: "AB01862444",
     brandCode: "SAKURA",
     storeCode: "0032602",
-    storeName: "SAKURA 店舗1",
-    salesAssociate: "SAKURA 店舗1",
+    storeName: "SAKURA モール店",
+    salesAssociate: "SAKURA 新宿モール店",
     ranking: "シルバー",
   },
   {
-    memberId: "RC01866206",
+    memberId: "A101866206",
     brandCode: "SAKURA",
     storeCode: "0060101",
-    storeName: "SAKURA 店舗2",
+    storeName: "SAKURA 駅前店",
     salesAssociate: "岡田 端穂",
     ranking: "ゴールド",
   },
   {
-    memberId: "RC01017392",
+    memberId: "B101017392",
     brandCode: "SAKURA",
     storeCode: "0060501",
-    storeName: "SAKURA 店舗3",
+    storeName: "SAKURA 原宿店",
     salesAssociate: "平出 有紗",
     ranking: "ブロンズ",
   },
 ];
 
-/** Mock coupons per member (MVP). Birthday coupon is on the member with birthday in Feb (RC01862444). */
+/** Mock coupons per member (MVP). Birthday coupon is on the member with birthday in Feb (AB01862444). */
 export const mockCouponsByMember: Record<string, Coupon[]> = {
-  RC01862444: [
+  AB01862444: [
     {
       id: "c1",
       name: "10% Off Next Visit",
@@ -343,7 +343,7 @@ export const mockCouponsByMember: Record<string, Coupon[]> = {
 
 /** Mock online cart per member. EC browse tag is shown only when cart has items. */
 export const mockOnlineCartByMember: Record<string, OnlineCartItem[]> = {
-  RC01862444: [
+  AB01862444: [
     {
       id: "cart1",
       itemName: "プリーツミディスカート",
@@ -352,15 +352,14 @@ export const mockOnlineCartByMember: Record<string, OnlineCartItem[]> = {
     },
     { id: "cart2", itemName: "シルク風ブラウス", price: 4500, quantity: 1 },
   ],
-  RC01866206: [],
-  RC01017392: [],
+  A101866206: [],
+  B101017392: [],
 };
 
 /** Prepopulated notes per member (used when localStorage has no notes yet). */
 export const mockNotesByMember: Record<string, string> = {
-  RC01862444:
-    "前回来店時はご家族と一緒でした。スカートの新作にご興味あり。",
-  RC01866206:
+  AB01862444: "前回来店時はご家族と一緒でした。スカートの新作にご興味あり。",
+  A101866206:
     "VIPのお客様。ブラウスとジャケットをお好み。ウィッシュリストのフォローをお願いします。",
 };
 
@@ -387,35 +386,29 @@ export const mockRecommendationItems: {
 export const mockAssociateTodos: AssociateTodo[] = [
   {
     id: "t1",
-    title: "Follow-up call: 田中 花子",
+    title: "田中 花子 様へのフォローアップ電話",
     dueDate: "2025-02-20",
     status: "pending",
-    memberId: "RC01862444",
+    memberId: "AB01862444",
   },
   {
     id: "t2",
-    title: "Stock check: skirts section",
+    title: "スカートコーナーの在庫確認",
     dueDate: "2025-02-16",
     status: "pending",
   },
   {
     id: "t3",
-    title: "Send thank-you to 佐藤 美咲",
+    title: "佐藤 美咲 様へお礼状送付",
     dueDate: "2025-02-18",
     status: "done",
-    memberId: "RC01866206",
+    memberId: "A101866206",
   },
 ];
 
 /** Normalize phone for search: strip spaces and dashes. */
 function normalizePhone(phone: string): string {
   return phone.replace(/\s|-/g, "");
-}
-
-/** Fetch all sales (mock; replace with CSV/API later). */
-export async function fetchSales(): Promise<SalesRecord[]> {
-  await delay(300);
-  return [...mockSales];
 }
 
 /** Fetch core user fields by member id (mock). */

@@ -1,14 +1,9 @@
-import { useState } from "react"
-import { useTranslation } from "react-i18next"
-import {
-  ChevronLeft,
-  ChevronRight,
-  Phone,
-  Users,
-  ListTodo,
-} from "lucide-react"
-import { LanguageSwitcher } from "./LanguageSwitcher"
-import { ViewSwitcher } from "./ViewSwitcher"
+import { ChevronLeft, ChevronRight, ListTodo, Phone, Users } from 'lucide-react';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { LanguageSwitcher } from './LanguageSwitcher';
+import { ViewSwitcher } from './ViewSwitcher';
 
 export type AssociateTabId = "search" | "in-store" | "tasks"
 
@@ -17,10 +12,10 @@ const NAV_IDS: {
   labelKey: string
   icon: React.ComponentType<{ className?: string }>
 }[] = [
-  { id: "search", labelKey: "searchByPhone", icon: Phone },
-  { id: "in-store", labelKey: "inStore", icon: Users },
-  { id: "tasks", labelKey: "tasksAssigned", icon: ListTodo },
-]
+    { id: "search", labelKey: "searchByPhone", icon: Phone },
+    { id: "in-store", labelKey: "inStore", icon: Users },
+    { id: "tasks", labelKey: "tasksAssigned", icon: ListTodo },
+  ]
 
 interface AssociateSidebarProps {
   activeTab: AssociateTabId
@@ -38,15 +33,14 @@ export function AssociateSidebar({ activeTab, onTabChange }: AssociateSidebarPro
     >
       {/* Header */}
       <div
-        className={`flex h-14 shrink-0 items-center border-b border-white/10 ${
-          collapsed ? "justify-center px-2" : "justify-between gap-2 px-4"
-        }`}
+        className={`flex h-14 shrink-0 items-center border-b border-white/10 ${collapsed ? "justify-center px-2" : "justify-between gap-2 px-4"
+          }`}
       >
         {collapsed ? (
           <span className="text-lg font-bold tracking-tight">A</span>
         ) : (
           <>
-            <span className="text-lg font-bold tracking-tight">Mark</span>
+            <span className="text-lg font-bold tracking-tight">Sales Analytics</span>
             <LanguageSwitcher />
           </>
         )}
@@ -62,11 +56,10 @@ export function AssociateSidebar({ activeTab, onTabChange }: AssociateSidebarPro
                 <button
                   type="button"
                   onClick={() => onTabChange(id)}
-                  className={`relative flex w-full items-center gap-3 rounded-lg py-2.5 text-left text-sm font-medium transition-colors ${
-                    isActive
+                  className={`relative flex w-full items-center gap-3 rounded-lg py-2.5 text-left text-sm font-medium transition-colors ${isActive
                       ? "bg-[#384152] text-white"
                       : "text-white/90 hover:bg-white/10 hover:text-white"
-                  } ${collapsed ? "justify-center px-2" : "pl-3 pr-3"}`}
+                    } ${collapsed ? "justify-center px-2" : "pl-3 pr-3"}`}
                 >
                   {isActive && (
                     <span className="absolute left-0 top-1/2 h-8 w-0.5 -translate-y-1/2 rounded-r bg-blue-500" aria-hidden />
@@ -94,9 +87,8 @@ export function AssociateSidebar({ activeTab, onTabChange }: AssociateSidebarPro
         <button
           type="button"
           onClick={() => setCollapsed((c) => !c)}
-          className={`flex w-full items-center gap-3 rounded-lg py-2.5 text-sm font-medium text-white/90 hover:bg-white/10 hover:text-white transition-colors ${
-            collapsed ? "justify-center px-2" : "px-3"
-          }`}
+          className={`flex w-full items-center gap-3 rounded-lg py-2.5 text-sm font-medium text-white/90 hover:bg-white/10 hover:text-white transition-colors ${collapsed ? "justify-center px-2" : "px-3"
+            }`}
         >
           {collapsed ? (
             <ChevronRight

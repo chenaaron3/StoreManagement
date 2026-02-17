@@ -1,15 +1,10 @@
 import {
-  CartesianGrid,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
-import { formatCurrency } from "@/lib/utils";
+    CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis
+} from 'recharts';
 
-export type MultiSeriesTrendRow = { date: string; [key: string]: string | number };
+import { formatCurrency } from '@/lib/utils';
+
+export type MultiSeriesTrendRow = { date: string;[key: string]: string | number };
 
 const CHART_COLORS = [
   "var(--chart-1)",
@@ -72,34 +67,37 @@ export function MultiSeriesTrendChart({ data }: MultiSeriesTrendChartProps) {
   const seriesKeys = Object.keys(data[0]).filter((k) => k !== "date");
 
   return (
-    <ResponsiveContainer width="100%" height={420}>
-      <LineChart data={data} margin={{ top: 5, right: 40, left: 55, bottom: 5 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-        <XAxis
-          dataKey="date"
-          angle={-45}
-          textAnchor="end"
-          height={80}
-          tick={{ fontSize: 12, fill: "var(--muted-foreground)" }}
-        />
-        <YAxis
-          tickFormatter={(v) => `¥${(v / 1000).toFixed(0)}k`}
-          tick={{ fontSize: 12, fill: "var(--muted-foreground)" }}
-          width={55}
-        />
-        <Tooltip content={<CustomTooltip />} />
-        {seriesKeys.map((key, i) => (
-          <Line
-            key={key}
-            type="monotone"
-            dataKey={key}
-            name={key.length > 40 ? `${key.slice(0, 40)}…` : key}
-            stroke={CHART_COLORS[i % CHART_COLORS.length]}
-            strokeWidth={2}
-            dot={false}
+    <div className="overflow-visible w-full" style={{ color: "var(--foreground)" }}>
+      <ResponsiveContainer width="100%" height={380}>
+        <LineChart data={data} margin={{ top: 16, right: 32, left: 8, bottom: 24 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+          <XAxis
+            dataKey="date"
+            angle={-45}
+            textAnchor="end"
+            height={72}
+            tick={{ fontSize: 12, fill: "currentColor" }}
+            interval={0}
           />
-        ))}
-      </LineChart>
-    </ResponsiveContainer>
+          <YAxis
+            tickFormatter={(v) => (v >= 1e6 ? `¥${(v / 1e6).toFixed(0)}M` : `¥${(v / 1000).toFixed(0)}k`)}
+            tick={{ fontSize: 12, fill: "currentColor" }}
+            width={40}
+          />
+          <Tooltip content={<CustomTooltip />} />
+          {seriesKeys.map((key, i) => (
+            <Line
+              key={key}
+              type="monotone"
+              dataKey={key}
+              name={key}
+              stroke={CHART_COLORS[i % CHART_COLORS.length]}
+              strokeWidth={2}
+              dot={false}
+            />
+          ))}
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
   );
 }

@@ -1,6 +1,7 @@
 import type { CustomerSegment, RFMMatrixCell } from "@/types/analysis";
 import type { PrecomputedData } from "@/utils/precomputedDataLoader";
-import { RFMAnalysis, AdvancedCustomerSegmentation } from "./customers";
+import { AdvancedCustomerSegmentation, RFMAnalysis } from './customers';
+
 import type { BrandOption } from "./BrandFilterSelect";
 
 interface CustomersTabProps {
@@ -15,7 +16,6 @@ export function CustomersTab({ data, brandFilter, onBrandFilterChange, brandOpti
   const frequencySegments = (data.frequencySegments ?? []) as CustomerSegment[];
   const ageSegments = (data.ageSegments ?? []) as CustomerSegment[];
   const genderSegments = (data.genderSegments ?? []) as CustomerSegment[];
-  const channelSegments = (data.channelSegments ?? []) as CustomerSegment[];
   const aovSegments = (data.aovSegments ?? []) as CustomerSegment[];
   const lifetimeValueSegments = data.customerSegments ?? [];
 
@@ -31,7 +31,6 @@ export function CustomersTab({ data, brandFilter, onBrandFilterChange, brandOpti
         frequencySegments={frequencySegments}
         ageSegments={ageSegments}
         genderSegments={genderSegments}
-        channelSegments={channelSegments}
         aovSegments={aovSegments}
         lifetimeValueSegments={lifetimeValueSegments}
       />

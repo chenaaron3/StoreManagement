@@ -6,7 +6,7 @@ import { KPICard } from "@/components/KPICard";
 import { TrendChart } from "@/components/TrendChart";
 import { DayOfWeekChart } from "@/components/DayOfWeekChart";
 import type { PrecomputedData } from "@/utils/precomputedDataLoader";
-import type { Granularity } from "@/utils/dataAnalysis";
+import type { Granularity } from "@/types/analysis";
 import type { BrandOption } from "./BrandFilterSelect";
 import { BrandFilterSelect } from "./BrandFilterSelect";
 

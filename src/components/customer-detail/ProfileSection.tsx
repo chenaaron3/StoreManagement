@@ -1,7 +1,8 @@
-import { useTranslation } from "react-i18next"
-import type { User } from "@/types/data"
-import { Section } from "./Section"
+import { useTranslation } from 'react-i18next';
 
+import { Section } from './Section';
+
+import type { User } from "@/types/data"
 /** Most recent purchase size (by purchaseDate), or null if no purchases. */
 function getMostRecentSize(purchases: User["purchases"]): string | null {
   if (!purchases.length) return null
@@ -16,8 +17,8 @@ interface ProfileSectionProps {
 }
 
 function getGenderKey(gender: string): string {
-  if (gender === "1") return "genderMale"
-  if (gender === "2") return "genderFemale"
+  if (gender === "1") return "genderFemale"
+  if (gender === "2") return "genderMale"
   return "genderUndefined"
 }
 

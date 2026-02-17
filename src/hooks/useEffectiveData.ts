@@ -3,6 +3,16 @@
  */
 import { useMemo } from "react";
 import type { PrecomputedData } from "@/utils/precomputedDataLoader";
+import {
+  createStoreMatchesBrand,
+  filterPerformanceWithStores,
+} from "@/utils/brandFilter";
+
+type PerfWithStores = {
+  name: string;
+  totalRevenue: number;
+  stores: { storeName: string; revenue: number }[];
+};
 
 export function useEffectiveData(
   data: PrecomputedData | null,
@@ -17,24 +27,7 @@ export function useEffectiveData(
     );
     const brandName = selectedBrand?.brandName ?? "";
     const storePrefix = brandName ? `${brandName} ` : "";
-
-    const storeMatchesBrand = (storeName: string) =>
-      !storePrefix || (storeName?.trim() || "").startsWith(storePrefix);
-
-    const filterPerformanceWithStores = (
-      items: { name: string; totalRevenue: number; stores: { storeName: string; revenue: number }[] }[]
-    ) => {
-      return items
-        .map((item) => {
-          const matchingStores = (item.stores ?? []).filter((s) =>
-            storeMatchesBrand(s.storeName)
-          );
-          const totalRevenue = matchingStores.reduce((sum, s) => sum + s.revenue, 0);
-          return { ...item, stores: matchingStores, totalRevenue };
-        })
-        .filter((item) => item.totalRevenue > 0 || item.stores.length > 0)
-        .sort((a, b) => b.totalRevenue - a.totalRevenue);
-    };
+    const storeMatchesBrand = createStoreMatchesBrand(storePrefix);
 
     if (data.byBrand?.[brandFilter]) {
       const brandData = data.byBrand[brandFilter] as Record<string, unknown>;
@@ -47,6 +40,8 @@ export function useEffectiveData(
         customerSegments: brandData.customerSegments as PrecomputedData["customerSegments"],
         rfmMatrix: brandData.rfmMatrix as PrecomputedData["rfmMatrix"],
         frequencySegments: brandData.frequencySegments as PrecomputedData["frequencySegments"],
+        ageSegments: (brandData.ageSegments ?? data.ageSegments) as PrecomputedData["ageSegments"],
+        genderSegments: (brandData.genderSegments ?? data.genderSegments) as PrecomputedData["genderSegments"],
         channelSegments: brandData.channelSegments as PrecomputedData["channelSegments"],
         aovSegments: brandData.aovSegments as PrecomputedData["aovSegments"],
         employeePerformance: brandData.employeePerformance as PrecomputedData["employeePerformance"],
@@ -139,39 +134,24 @@ export function useEffectiveData(
       }) as PrecomputedData["storeTrendsMonthly"],
       employeePerformance: filteredEmployees,
       productPerformanceWithStores: filterPerformanceWithStores(
-        (data.productPerformanceWithStores ?? []) as {
-          name: string;
-          totalRevenue: number;
-          stores: { storeName: string; revenue: number }[];
-        }[]
+        (data.productPerformanceWithStores ?? []) as PerfWithStores[],
+        storeMatchesBrand
       ),
       collectionPerformanceWithStores: filterPerformanceWithStores(
-        (data.collectionPerformanceWithStores ?? []) as {
-          name: string;
-          totalRevenue: number;
-          stores: { storeName: string; revenue: number }[];
-        }[]
+        (data.collectionPerformanceWithStores ?? []) as PerfWithStores[],
+        storeMatchesBrand
       ),
       categoryPerformanceWithStores: filterPerformanceWithStores(
-        (data.categoryPerformanceWithStores ?? []) as {
-          name: string;
-          totalRevenue: number;
-          stores: { storeName: string; revenue: number }[];
-        }[]
+        (data.categoryPerformanceWithStores ?? []) as PerfWithStores[],
+        storeMatchesBrand
       ),
       colorPerformanceWithStores: filterPerformanceWithStores(
-        (data.colorPerformanceWithStores ?? []) as {
-          name: string;
-          totalRevenue: number;
-          stores: { storeName: string; revenue: number }[];
-        }[]
+        (data.colorPerformanceWithStores ?? []) as PerfWithStores[],
+        storeMatchesBrand
       ),
       sizePerformanceWithStores: filterPerformanceWithStores(
-        (data.sizePerformanceWithStores ?? []) as {
-          name: string;
-          totalRevenue: number;
-          stores: { storeName: string; revenue: number }[];
-        }[]
+        (data.sizePerformanceWithStores ?? []) as PerfWithStores[],
+        storeMatchesBrand
       ),
       productTrendsWeekly: data.productTrendsWeekly,
       productTrendsMonthly: data.productTrendsMonthly,
