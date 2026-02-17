@@ -1,4 +1,38 @@
 {
+  "login": {
+    "title": "ログイン",
+    "subtitle": "ダッシュボードにアクセスするには認証情報を入力してください",
+    "username": "ユーザー名",
+    "password": "パスワード",
+    "usernamePlaceholder": "ユーザー名を入力",
+    "passwordPlaceholder": "パスワードを入力",
+    "submit": "ログイン",
+    "logout": "ログアウト",
+    "error": "ユーザー名とパスワードの両方を入力してください。"
+  },
+  "header": {
+    "siteTitle": "売上分析",
+    "search": "検索",
+    "help": "ヘルプ",
+    "notifications": "通知",
+    "notification1Title": "新しい売上レポートが利用可能です",
+    "notification1Time": "2分前",
+    "notification2Title": "店舗 {{store}} が本日の目標を達成しました",
+    "notification2Time": "15分前",
+    "toggleSidebar": "サイドバーを開閉",
+    "userMenu": {
+      "account": "アカウント",
+      "profile": "プロフィール"
+    }
+  },
+  "search": {
+    "placeholder": "ブランド、店舗、商品を検索…",
+    "noResults": "結果がありません",
+    "typeToSearch": "検索するには入力してください"
+  },
+  "dateRange": {
+    "select": "日付範囲を選択"
+  },
   "sidebar": {
     "collapse": "折りたたむ",
     "sales": "売上",
@@ -12,6 +46,7 @@
     "searchByPhone": "電話番号検索",
     "inStore": "来店客情報",
     "tasksAssigned": "Todoリスト",
+    "myStore": "店舗分析",
     "myDashboard": "ダッシュボード",
     "location": "所在地",
     "branch": "支店"
@@ -39,27 +74,27 @@
     "tabs": {
       "sales": {
         "title": "売上",
-        "subtitle": "売上、取引数、トレンドの推移"
+        "subtitle": "売上サマリー、取引数、トレンド分析"
       },
       "brand": {
         "title": "ブランド",
-        "subtitle": "ブランド別の売上と実績"
+        "subtitle": "ブランド別パフォーマンスと売上貢献度"
       },
       "customers": {
         "title": "顧客",
-        "subtitle": "セグメント、RFM分析、顧客インサイト"
+        "subtitle": "セグメント、RFMスコア、購買行動分析"
       },
       "product": {
         "title": "商品",
-        "subtitle": "商品別の売上"
+        "subtitle": "商品別売上と販売パフォーマンス"
       },
       "stores": {
         "title": "店舗",
-        "subtitle": "店舗別の売上と実績"
+        "subtitle": "店舗別パフォーマンスと売上内訳"
       },
       "employees": {
         "title": "従業員",
-        "subtitle": "従業員別の売上と実績"
+        "subtitle": "担当者別パフォーマンスと売上貢献度"
       }
     },
     "error": {
@@ -75,7 +110,17 @@
     "salesTrends": "売上トレンド",
     "weekly": "週次",
     "monthly": "月次",
-    "revenueByDayOfWeek": "曜日別売上"
+    "revenueByDayOfWeek": "曜日別売上",
+    "sales": "売上",
+    "visits": "来店",
+    "allDay": "全日",
+    "allWeek": "全週",
+    "allMonth": "全月",
+    "allYear": "全年",
+    "salesRanking": "売上ランキング",
+    "storeSalesTrend": "店舗売上トレンド",
+    "weekRatio": "週比",
+    "dayRatio": "日比"
   },
   "associatePage": {
     "searchByPhone": "電話番号検索",
@@ -84,7 +129,11 @@
     "phoneSearchPlaceholder": "電話番号で検索（例：090-1234-5678）",
     "search": "検索",
     "searching": "検索中…",
-    "noCustomerFound": "該当する顧客がいません。"
+    "noCustomerFound": "該当する顧客がいません。",
+    "myStore": "店舗分析",
+    "storeRevenue": "店舗売上",
+    "topProductsAtStore": "当店の人気商品",
+    "storeDataUnavailable": "店舗データがありません。npm run extract-store-data を実行してください。"
   },
   "todo": {
     "title": "Todoリスト",
@@ -107,7 +156,7 @@
     "customerValue": "お客様情報",
     "purchasesTotal": "購入{{total}}回・直近6ヶ月{{inLast6}}回",
     "inMyBrand": "自ブランド",
-    "recommendedForYou": "おすすめ商品",
+    "recommendedForYou": "AIによるおすすめ",
     "noRecommendations": "おすすめはまだありません",
     "purchases": "購入履歴（{{count}}件）"
   },

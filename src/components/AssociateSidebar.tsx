@@ -1,30 +1,33 @@
-import { ChevronLeft, ChevronRight, ListTodo, Phone, Users } from 'lucide-react';
+import { ListTodo, Phone, Store, Users } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { LanguageSwitcher } from './LanguageSwitcher';
-import { ViewSwitcher } from './ViewSwitcher';
 
-export type AssociateTabId = "search" | "in-store" | "tasks"
+export type AssociateTabId = "store" | "search" | "in-store" | "tasks"
 
 const NAV_IDS: {
   id: AssociateTabId
   labelKey: string
   icon: React.ComponentType<{ className?: string }>
 }[] = [
-    { id: "search", labelKey: "searchByPhone", icon: Phone },
+    { id: "store", labelKey: "myStore", icon: Store },
     { id: "in-store", labelKey: "inStore", icon: Users },
+    { id: "search", labelKey: "searchByPhone", icon: Phone },
     { id: "tasks", labelKey: "tasksAssigned", icon: ListTodo },
   ]
 
 interface AssociateSidebarProps {
   activeTab: AssociateTabId
   onTabChange: (tab: AssociateTabId) => void
+  collapsed?: boolean
+  onCollapsedChange?: (collapsed: boolean) => void
 }
 
-export function AssociateSidebar({ activeTab, onTabChange }: AssociateSidebarProps) {
+export function AssociateSidebar({ activeTab, onTabChange, collapsed: controlledCollapsed }: AssociateSidebarProps) {
   const { t } = useTranslation()
-  const [collapsed, setCollapsed] = useState(false)
+  const [internalCollapsed] = useState(false)
+  const collapsed = controlledCollapsed ?? internalCollapsed
 
   return (
     <aside
@@ -57,8 +60,8 @@ export function AssociateSidebar({ activeTab, onTabChange }: AssociateSidebarPro
                   type="button"
                   onClick={() => onTabChange(id)}
                   className={`relative flex w-full items-center gap-3 rounded-lg py-2.5 text-left text-sm font-medium transition-colors ${isActive
-                      ? "bg-[#384152] text-white"
-                      : "text-white/90 hover:bg-white/10 hover:text-white"
+                    ? "bg-[#384152] text-white"
+                    : "text-white/90 hover:bg-white/10 hover:text-white"
                     } ${collapsed ? "justify-center px-2" : "pl-3 pr-3"}`}
                 >
                   {isActive && (
@@ -72,37 +75,6 @@ export function AssociateSidebar({ activeTab, onTabChange }: AssociateSidebarPro
           })}
         </ul>
       </nav>
-
-      {/* User (ViewSwitcher) */}
-      <div className={`shrink-0 border-t border-white/10 p-2 ${collapsed ? "flex justify-center" : ""}`}>
-        <ViewSwitcher
-          variant={collapsed ? "icon" : "full"}
-          invert
-          className={collapsed ? "justify-center rounded-lg py-2" : "w-full justify-start rounded-lg py-2"}
-        />
-      </div>
-
-      {/* Collapse */}
-      <div className="shrink-0 border-t border-white/10 p-2">
-        <button
-          type="button"
-          onClick={() => setCollapsed((c) => !c)}
-          className={`flex w-full items-center gap-3 rounded-lg py-2.5 text-sm font-medium text-white/90 hover:bg-white/10 hover:text-white transition-colors ${collapsed ? "justify-center px-2" : "px-3"
-            }`}
-        >
-          {collapsed ? (
-            <ChevronRight
-              className="h-5 w-5 shrink-0"
-              aria-label={t("common.expandSidebar")}
-            />
-          ) : (
-            <>
-              <ChevronLeft className="h-5 w-5 shrink-0" aria-hidden />
-              <span>{t("sidebar.collapse")}</span>
-            </>
-          )}
-        </button>
-      </div>
     </aside>
   )
 }

@@ -9,21 +9,16 @@ import { EmptyState } from '@/components/ui/empty-state';
 import { TableContainer } from '@/components/ui/table-container';
 import { formatCurrency } from '@/lib/utils';
 
-import { BrandFilterSelect } from './BrandFilterSelect';
 import { ManagerCard } from './ManagerCard';
 
 import type { PrecomputedData } from "@/utils/precomputedDataLoader";
 import type { Granularity } from "@/types/analysis";
 import type { PerformanceWithStoreBreakdown } from "@/types/analysis";
-import type { BrandOption } from "./BrandFilterSelect";
 interface StoresTabProps {
   data: PrecomputedData;
-  brandFilter: string;
-  onBrandFilterChange: (code: string) => void;
-  brandOptions: BrandOption[];
 }
 
-export function StoresTab({ data, brandFilter, onBrandFilterChange, brandOptions }: StoresTabProps) {
+export function StoresTab({ data }: StoresTabProps) {
   const { t } = useTranslation();
   const [granularity, setGranularity] = useState<Granularity>("monthly");
 
@@ -42,12 +37,6 @@ export function StoresTab({ data, brandFilter, onBrandFilterChange, brandOptions
           <div className="flex flex-wrap items-center justify-between gap-4">
             <CardTitle>{t("storesTab.title")}</CardTitle>
             <div className="flex flex-wrap items-center gap-4">
-              <BrandFilterSelect
-                selectedBrandCode={brandFilter}
-                brandOptions={brandOptions}
-                onBrandChange={onBrandFilterChange}
-                idPrefix="stores"
-              />
               <ButtonGroup className="gap-2">
                 {(["weekly", "monthly"] as const).map((g) => (
                   <button

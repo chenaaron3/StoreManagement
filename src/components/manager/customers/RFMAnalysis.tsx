@@ -1,35 +1,27 @@
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { HelpCircle } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { ButtonGroup } from "@/components/ui/button-group";
-import type { RFMMatrixCell } from "@/types/analysis";
-import { formatCurrency, formatNumber } from "@/lib/utils";
-import type { BrandOption } from "../BrandFilterSelect";
-import { BrandFilterSelect } from "../BrandFilterSelect";
-import { RFMColorScale } from "./RFMColorScale";
-import { RFMMatrixGrid } from "./RFMMatrixGrid";
-import { RFMCouponModal } from "./RFMCouponModal";
+import { HelpCircle } from 'lucide-react';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
+import { ButtonGroup } from '@/components/ui/button-group';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { formatCurrency, formatNumber } from '@/lib/utils';
+
+import { RFMColorScale } from './RFMColorScale';
+import { RFMCouponModal } from './RFMCouponModal';
+import { RFMMatrixGrid } from './RFMMatrixGrid';
+
+import type { RFMMatrixCell } from "@/types/analysis";
 type MetricType = "revenue" | "aov" | "customers";
 
 interface RFMAnalysisProps {
   rfmMatrix: RFMMatrixCell[];
-  brandFilter?: string;
-  onBrandFilterChange?: (code: string) => void;
-  brandOptions?: BrandOption[];
 }
 
 const RECENCY_KEYS = ["mostRecent", "recent", "lessRecent", "leastRecent"] as const;
 const FREQUENCY_KEYS = ["high", "mediumHigh", "mediumLow", "low"] as const;
 
-export function RFMAnalysis({
-  rfmMatrix,
-  brandFilter = "all",
-  onBrandFilterChange,
-  brandOptions = [],
-}: RFMAnalysisProps) {
+export function RFMAnalysis({ rfmMatrix }: RFMAnalysisProps) {
   const { t } = useTranslation();
   const [metricType, setMetricType] = useState<MetricType>("revenue");
   const [selectedCell, setSelectedCell] = useState<RFMMatrixCell | null>(null);
@@ -134,14 +126,6 @@ export function RFMAnalysis({
               </Tooltip>
             </div>
             <div className="flex flex-wrap items-center gap-4">
-              {onBrandFilterChange && brandOptions.length > 0 && (
-                <BrandFilterSelect
-                  selectedBrandCode={brandFilter}
-                  brandOptions={brandOptions}
-                  onBrandChange={onBrandFilterChange}
-                  idPrefix="customers"
-                />
-              )}
               <div className="flex flex-wrap items-center gap-3">
                 <span className="text-sm text-muted-foreground">{t("rfm.metric")}:</span>
                 <ButtonGroup>
@@ -150,11 +134,10 @@ export function RFMAnalysis({
                       key={m}
                       type="button"
                       onClick={() => setMetricType(m)}
-                      className={`rounded-md px-2.5 py-1.5 text-xs font-medium ${
-                        metricType === m
+                      className={`rounded-md px-2.5 py-1.5 text-xs font-medium ${metricType === m
                           ? "bg-primary text-primary-foreground"
                           : "bg-muted text-muted-foreground hover:bg-muted/80"
-                      }`}
+                        }`}
                     >
                       {t(`rfm.${m}`)}
                     </button>

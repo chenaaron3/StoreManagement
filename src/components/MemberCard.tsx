@@ -50,7 +50,7 @@ export function MemberCard({ memberId, onSelect }: MemberCardProps) {
     <button
       type="button"
       onClick={onSelect}
-      className="w-full text-left transition-colors hover:bg-muted/50 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-xl"
+      className="flex h-full min-h-0 w-full flex-col text-left transition-colors hover:bg-muted/50 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-xl"
     >
       <MemberCardContent user={data} />
     </button>

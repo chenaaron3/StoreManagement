@@ -107,7 +107,7 @@ function TodoRow({
   return (
     <li
       className={cn(
-        "flex items-center gap-2 rounded-md border px-3 py-2 text-sm",
+        "flex items-center gap-2 rounded-md border bg-card px-3 py-2 text-sm",
         done && "opacity-70"
       )}
     >

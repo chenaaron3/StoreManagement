@@ -1,5 +1,5 @@
-import { useTranslation } from "react-i18next";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export interface BrandOption {
   brandCode: string;
@@ -25,12 +25,10 @@ export function BrandFilterSelect({
 
   return (
     <div className="flex items-center gap-2">
-      <label htmlFor={inputId} className="text-sm text-muted-foreground">
-        {t("employeeFilters.brand")}
-      </label>
       <div className="relative">
         <select
           id={inputId}
+          aria-label={t("employeeFilters.brand")}
           value={selectedBrandCode}
           onChange={(e) => onBrandChange(e.target.value)}
           className="rounded-md border bg-background pl-3 pr-10 py-1.5 text-sm appearance-none"

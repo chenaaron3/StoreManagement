@@ -1,5 +1,6 @@
-import { useTranslation } from "react-i18next";
-import { ITEMS_PER_PAGE_OPTIONS } from "./employeesUtils";
+import { useTranslation } from 'react-i18next';
+
+import { ITEMS_PER_PAGE_OPTIONS } from './employeesUtils';
 
 interface EmployeeFiltersProps {
   selectedBrand: string;

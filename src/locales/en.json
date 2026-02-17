@@ -1,4 +1,38 @@
 {
+  "login": {
+    "title": "Log in",
+    "subtitle": "Enter your credentials to access the dashboard",
+    "username": "Username",
+    "password": "Password",
+    "usernamePlaceholder": "Enter username",
+    "passwordPlaceholder": "Enter password",
+    "submit": "Log in",
+    "logout": "Log out",
+    "error": "Please enter both username and password."
+  },
+  "header": {
+    "siteTitle": "Sales Analytics",
+    "search": "Search",
+    "help": "Help",
+    "notifications": "Notifications",
+    "notification1Title": "New sale report available",
+    "notification1Time": "2 min ago",
+    "notification2Title": "Store {{store}} exceeded daily target",
+    "notification2Time": "15 min ago",
+    "toggleSidebar": "Toggle sidebar",
+    "userMenu": {
+      "account": "Account",
+      "profile": "Your profile"
+    }
+  },
+  "search": {
+    "placeholder": "Search brands, stores, products…",
+    "noResults": "No results found",
+    "typeToSearch": "Type to search"
+  },
+  "dateRange": {
+    "select": "Select date range"
+  },
   "sidebar": {
     "collapse": "Collapse",
     "sales": "Sales",
@@ -12,6 +46,7 @@
     "searchByPhone": "Search by phone",
     "inStore": "Currently in store",
     "tasksAssigned": "Tasks assigned to me",
+    "myStore": "Store analytics",
     "myDashboard": "My dashboard",
     "location": "Location",
     "branch": "Branch"
@@ -39,27 +74,27 @@
     "tabs": {
       "sales": {
         "title": "Sales",
-        "subtitle": "Revenue, transactions, and trends over time"
+        "subtitle": "Revenue overview, transaction volume, and trend analysis"
       },
       "brand": {
         "title": "Brand",
-        "subtitle": "Revenue and performance by brand"
+        "subtitle": "Brand performance metrics and revenue contribution"
       },
       "customers": {
         "title": "Customers",
-        "subtitle": "Segmentation, RFM analysis, and customer insights"
+        "subtitle": "Customer segments, RFM scoring, and behavioral insights"
       },
       "product": {
         "title": "Product",
-        "subtitle": "Revenue and sales by product"
+        "subtitle": "Product-level revenue and sales performance"
       },
       "stores": {
         "title": "Stores",
-        "subtitle": "Revenue and performance by store"
+        "subtitle": "Store performance metrics and revenue breakdown"
       },
       "employees": {
         "title": "Employees",
-        "subtitle": "Revenue and performance by employee"
+        "subtitle": "Associate performance and sales contribution"
       }
     },
     "error": {
@@ -75,7 +110,17 @@
     "salesTrends": "Sales trends",
     "weekly": "Weekly",
     "monthly": "Monthly",
-    "revenueByDayOfWeek": "Revenue by day of week"
+    "revenueByDayOfWeek": "Revenue by day of week",
+    "sales": "Sales",
+    "visits": "Visits",
+    "allDay": "All day",
+    "allWeek": "All week",
+    "allMonth": "All month",
+    "allYear": "All year",
+    "salesRanking": "Sales ranking",
+    "storeSalesTrend": "Store sales trend",
+    "weekRatio": "Week ratio",
+    "dayRatio": "Day ratio"
   },
   "associatePage": {
     "searchByPhone": "Search by phone",
@@ -84,7 +129,11 @@
     "phoneSearchPlaceholder": "Search by phone number (e.g. 090-1234-5678)",
     "search": "Search",
     "searching": "Searching…",
-    "noCustomerFound": "No customer found."
+    "noCustomerFound": "No customer found.",
+    "myStore": "Store analytics",
+    "storeRevenue": "Store revenue",
+    "topProductsAtStore": "Top products at my store",
+    "storeDataUnavailable": "Store data unavailable. Run npm run extract-store-data."
   },
   "todo": {
     "title": "Tasks assigned to me",
@@ -107,7 +156,7 @@
     "customerValue": "Customer value",
     "purchasesTotal": "{{total}} purchases total · {{inLast6}} in the last 6 months",
     "inMyBrand": "in my brand",
-    "recommendedForYou": "Recommended for you",
+    "recommendedForYou": "AI recommendation",
     "noRecommendations": "No recommendations yet",
     "purchases": "Purchases ({{count}})"
   },

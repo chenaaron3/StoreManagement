@@ -4,25 +4,19 @@ import {
     Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis
 } from 'recharts';
 
-import { ButtonGroup } from "@/components/ui/button-group";
-import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { EmptyState } from "@/components/ui/empty-state";
-import { CHART_COLORS } from "@/lib/chartConstants";
-import { formatCurrency, formatNumber } from "@/lib/utils";
+import { ButtonGroup } from '@/components/ui/button-group';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { EmptyState } from '@/components/ui/empty-state';
+import { CHART_COLORS } from '@/lib/chartConstants';
+import { formatCurrency, formatNumber } from '@/lib/utils';
 
 import type { CustomerSegment } from "@/types/analysis";
-import type { BrandOption } from "../BrandFilterSelect";
-import { BrandFilterSelect } from "../BrandFilterSelect";
-
 interface AdvancedCustomerSegmentationProps {
   frequencySegments: CustomerSegment[];
   ageSegments: CustomerSegment[];
   genderSegments: CustomerSegment[];
   aovSegments: CustomerSegment[];
   lifetimeValueSegments: CustomerSegment[];
-  brandFilter?: string;
-  onBrandFilterChange?: (code: string) => void;
-  brandOptions?: BrandOption[];
 }
 
 type SegmentationType = "frequency" | "age" | "gender" | "aov" | "lifetimeValue";
@@ -33,9 +27,6 @@ export function AdvancedCustomerSegmentation({
   genderSegments,
   aovSegments,
   lifetimeValueSegments,
-  brandFilter = "all",
-  onBrandFilterChange,
-  brandOptions = [],
 }: AdvancedCustomerSegmentationProps) {
   const { t } = useTranslation();
   const [activeSegment, setActiveSegment] = useState<SegmentationType>("frequency");
@@ -66,16 +57,6 @@ export function AdvancedCustomerSegmentation({
         <CardDescription>
           {t("customerSegmentation.description")}
         </CardDescription>
-        {onBrandFilterChange && brandOptions.length > 0 && (
-          <CardAction>
-            <BrandFilterSelect
-              selectedBrandCode={brandFilter}
-              brandOptions={brandOptions}
-              onBrandChange={onBrandFilterChange}
-              idPrefix="segmentation"
-            />
-          </CardAction>
-        )}
       </CardHeader>
       <CardContent>
         <div className="mb-6">
@@ -87,8 +68,8 @@ export function AdvancedCustomerSegmentation({
                   type="button"
                   onClick={() => setActiveSegment(type)}
                   className={`rounded-md px-3 py-1.5 text-sm font-medium ${activeSegment === type
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted text-muted-foreground hover:bg-muted/80"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted text-muted-foreground hover:bg-muted/80"
                     }`}
                 >
                   {t(`customerSegmentation.${type}`)}

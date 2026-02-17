@@ -34,7 +34,7 @@ export function MemberCardContent({ user }: MemberCardContentProps) {
   const recommendations = getRecommendations(user.purchases).slice(0, 2)
 
   return (
-    <Card className="cursor-pointer gap-2 bg-card shadow-sm">
+    <Card className="flex h-full min-h-0 flex-1 flex-col cursor-pointer gap-2 bg-card shadow-sm">
       <CardHeader className="pb-2">
         <div className="flex flex-wrap items-center gap-2">
           <CardTitle className="text-base">{user.name || user.memberId}</CardTitle>

@@ -9,20 +9,15 @@ import { EmptyState } from '@/components/ui/empty-state';
 import { TableContainer } from '@/components/ui/table-container';
 import { formatCurrency } from '@/lib/utils';
 
-import { BrandFilterSelect } from './BrandFilterSelect';
 import { ManagerCard } from './ManagerCard';
 
 import type { PrecomputedData } from "@/utils/precomputedDataLoader";
 import type { Granularity } from "@/types/analysis";
 import type { PerformanceWithStoreBreakdown } from "@/types/analysis";
-import type { BrandOption } from "./BrandFilterSelect";
 type ProductViewType = "product" | "collection" | "category" | "color" | "size";
 
 interface ProductTabProps {
   data: PrecomputedData;
-  brandFilter: string;
-  onBrandFilterChange: (code: string) => void;
-  brandOptions: BrandOption[];
 }
 
 const VIEW_KEYS: Record<ProductViewType, string> = {
@@ -33,7 +28,7 @@ const VIEW_KEYS: Record<ProductViewType, string> = {
   size: "size",
 };
 
-export function ProductTab({ data, brandFilter, onBrandFilterChange, brandOptions }: ProductTabProps) {
+export function ProductTab({ data }: ProductTabProps) {
   const { t } = useTranslation();
   const [viewType, setViewType] = useState<ProductViewType>("product");
   const [granularity, setGranularity] = useState<Granularity>("monthly");
@@ -72,12 +67,6 @@ export function ProductTab({ data, brandFilter, onBrandFilterChange, brandOption
           <div className="flex flex-wrap items-center justify-between gap-4">
             <CardTitle>{t("productTab.trends", { view: t(`productTab.${VIEW_KEYS[viewType]}`) })}</CardTitle>
             <div className="flex flex-1 flex-wrap items-center justify-end gap-4 min-w-0">
-              <BrandFilterSelect
-                selectedBrandCode={brandFilter}
-                brandOptions={brandOptions}
-                onBrandChange={onBrandFilterChange}
-                idPrefix="product"
-              />
               <ButtonGroup className="shrink-0">
                 {(Object.keys(VIEW_KEYS) as ProductViewType[]).map((v) => (
                   <button

@@ -44,7 +44,7 @@ export function PhoneSearchBar({ onMatch }: PhoneSearchBarProps) {
             setNoMatch(false)
           }}
           onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-          className="flex-1"
+          className="flex-1 bg-card"
         />
         <Button onClick={handleSearch} disabled={loading}>
           {loading ? t("associatePage.searching") : t("associatePage.search")}
