@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-    Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis
+    Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis
 } from 'recharts';
 
 import { ButtonGroup } from '@/components/ui/button-group';
@@ -82,30 +82,33 @@ export function AdvancedCustomerSegmentation({
         {!hasData ? (
           <EmptyState>{t("customerSegmentation.noData")}</EmptyState>
         ) : (
-          <div className="max-w-5xl mr-auto grid grid-cols-1 lg:grid-cols-2 gap-10">
-            <div className="overflow-visible min-w-0" style={{ color: "var(--foreground)" }}>
+          <div className="max-w-5xl mr-auto grid grid-cols-1 lg:grid-cols-2 gap-10 overflow-hidden min-w-0">
+            <div className="min-w-0 overflow-hidden" style={{ color: "var(--foreground)" }}>
               <h3 className="text-lg font-semibold mb-4">
                 {t(`customerSegmentation.${activeSegment}`)} {t("customerSegmentation.distribution")}
               </h3>
-              <ResponsiveContainer width="100%" height={320}>
-                <PieChart margin={{ top: 24, right: 24, bottom: 24, left: 24 }}>
-                  <Pie
-                    data={chartData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine
-                    label={({ name, percent }: { name?: string; percent?: number }) =>
-                      `${translateSegment(name ?? "")}: ${((percent ?? 0) * 100).toFixed(1)}%`
-                    }
-                    outerRadius={100}
-                    dataKey="count"
-                    nameKey="segment"
-                  >
-                    {chartData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.fill} />
-                    ))}
-                  </Pie>
-                  <Tooltip
+              <div className="min-w-0">
+                <ResponsiveContainer width="100%" height={320}>
+                  <PieChart margin={{ top: 24, right: 24, bottom: 56, left: 24 }}>
+                    <Pie
+                      data={chartData}
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={95}
+                      dataKey="count"
+                      nameKey="segment"
+                    >
+                      {chartData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.fill} />
+                      ))}
+                    </Pie>
+                    <Legend
+                      layout="horizontal"
+                      verticalAlign="bottom"
+                      formatter={(value) => translateSegment(value)}
+                      wrapperStyle={{ paddingTop: 8 }}
+                    />
+                    <Tooltip
                     formatter={(value: number | undefined) => (value != null ? formatNumber(value) : "")}
                     content={({ active, payload }) => {
                       if (!active || !payload?.[0]) return null;
@@ -125,9 +128,10 @@ export function AdvancedCustomerSegmentation({
                   />
                 </PieChart>
               </ResponsiveContainer>
+              </div>
             </div>
 
-            <div className="overflow-visible min-w-0" style={{ color: "var(--foreground)" }}>
+            <div className="min-w-0 overflow-hidden" style={{ color: "var(--foreground)" }}>
               <h3 className="text-lg font-semibold mb-4">{t("customerSegmentation.revenueBySegment")}</h3>
               <ResponsiveContainer width="100%" height={320}>
                 <BarChart
