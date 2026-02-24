@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AssociateSidebar, type AssociateTabId } from '@/components/AssociateSidebar';
+import { AssociateSidebar } from '@/components/AssociateSidebar';
 import { AssociateTodoList } from '@/components/AssociateTodoList';
 import { CustomerDetailModalContent } from '@/components/CustomerDetailModalContent';
 import { KPICard } from '@/components/KPICard';
@@ -17,6 +17,7 @@ import { CURRENT_STORE_NAME } from '@/config/associate';
 import { formatCurrency } from '@/lib/utils';
 import { loadStoreData } from '@/utils/storeDataLoader';
 
+import type { AssociateTabId } from '@/components/AssociateSidebar';
 import type { StoreData } from '@/utils/storeDataLoader';
 
 const MEMBER_IDS = ["AB01862444", "A101866206", "B101017392"]
@@ -178,7 +179,7 @@ export function AssociatePage() {
         open={!!selectedMemberId}
         onOpenChange={(open) => !open && setSelectedMemberId(null)}
       >
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-7xl max-h-[85vh] overflow-y-auto">
           {selectedMemberId && (
             <CustomerDetailModalContent memberId={selectedMemberId} />
           )}

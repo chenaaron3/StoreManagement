@@ -11,6 +11,7 @@
     "anonymize-sales": "tsx scripts/anonymizeSales.ts",
     "build-member-demographics": "tsx scripts/buildMemberDemographics.ts",
     "precompute": "tsx scripts/precomputeData.ts",
+    "precompute:full": "PRECOMPUTE_CUSTOMER_LIMIT=0 tsx scripts/precomputeData.ts",
     "extract-store-data": "tsx scripts/extractStoreData.ts",
     "data-pipeline": "npm run anonymize-sales && npm run build-member-demographics && npm run precompute"
   },

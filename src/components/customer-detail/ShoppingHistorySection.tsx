@@ -5,6 +5,7 @@ import { Section } from "./Section"
 import { StoreStatsBlock } from "./StoreStatsBlock"
 import { BrandPreferences } from "./BrandPreferences"
 import { CategoryTrendChart, type CategoryCount } from "./CategoryTrendChart"
+import { PurchaseHistoryTable } from "./PurchaseHistoryTable"
 
 interface ShoppingHistorySectionProps {
   user: User
@@ -24,6 +25,7 @@ export function ShoppingHistorySection({ user, categoryCounts }: ShoppingHistory
           <p className="text-xs font-medium text-muted-foreground mb-1">{t("customerDetail.categoryTrend")}</p>
           <CategoryTrendChart categoryCounts={categoryCounts} />
         </div>
+        <PurchaseHistoryTable purchases={user.purchases} />
       </div>
     </Section>
   )

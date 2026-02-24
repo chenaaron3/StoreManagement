@@ -1,4 +1,5 @@
 export { CustomerDetailModalHeader } from "./CustomerDetailModalHeader"
+export { PurchaseHistoryTable } from "./PurchaseHistoryTable"
 export { ShoppingHistorySection } from "./ShoppingHistorySection"
 export { NotesSection } from "./NotesSection"
 export { ProfileSection } from "./ProfileSection"

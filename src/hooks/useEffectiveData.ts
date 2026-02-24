@@ -31,8 +31,15 @@ export function useEffectiveData(
 
     if (data.byBrand?.[brandFilter]) {
       const brandData = data.byBrand[brandFilter] as Record<string, unknown>;
+      const customerList = (data.customerList ?? []) as { preferredBrand?: string }[];
+      const filteredList = customerList.filter(
+        (c) => c.preferredBrand === brandFilter
+      );
+      const resultList = filteredList.length > 0 ? filteredList : customerList;
       return {
         ...data,
+        customerList: resultList as PrecomputedData["customerList"],
+        customerPurchases: data.customerPurchases,
         kpis: brandData.kpis as PrecomputedData["kpis"],
         trendDataWeekly: brandData.trendDataWeekly as PrecomputedData["trendDataWeekly"],
         trendDataMonthly: brandData.trendDataMonthly as PrecomputedData["trendDataMonthly"],
@@ -166,6 +173,11 @@ export function useEffectiveData(
         (data.channelSegments ?? []) as { segment: string; count: number; totalRevenue: number; averageRevenue: number; percentage: number }[]
       ).filter((c) => storeMatchesBrand(c.segment)),
       aovSegments: data.aovSegments,
+      customerList: (data.customerList ?? []).filter(
+        (c: { preferredBrand?: string }) =>
+          !brandName || c.preferredBrand === brandFilter
+      ),
+      customerPurchases: data.customerPurchases,
     };
   }, [data, brandFilter]);
 }

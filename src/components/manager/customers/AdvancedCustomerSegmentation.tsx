@@ -53,14 +53,14 @@ export function AdvancedCustomerSegmentation({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-2xl">{t("customerSegmentation.title")}</CardTitle>
-        <CardDescription>
-          {t("customerSegmentation.description")}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="mb-6">
-          <ButtonGroup className="w-fit flex-wrap gap-2 pr-1">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+          <div>
+            <CardTitle className="text-2xl">{t("customerSegmentation.title")}</CardTitle>
+            <CardDescription>
+              {t("customerSegmentation.description")}
+            </CardDescription>
+          </div>
+          <ButtonGroup className="w-fit flex-wrap gap-2 pr-1 sm:shrink-0">
             {(["frequency", "age", "gender", "aov", "lifetimeValue"] as const).map(
               (type) => (
                 <button
@@ -78,6 +78,8 @@ export function AdvancedCustomerSegmentation({
             )}
           </ButtonGroup>
         </div>
+      </CardHeader>
+      <CardContent>
 
         {!hasData ? (
           <EmptyState>{t("customerSegmentation.noData")}</EmptyState>

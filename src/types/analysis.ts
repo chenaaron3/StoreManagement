@@ -122,6 +122,34 @@ export interface EmployeePerformance {
   totalRevenue: number;
   stores: string[];
   products: { productName: string; revenue: number }[];
+  /** Extended metrics for performance report */
+  monthlyRevenue?: number;
+  monthlyItems?: number;
+  customerCount?: number;
+  rankS?: number;
+  rankA?: number;
+  rankB?: number;
+  prevMonth?: number;
+  prevYear?: number;
+  prevMonthPct?: number;
+  prevYearPct?: number;
+  rank?: number;
+}
+
+/** Customer row for Customer Master (no real names; from CSV pipeline). */
+export interface CustomerListItem {
+  memberId: string;
+  displayName: string;
+  gender: string;
+  age: number | null;
+  totalRevenue: number;
+  transactionCount: number;
+  firstPurchaseDate: string;
+  lastPurchaseDate: string;
+  preferredStore: string;
+  preferredBrand: string;
+  salesAssociate: string;
+  internalRank: "S" | "A" | "B" | "C";
 }
 
 /** Per-brand aggregate for brand comparison. */

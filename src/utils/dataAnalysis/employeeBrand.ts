@@ -3,7 +3,19 @@
  */
 import type { SalesRecord } from "@/types/data";
 import type { EmployeePerformance, BrandPerformance } from "@/types/analysis";
+import { assignRanksByLtvPercentile } from "@/config/internalRank";
 import { transactionKey } from "./dateUtils";
+
+/** Get most recent month start (YYYY-MM-DD) from sales for monthly metrics. */
+function getLatestMonthStart(sales: SalesRecord[]): string {
+  let latest = "2000-01-01";
+  sales.forEach((s) => {
+    if (s.purchaseDate && s.purchaseDate > latest) latest = s.purchaseDate;
+  });
+  const d = new Date(latest);
+  d.setMonth(d.getMonth() - 1);
+  return d.toISOString().slice(0, 10);
+}
 
 export function getEmployeePerformance(
   salesData: SalesRecord[],
@@ -43,6 +55,76 @@ export function getEmployeePerformance(
         .sort((a, b) => b.revenue - a.revenue),
     }))
     .sort((a, b) => b.totalRevenue - a.totalRevenue);
+}
+
+/** Extended employee performance with S/A/B rank counts and monthly metrics. */
+export function getEmployeePerformanceWithRanks(
+  salesData: SalesRecord[]
+): EmployeePerformance[] {
+  const base = getEmployeePerformance(salesData);
+  const monthStart = getLatestMonthStart(salesData);
+
+  const totalRevenueByMember = new Map<string, number>();
+  const memberToAssociates = new Map<string, Set<string>>();
+
+  salesData.forEach((sale) => {
+    if (sale.totalCost <= 0 || !sale.salesAssociate?.trim()) return;
+    totalRevenueByMember.set(
+      sale.memberId,
+      (totalRevenueByMember.get(sale.memberId) || 0) + sale.totalCost
+    );
+    if (sale.purchaseDate >= monthStart) {
+      if (!memberToAssociates.has(sale.memberId)) {
+        memberToAssociates.set(sale.memberId, new Set());
+      }
+      memberToAssociates.get(sale.memberId)!.add(sale.salesAssociate.trim());
+    }
+  });
+
+  const rankByMember = assignRanksByLtvPercentile(totalRevenueByMember);
+
+  const associateToCustomers = new Map<
+    string,
+    Map<"S" | "A" | "B" | "C", number>
+  >();
+
+  memberToAssociates.forEach((assocs, memberId) => {
+    const rank = rankByMember.get(memberId) ?? "C";
+    assocs.forEach((a) => {
+      if (!associateToCustomers.has(a)) {
+        associateToCustomers.set(a, new Map([["S", 0], ["A", 0], ["B", 0], ["C", 0]]));
+      }
+      associateToCustomers.get(a)!.set(rank, (associateToCustomers.get(a)!.get(rank) || 0) + 1);
+    });
+  });
+
+  const monthlyByAssociate = new Map<string, { revenue: number; items: number; customers: Set<string> }>();
+  salesData.forEach((sale) => {
+    if (sale.totalCost <= 0 || !sale.salesAssociate?.trim()) return;
+    if (sale.purchaseDate < monthStart) return;
+    const key = sale.salesAssociate.trim();
+    if (!monthlyByAssociate.has(key)) {
+      monthlyByAssociate.set(key, { revenue: 0, items: 0, customers: new Set() });
+    }
+    const e = monthlyByAssociate.get(key)!;
+    e.revenue += sale.totalCost;
+    e.items += sale.quantity || 1;
+    e.customers.add(sale.memberId);
+  });
+
+  return base.map((emp) => {
+    const rankCounts = associateToCustomers.get(emp.staffName);
+    const monthly = monthlyByAssociate.get(emp.staffName);
+    return {
+      ...emp,
+      monthlyRevenue: monthly?.revenue ?? 0,
+      monthlyItems: monthly?.items ?? 0,
+      customerCount: monthly?.customers.size ?? 0,
+      rankS: rankCounts?.get("S") ?? 0,
+      rankA: rankCounts?.get("A") ?? 0,
+      rankB: rankCounts?.get("B") ?? 0,
+    };
+  });
 }
 
 export function getBrandPerformance(

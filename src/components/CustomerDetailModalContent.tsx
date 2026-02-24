@@ -11,6 +11,7 @@ import { getOnlineCart } from "@/data/mockData"
 import {
   getNotificationFlags,
   getLastVisit,
+  getLastVisits,
   getPurchaseCategoryCounts,
   getRecommendations,
 } from "@/lib/associateUtils"
@@ -80,6 +81,7 @@ export function CustomerDetailModalContent({ memberId }: CustomerDetailModalCont
     onlineCartItems.length > 0
   )
   const lastVisit = getLastVisit(data.purchases)
+  const visits = getLastVisits(data.purchases, 5)
   const topRank = topRanking(data.memberships)
   const categoryCounts = getPurchaseCategoryCounts(data.purchases)
   const recommendations = getRecommendations(data.purchases)
@@ -94,7 +96,7 @@ export function CustomerDetailModalContent({ memberId }: CustomerDetailModalCont
         flags={flags}
       />
 
-      <div className="max-h-[70vh] space-y-6 overflow-y-auto py-2 pr-2">
+      <div className="max-h-[85vh] space-y-6 overflow-y-auto py-2 pr-2">
         <ProfileSection user={data} />
         <Separator />
 
@@ -115,7 +117,7 @@ export function CustomerDetailModalContent({ memberId }: CustomerDetailModalCont
         <CouponsSection coupons={coupons} />
         <Separator />
 
-        <LastVisitSection lastVisit={lastVisit} />
+        <LastVisitSection lastVisit={lastVisit} visits={visits} />
         <Separator />
 
         <OnlineCartSection items={onlineCartItems} />

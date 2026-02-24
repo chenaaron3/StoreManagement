@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
-    BrandTab, CustomersTab, EmployeesTab, ProductTab, SalesTab, StoresTab
+    BrandTab, CustomerMasterTab, CustomersTab, EmployeesTab, ProductTab, SalesTab, SalesTabTimeRange, StoresTab
 } from '@/components/manager';
 import { BrandFilterSelect } from '@/components/manager/BrandFilterSelect';
 import { ManagerSidebar, type ManagerTabId } from '@/components/ManagerSidebar';
@@ -20,6 +20,7 @@ export function ManagerPage() {
   const [activeTab, setActiveTab] = useState<ManagerTabId>("sales");
   const [brandFilter, setBrandFilter] = useState<string>("all");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [salesTimeRange, setSalesTimeRange] = useState<"allDay" | "allWeek" | "allMonth" | "allYear">("allMonth");
 
   const brandOptions = useMemo(() => {
     if (!data?.brandPerformance) return [];
@@ -76,24 +77,35 @@ export function ManagerPage() {
         const tabData: PrecomputedData = effectiveData!;
         return (
           <>
-            <p className="text-center text-lg font-semibold tracking-tight">
-              {brandFilter !== "all"
-                ? `${brandOptions.find((b) => b.brandCode === brandFilter)?.brandName ?? ""} – ${t(`managerPage.tabs.${activeTab}.subtitle`)}`
-                : t(`managerPage.tabs.${activeTab}.subtitle`)}
-            </p>
-            {activeTab !== "employees" && (
-              <div className="flex justify-end">
-                <BrandFilterSelect
-                  selectedBrandCode={brandFilter}
-                  brandOptions={brandOptions}
-                  onBrandChange={setBrandFilter}
-                  idPrefix="manager"
-                />
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <p className="text-lg font-semibold tracking-tight shrink-0">
+                {activeTab === "customerMaster"
+                  ? t("managerPage.tabs.customerMaster.title")
+                  : brandFilter !== "all"
+                    ? `${brandOptions.find((b) => b.brandCode === brandFilter)?.brandName ?? ""} – ${t(`managerPage.tabs.${activeTab}.subtitle`)}`
+                    : t(`managerPage.tabs.${activeTab}.subtitle`)}
+              </p>
+              <div className="flex flex-wrap items-center gap-3">
+                {activeTab !== "employees" && (
+                  <BrandFilterSelect
+                    selectedBrandCode={brandFilter}
+                    brandOptions={brandOptions}
+                    onBrandChange={setBrandFilter}
+                    idPrefix="manager"
+                  />
+                )}
+                {activeTab === "sales" && (
+                  <SalesTabTimeRange
+                    value={salesTimeRange}
+                    onChange={setSalesTimeRange}
+                  />
+                )}
               </div>
-            )}
-            {activeTab === "sales" && <SalesTab data={tabData} />}
+            </div>
+            {activeTab === "sales" && <SalesTab data={tabData} timeRange={salesTimeRange} onTimeRangeChange={setSalesTimeRange} />}
             {activeTab === "brand" && data && <BrandTab data={data} />}
             {activeTab === "customers" && <CustomersTab data={tabData} />}
+            {activeTab === "customerMaster" && <CustomerMasterTab data={tabData} />}
             {activeTab === "product" && <ProductTab data={tabData} />}
             {activeTab === "stores" && <StoresTab data={tabData} />}
             {activeTab === "employees" && <EmployeesTab data={tabData} brandFilter={brandFilter} />}
@@ -113,7 +125,7 @@ export function ManagerPage() {
       <div className="flex min-w-0 flex-1 flex-col">
         <TopBar onSidebarToggle={() => setSidebarCollapsed((c) => !c)} />
         <main className="min-h-0 flex-1 overflow-y-auto">
-          <div className="space-y-6 px-6 pt-6">{body}</div>
+          <div className="space-y-4 px-6 pt-4">{body}</div>
         </main>
       </div>
     </div>

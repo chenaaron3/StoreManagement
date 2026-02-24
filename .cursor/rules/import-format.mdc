@@ -1,0 +1,19 @@
+---
+description: Type import format - use import type { } instead of inline type modifier
+globs: "**/*.{ts,tsx}"
+alwaysApply: false
+---
+
+# Import format for type-only imports
+
+Use `import type` when importing types only. Put `type` before the braces, not inside.
+
+```typescript
+// ✅ GOOD
+import type { AssociateTabId } from '@/components/AssociateSidebar';
+import type { Customer } from '@/types/data';
+
+// ❌ BAD – inline type modifier
+import { type AssociateTabId } from '@/components/AssociateSidebar';
+import { type Customer } from '@/types/data';
+```

@@ -30,7 +30,7 @@ export interface SalesRecord {
 export type Purchase = Omit<SalesRecord, "memberId">;
 
 /**
- * Membership / customer–store association (e.g. mark_memberships.csv).
+ * Membership / customer–store association (e.g. mark_membership_MD_LM_EL.csv).
  * Use for CSV/API; when nested under User, use Membership instead.
  */
 export interface MembershipRecord {

@@ -1,4 +1,4 @@
-import { LayoutDashboard, Package, Store, Tag, UserCog, Users } from 'lucide-react';
+import { BookOpen, LayoutDashboard, Package, Store, Tag, UserCog, Users } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -7,6 +7,7 @@ import { LanguageSwitcher } from './LanguageSwitcher';
 export type ManagerTabId =
   | "sales"
   | "customers"
+  | "customerMaster"
   | "product"
   | "stores"
   | "employees"
@@ -15,6 +16,7 @@ export type ManagerTabId =
 const NAV_ITEMS: { id: ManagerTabId; icon: React.ComponentType<{ className?: string }> }[] = [
   { id: "sales", icon: LayoutDashboard },
   { id: "customers", icon: Users },
+  { id: "customerMaster", icon: BookOpen },
   { id: "product", icon: Package },
   { id: "stores", icon: Store },
   { id: "employees", icon: UserCog },
@@ -24,6 +26,7 @@ const NAV_ITEMS: { id: ManagerTabId; icon: React.ComponentType<{ className?: str
 const SIDEBAR_LABELS: Record<ManagerTabId, string> = {
   sales: "sidebar.sales",
   customers: "sidebar.customers",
+  customerMaster: "sidebar.customerMaster",
   product: "sidebar.product",
   stores: "sidebar.stores",
   employees: "sidebar.employees",

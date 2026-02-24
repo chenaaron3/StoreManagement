@@ -1,15 +1,36 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { spawn } from "child_process";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
+import { dirname, join } from "path";
+import { fileURLToPath } from "url";
 
-import * as dataAnalysis from '../src/utils/dataAnalysis';
+import * as dataAnalysis from "../src/utils/dataAnalysis";
+import { assignRanksByLtvPercentile } from "../src/config/internalRank";
 import { parseMarkSalesCSVStream } from '../src/utils/dataParser';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+/** Max customers in customerList/customerPurchases. Default 1000 for lighter output.
+ * Set PRECOMPUTE_CUSTOMER_LIMIT=0 for unlimited (full dataset). */
+const DEFAULT_CUSTOMER_LIMIT = 1000;
+
+function getCustomerLimit(): number {
+  const env = process.env.PRECOMPUTE_CUSTOMER_LIMIT;
+  if (env == null || env === "") return DEFAULT_CUSTOMER_LIMIT;
+  const n = parseInt(env, 10);
+  return Number.isNaN(n) || n < 0 ? DEFAULT_CUSTOMER_LIMIT : n;
+}
+
+/** Use compact JSON (faster) unless PRECOMPUTE_PRETTY=1 */
+function usePrettyPrint(): boolean {
+  return process.env.PRECOMPUTE_PRETTY === "1";
+}
+
 async function precomputeData() {
-  console.log("Starting data precomputation...");
+  const limit = getCustomerLimit();
+  console.log(
+    `Starting data precomputation... (customer limit: ${limit === 0 ? "unlimited" : limit})`
+  );
 
   const projectRoot = join(__dirname, "..");
   const dataDir = join(projectRoot, "src", "data");
@@ -33,6 +54,27 @@ async function precomputeData() {
   });
 
   console.log(`Processed ${filteredSales.length} sales records.`);
+
+  // Pre-group sales by brand in a single pass (avoids repeated filter() per brand)
+  type SalesRecord = (typeof filteredSales)[number];
+  const salesGroupedByBrandCode = new Map<string, SalesRecord[]>();
+  const salesByStorePrefix = new Map<string, SalesRecord[]>();
+  for (const r of filteredSales) {
+    const code = (r.brandId?.trim() || r.brandCode?.trim() || "") || "_none";
+    if (!salesGroupedByBrandCode.has(code)) salesGroupedByBrandCode.set(code, []);
+    salesGroupedByBrandCode.get(code)!.push(r);
+
+    const sn = (r.storeName || "").trim();
+    const spaceIdx = sn.indexOf(" ");
+    if (spaceIdx > 0) {
+      const prefix = sn.slice(0, spaceIdx + 1);
+      if (!salesByStorePrefix.has(prefix)) salesByStorePrefix.set(prefix, []);
+      salesByStorePrefix.get(prefix)!.push(r);
+    }
+  }
+  console.log(
+    `Pre-grouped sales by ${salesGroupedByBrandCode.size} brand codes, ${salesByStorePrefix.size} store prefixes.`,
+  );
 
   const demographicsPath = join(publicDataDir, "member_demographics.json");
   let memberDemographics: dataAnalysis.MemberDemographics | null = null;
@@ -122,107 +164,69 @@ async function precomputeData() {
     }
   > = {};
 
-  for (const brand of brandPerformance) {
-    const salesForBrand = filteredSales.filter(
-      (r) =>
-        (r.brandId?.trim() || r.brandCode?.trim() || "") === brand.brandCode,
-    );
-    const storeNamePrefix = brand.brandName ? brand.brandName + " " : "";
-    const salesForBrandStores = filteredSales.filter(
-      (r) =>
-        (r.storeName?.trim() || "").startsWith(storeNamePrefix) ||
-        (r.brandId?.trim() || r.brandCode?.trim() || "") === brand.brandCode,
-    );
-    const salesToUse =
-      salesForBrandStores.length > 0 ? salesForBrandStores : salesForBrand;
+  const workerPath = join(__dirname, "workers", "brandAnalyticsWorker.ts");
+  const runBrandWorker = (brand: (typeof brandPerformance)[0]) =>
+    new Promise<{ brandCode: string; result: (typeof byBrand)[string] }>(
+      (resolve, reject) => {
+        const salesForBrand =
+          salesGroupedByBrandCode.get(brand.brandCode || "_none") ?? [];
+        const storeNamePrefix = brand.brandName ? brand.brandName + " " : "";
+        const byStore = storeNamePrefix
+          ? (salesByStorePrefix.get(storeNamePrefix) ?? [])
+          : [];
+        const combined = new Set<SalesRecord>([...salesForBrand, ...byStore]);
+        const salesForBrandStores = Array.from(combined);
+        const salesToUse =
+          salesForBrandStores.length > 0 ? salesForBrandStores : salesForBrand;
 
-    byBrand[brand.brandCode] = {
-      kpis: dataAnalysis.calculateKPIs(salesToUse),
-      trendDataWeekly: dataAnalysis.getTrendsByGranularity(
-        salesToUse,
-        "weekly",
-      ),
-      trendDataMonthly: dataAnalysis.getTrendsByGranularity(
-        salesToUse,
-        "monthly",
-      ),
-      dayOfWeekData: dataAnalysis.getDayOfWeekAnalysis(salesToUse),
-      customerSegments: dataAnalysis.getCustomerSegments(salesToUse),
-      rfmMatrix: dataAnalysis.getRFMMatrix(salesToUse),
-      frequencySegments: dataAnalysis.getFrequencySegments(salesToUse),
-      ageSegments: dataAnalysis.getAgeSegments(salesToUse, memberDemographics),
-      genderSegments: dataAnalysis.getGenderSegments(
-        salesToUse,
-        memberDemographics,
-      ),
-      channelSegments: dataAnalysis.getChannelSegments(salesToUse),
-      aovSegments: dataAnalysis.getAOVSegments(salesToUse),
-      employeePerformance: dataAnalysis.getEmployeePerformance(salesToUse),
-      storePerformanceWithProducts:
-        dataAnalysis.getStorePerformanceWithProducts(salesToUse, 25),
-      storeTrendsWeekly: dataAnalysis.getStoreTrends(salesToUse, 25, "weekly"),
-      storeTrendsMonthly: dataAnalysis.getStoreTrends(
-        salesToUse,
-        25,
-        "monthly",
-      ),
-      productPerformanceWithStores:
-        dataAnalysis.getProductPerformanceWithStores(salesToUse, 25),
-      productTrendsWeekly: dataAnalysis.getProductTrends(
-        salesToUse,
-        25,
-        "weekly",
-      ),
-      productTrendsMonthly: dataAnalysis.getProductTrends(
-        salesToUse,
-        25,
-        "monthly",
-      ),
-      collectionPerformanceWithStores:
-        dataAnalysis.getCollectionPerformanceWithStores(salesToUse, 25),
-      collectionTrendsWeekly: dataAnalysis.getCollectionTrends(
-        salesToUse,
-        25,
-        "weekly",
-      ),
-      collectionTrendsMonthly: dataAnalysis.getCollectionTrends(
-        salesToUse,
-        25,
-        "monthly",
-      ),
-      categoryPerformanceWithStores:
-        dataAnalysis.getCategoryPerformanceWithStores(salesToUse, 25),
-      categoryTrendsWeekly: dataAnalysis.getCategoryTrends(
-        salesToUse,
-        25,
-        "weekly",
-      ),
-      categoryTrendsMonthly: dataAnalysis.getCategoryTrends(
-        salesToUse,
-        25,
-        "monthly",
-      ),
-      colorPerformanceWithStores: dataAnalysis.getColorPerformanceWithStores(
-        salesToUse,
-        25,
-      ),
-      sizePerformanceWithStores: dataAnalysis.getSizePerformanceWithStores(
-        salesToUse,
-        25,
-      ),
-      colorTrends: dataAnalysis.getAttributeTrends(
-        salesToUse,
-        "color",
-        "monthly",
-      ),
-      sizeTrends: dataAnalysis.getAttributeTrends(
-        salesToUse,
-        "size",
-        "monthly",
-      ),
-    };
+        const input = JSON.stringify({
+          brandCode: brand.brandCode,
+          salesToUse,
+          memberDemographics,
+        });
+        const proc = spawn("npx", ["tsx", workerPath], {
+          stdio: ["pipe", "pipe", "pipe"],
+          cwd: join(__dirname, ".."),
+        });
+        let stdout = "";
+        proc.stdout?.on("data", (chunk: Buffer) => {
+          stdout += chunk.toString();
+        });
+        proc.stderr?.on("data", (chunk: Buffer) => {
+          process.stderr.write(chunk);
+        });
+        proc.on("error", reject);
+        proc.on("close", (code) => {
+          if (code !== 0) {
+            reject(new Error(`Worker exited with code ${code}`));
+            return;
+          }
+          try {
+            resolve(JSON.parse(stdout) as { brandCode: string; result: (typeof byBrand)[string] });
+          } catch (e) {
+            reject(e);
+          }
+        });
+        proc.stdin?.write(input, "utf-8", () => proc.stdin?.end());
+      },
+    );
+
+  console.log(
+    `  Running per-brand analytics in parallel (${brandPerformance.length} workers)...`,
+  );
+  const brandResults = await Promise.all(
+    brandPerformance.map((brand, i) => {
+      console.log(
+        `  byBrand ${brand.brandCode} (${i + 1}/${brandPerformance.length})...`,
+      );
+      return runBrandWorker(brand);
+    }),
+  );
+  for (const { brandCode, result } of brandResults) {
+    byBrand[brandCode] = result;
   }
 
+  console.log("Building global analytics...");
   const precomputed = {
     kpis: dataAnalysis.calculateKPIs(filteredSales),
     trendDataWeekly: dataAnalysis.getTrendsByGranularity(
@@ -310,15 +314,50 @@ async function precomputeData() {
     ),
     channelSegments: dataAnalysis.getChannelSegments(filteredSales),
     aovSegments: dataAnalysis.getAOVSegments(filteredSales),
-    employeePerformance: dataAnalysis.getEmployeePerformance(filteredSales),
+    employeePerformance: dataAnalysis.getEmployeePerformanceWithRanks(filteredSales),
     brandPerformance,
     byBrand,
+    ...((): { customerList: ReturnType<typeof dataAnalysis.getCustomerList>; customerPurchases: Record<string, unknown[]> } => {
+      const limit = getCustomerLimit();
+      console.log("Building customerList...");
+      const fullList = dataAnalysis.getCustomerList(filteredSales, memberDemographics);
+      let list =
+        limit > 0
+          ? [...fullList].sort((a, b) => (b.totalRevenue ?? 0) - (a.totalRevenue ?? 0)).slice(0, limit)
+          : fullList;
+      // Re-assign ranks within the limited set so displayed customers have S/A/B/C distribution
+      if (limit > 0 && list.length > 0) {
+        const revenueMap = new Map(list.map((c) => [c.memberId, c.totalRevenue ?? 0]));
+        const rankByMember = assignRanksByLtvPercentile(revenueMap);
+        list = list.map((c) => ({ ...c, internalRank: rankByMember.get(c.memberId) ?? "C" }));
+      }
+      console.log(`  customerList: ${list.length} customers${limit > 0 ? ` (limited from ${fullList.length})` : ""}`);
+
+      console.log("Building customerPurchases...");
+      const fullPurchases = dataAnalysis.getCustomerPurchases(filteredSales);
+      let purchases: Record<string, unknown[]>;
+      if (limit > 0) {
+        const topIds = new Set(list.map((c) => c.memberId));
+        purchases = {};
+        for (const [mid, arr] of Object.entries(fullPurchases)) {
+          if (topIds.has(mid)) purchases[mid] = arr;
+        }
+        console.log(`  customerPurchases: ${Object.keys(purchases).length} members (limited from ${Object.keys(fullPurchases).length})`);
+      } else {
+        purchases = fullPurchases;
+        console.log(`  customerPurchases: ${Object.keys(purchases).length} members`);
+      }
+      return { customerList: list, customerPurchases: purchases };
+    })(),
   };
 
   mkdirSync(publicDataDir, { recursive: true });
   const outputPath = join(publicDataDir, "precomputed.json");
   console.log("Writing precomputed data to", outputPath);
-  writeFileSync(outputPath, JSON.stringify(precomputed, null, 2), "utf-8");
+  const json = usePrettyPrint()
+    ? JSON.stringify(precomputed, null, 2)
+    : JSON.stringify(precomputed);
+  writeFileSync(outputPath, json, "utf-8");
 
   console.log("Data precomputation complete.");
   console.log(

@@ -17,6 +17,10 @@ export function EmployeePerformanceTable({ data }: EmployeePerformanceTableProps
           <tr className="border-b border-border bg-muted/60">
             <th className="text-left py-3 px-4 font-medium text-muted-foreground">{t("employeesTab.employee")}</th>
             <th className="text-right py-3 px-4 font-medium text-muted-foreground">{t("employeesTab.revenue")}</th>
+            <th className="text-right py-3 px-4 font-medium text-muted-foreground">売上点数</th>
+            <th className="text-right py-3 px-4 font-medium text-muted-foreground">顧客数</th>
+            <th className="text-right py-3 px-4 font-medium text-muted-foreground">S</th>
+            <th className="text-right py-3 px-4 font-medium text-muted-foreground">A</th>
             <th className="text-left py-3 px-4 font-medium text-muted-foreground">{t("employeesTab.stores")}</th>
             <th className="text-left py-3 px-4 font-medium text-muted-foreground">{t("employeesTab.topProducts")}</th>
           </tr>
@@ -28,6 +32,10 @@ export function EmployeePerformanceTable({ data }: EmployeePerformanceTableProps
               <td className="text-right py-3 px-4 whitespace-nowrap tabular-nums">
                 {formatCurrency(e.totalRevenue ?? 0)}
               </td>
+              <td className="text-right py-3 px-4 tabular-nums">{e.monthlyItems ?? "-"}</td>
+              <td className="text-right py-3 px-4 tabular-nums">{e.customerCount ?? "-"}</td>
+              <td className="text-right py-3 px-4 tabular-nums">{e.rankS ?? 0}</td>
+              <td className="text-right py-3 px-4 tabular-nums">{e.rankA ?? 0}</td>
               <td className="py-3 px-4 text-muted-foreground">
                 {(e.stores ?? []).slice(0, 3).join(", ")}
                 {(e.stores?.length ?? 0) > 3 &&

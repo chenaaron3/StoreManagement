@@ -10,22 +10,38 @@ export function isBirthdayThisMonth(birthday: string): boolean {
   return month === now.getMonth() + 1
 }
 
-/** Last visit info from purchases (most recent by purchaseDate). */
-export function getLastVisit(purchases: Purchase[]): {
+export type VisitInfo = {
   salesAssociate: string
   purchaseDate: string
   storeName: string
-} | null {
-  if (!purchases.length) return null
+}
+
+/** Last visit info from purchases (most recent by purchaseDate). */
+export function getLastVisit(purchases: Purchase[]): VisitInfo | null {
+  const visits = getLastVisits(purchases, 1)
+  return visits[0] ?? null
+}
+
+/** Last N visits from purchases, sorted by purchaseDate descending. */
+export function getLastVisits(purchases: Purchase[], limit = 5): VisitInfo[] {
+  if (!purchases.length) return []
+  const seen = new Set<string>()
   const sorted = [...purchases].sort(
     (a, b) => new Date(b.purchaseDate).getTime() - new Date(a.purchaseDate).getTime()
   )
-  const last = sorted[0]
-  return {
-    salesAssociate: last.salesAssociate,
-    purchaseDate: last.purchaseDate,
-    storeName: last.storeName,
+  const out: VisitInfo[] = []
+  for (const p of sorted) {
+    const key = `${p.purchaseDate}-${p.storeName}-${p.salesAssociate}`
+    if (seen.has(key)) continue
+    seen.add(key)
+    out.push({
+      salesAssociate: p.salesAssociate ?? "",
+      purchaseDate: p.purchaseDate,
+      storeName: p.storeName ?? "",
+    })
+    if (out.length >= limit) break
   }
+  return out
 }
 
 const SIX_MONTHS_MS = 6 * 30 * 24 * 60 * 60 * 1000

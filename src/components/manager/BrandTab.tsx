@@ -72,7 +72,7 @@ export function BrandTab({ data }: BrandTabProps) {
   }, [data.byBrand, data.brandPerformance]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         <BrandBarChart
           data={revenueChartData}
