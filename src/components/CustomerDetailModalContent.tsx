@@ -88,15 +88,17 @@ export function CustomerDetailModalContent({ memberId }: CustomerDetailModalCont
   const coupons = data.coupons ?? []
 
   return (
-    <>
-      <CustomerDetailModalHeader
-        name={data.name}
-        memberId={data.memberId}
-        topRank={topRank}
-        flags={flags}
-      />
+    <div className="flex min-h-0 flex-1 flex-col">
+      <div className="shrink-0 border-b border-border pb-4 pt-2">
+        <CustomerDetailModalHeader
+          name={data.name}
+          memberId={data.memberId}
+          topRank={topRank}
+          flags={flags}
+        />
+      </div>
 
-      <div className="max-h-[85vh] space-y-6 overflow-y-auto py-2 pr-2">
+      <div className="min-h-0 flex-1 space-y-6 overflow-y-auto py-4 pr-2">
         <ProfileSection user={data} />
         <Separator />
 
@@ -122,6 +124,6 @@ export function CustomerDetailModalContent({ memberId }: CustomerDetailModalCont
 
         <OnlineCartSection items={onlineCartItems} />
       </div>
-    </>
+    </div>
   )
 }

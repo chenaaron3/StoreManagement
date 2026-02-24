@@ -179,7 +179,7 @@ export function AssociatePage() {
         open={!!selectedMemberId}
         onOpenChange={(open) => !open && setSelectedMemberId(null)}
       >
-        <DialogContent className="max-w-7xl max-h-[85vh] overflow-y-auto">
+        <DialogContent className="flex min-h-0 min-w-[60vw] max-h-[85vh] flex-col overflow-hidden">
           {selectedMemberId && (
             <CustomerDetailModalContent memberId={selectedMemberId} />
           )}

@@ -25,9 +25,7 @@ export function PurchaseHistoryTable({ purchases }: PurchaseHistoryTableProps) {
           <thead>
             <tr className="border-b border-border bg-muted/60">
               <th className="text-left py-2 px-3 font-medium text-muted-foreground">購買日</th>
-              <th className="text-left py-2 px-3 font-medium text-muted-foreground">ブランド</th>
               <th className="text-left py-2 px-3 font-medium text-muted-foreground">店舗</th>
-              <th className="text-left py-2 px-3 font-medium text-muted-foreground">品番</th>
               <th className="text-left py-2 px-3 font-medium text-muted-foreground">商品名</th>
               <th className="text-left py-2 px-3 font-medium text-muted-foreground">カラー</th>
               <th className="text-left py-2 px-3 font-medium text-muted-foreground">サイズ</th>
@@ -42,9 +40,7 @@ export function PurchaseHistoryTable({ purchases }: PurchaseHistoryTableProps) {
                 className={`border-b border-border ${i % 2 === 1 ? "bg-muted/30" : ""}`}
               >
                 <td className="py-2 px-3">{p.purchaseDate}</td>
-                <td className="py-2 px-3">{p.brandName ?? p.brandCode ?? "-"}</td>
                 <td className="py-2 px-3">{p.storeName ?? "-"}</td>
-                <td className="py-2 px-3 font-mono text-xs">{p.productId ?? p.itemId ?? "-"}</td>
                 <td className="py-2 px-3">{p.productName ?? p.itemName ?? "-"}</td>
                 <td className="py-2 px-3">{p.color ?? "-"}</td>
                 <td className="py-2 px-3">{p.size ?? "-"}</td>
