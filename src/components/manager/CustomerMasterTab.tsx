@@ -69,7 +69,7 @@ export function CustomerMasterTab({ data }: CustomerMasterTabProps) {
     () => new Set(RANKS)
   );
   const [selectedGenders, setSelectedGenders] = useState<Set<string>>(
-    () => new Set(GENDERS.map((g) => g.value))
+    () => new Set(GENDERS.filter((g) => g.value !== "unknown").map((g) => g.value))
   );
   const [ageRange, setAgeRange] = useState<[number, number]>([0, 120]);
   const [transactionRange, setTransactionRange] = useState<[number, number]>([
