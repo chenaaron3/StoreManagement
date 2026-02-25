@@ -227,7 +227,7 @@
     "code": "Code",
     "expires": "Expires",
     "used": "Used",
-    "lastVisit": "Last visit",
+    "lastVisit": "Visit history",
     "lastVisitDate": "Last visit · {{date}}",
     "helpedBy": "Helped by",
     "purchaseHistory": "Purchase history",

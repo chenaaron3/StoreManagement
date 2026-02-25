@@ -227,7 +227,7 @@
     "code": "コード",
     "expires": "有効期限",
     "used": "使用済み",
-    "lastVisit": "前回来店",
+    "lastVisit": "来店履歴",
     "lastVisitDate": "前回来店 · {{date}}",
     "helpedBy": "対応スタッフ",
     "purchaseHistory": "購買実績",
